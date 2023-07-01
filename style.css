@@ -1,13 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
-  --background: hsl(208, 31%, 10%);
-  --secondaryBackground : hsl(208, 31%, 20%);
-  --primaryButton : red;
-  --uncheckedStar : hsl(208, 50%, 40%);
-  --primary: hsl(15, 50%, 50%);
-  --callToAction: red;
+  --background: hsl(268, 87%, 94%);
+  --secondaryBackground: hsl(275, 35%, 80%);
+  --primaryButton: #71C9CE;
+  --uncheckedStar: #71C9CE;
+  --primary: hsl(275, 49%, 63%);
   --circleSize: 1000px;
-  --textColor: white;
+  --textColor: hsl(275, 49%, 20%);
+  --textInvert: hsl(275, 49%, 100%);
+  --selectedColor:yellow;
 }
 body {
   font-family: "Montserrat", sans-serif;
@@ -18,11 +19,12 @@ body {
   flex-direction: column;
   min-width: 300px;
 }
-.navbarContainer{
+.navbarContainer {
   width: 100%;
   height: 100vh;
   position: fixed;
   pointer-events: none;
+  z-index: 8;
 }
 .centre {
   display: flex;
@@ -49,7 +51,7 @@ body {
   width: 100%;
 }
 .right > * {
-  font-size: 20px;
+  font-size: 23px;
   width: 35px;
   height: 35px;
   margin-right: 15px;
@@ -75,7 +77,7 @@ body {
   z-index: 9;
   position: absolute;
   transform: translate(-50%, -50%);
-  animation: transition .5s ease-out;
+  animation: transition 0.5s ease-out;
   border-radius: 50%;
   filter: blur(20px);
 }
@@ -111,15 +113,16 @@ body {
   flex-direction: column;
   padding: 50px;
 }
-.main>*{
+.main > * {
   max-width: 800px;
   background-color: var(--secondaryBackground);
   width: 100%;
   border-radius: 10px;
-  padding: 30px 20px;
+  padding: 20px 40px 20px 40px;
   box-sizing: border-box;
+  height: 100vh;
 }
-@media (hover:hover){
+@media (hover: hover) {
   .right > *:hover {
     color: white;
     background: var(--primary);
@@ -128,28 +131,65 @@ body {
     border: 2px solid transparent;
   }
 }
-@media(hover:none){
-  
+@media (hover: none) {
 }
-@media screen and (max-width:600px) {
-  .navbar{
+@media screen and (max-width: 600px) {
+  .navbar {
     bottom: 0;
   }
-  .title{
+  .title {
     display: none;
   }
-  .right{
+  .right {
     justify-content: space-around;
   }
-  .main{
+  .main {
     margin-top: 0;
     padding: 0;
   }
-  .main>*{
+  .main > * {
     border-radius: 0;
+    padding: 30px;
+    padding-top: 80px;
+  }
+  .title{
+    display: flex;
+    position: fixed;
+    top:7px;
+    background-color: var(--background);
+    padding: 10px 100px;
+    border-radius: 30px;
   }
 }
-
-.selectedStar{
-  color: gold;
+.slider{
+  position: relative;
+}
+.star-input{
+  position: absolute;
+  top:5px;
+  font-size: 28px;
+  pointer-events:none;
+  left: 125px;
+  margin-left: -15px;
+}
+.star-input>i {
+  display: none;
+  background-color: var(--textInvert);
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 2px;
+  padding-top: 3px;
+  transition: 300ms color ease;
+  color:var(--textColor);
+  border: 2px solid var(--textColor);
+}
+.selectedEmoji{
+  display: none;
+}
+.lable{
+  margin-top: 20px;
+  font-size: 22px;
+}
+.status{
+  font-size: 16px;
 }
