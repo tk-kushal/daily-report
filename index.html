@@ -1,34 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://kit.fontawesome.com/ad418b86d4.js" crossorigin="anonymous"></script>
-  <title>Daily Journal</title>
-</head>
-<body>
-  <div class="navbar centre">
-    <div class="title centre">
-      Report
-    </div>
-    <div class="right">
-      <div class="report centre">
-        <i class="fa-solid fa-book "></i>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/ad418b86d4.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Daily Journal</title>
+  </head>
+  <body>
+    <div class="navbarContainer">
+      <div class="navbar centre">
+        <div class="title">Report</div>
+        <div class="right">
+          <div class="report centre">
+            <i class="fa-solid fa-book"></i>
+          </div>
+          <div class="calander centre">
+            <i class="fa-solid fa-calendar-days cetner"></i>
+          </div>
+          <div class="user centre">
+            <img
+              src="https://lh3.googleusercontent.com/a/AGNmyxZ1xs_-dntzOmIGNlJEevbHUl3SU-EgjMcpx1V7=s96-c"
+              alt=""
+            />
+          </div>
+        </div>
       </div>
-      <div class="calander centre">
-        <i class="fa-solid fa-calendar-days cetner"></i>
+    </div>
+    <div class="main">
+      <div class="report">
+        <div class="feelLable">How did you Feel today</div>
+        <div class="star-input" id="feel">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <div class="energyLable">Energy</div>
+        <div class="star-input" id="energy">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
       </div>
-      <div class="user centre">
-        <img src="https://lh3.googleusercontent.com/a/AGNmyxZ1xs_-dntzOmIGNlJEevbHUl3SU-EgjMcpx1V7=s96-c" alt="">
-      </div>
+      <div class="calander" hidden>alksdj</div>
+      <div class="profile" hidden></div>
     </div>
-    </div>
-  <div class="main">
-    <div class="content centre">
-      This is content
-    </div>
-  </div>
-</body>
-<script src="index.js"></script>
+  </body>
+  <script src="index.js"></script>
 </html>

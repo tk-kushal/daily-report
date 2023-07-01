@@ -1,16 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
   --background: hsl(208, 31%, 10%);
+  --secondaryBackground : hsl(208, 31%, 20%);
+  --primaryButton : red;
+  --uncheckedStar : hsl(208, 50%, 40%);
   --primary: hsl(15, 50%, 50%);
   --callToAction: red;
   --circleSize: 1000px;
   --textColor: white;
-}
-
-.centre {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 body {
   font-family: "Montserrat", sans-serif;
@@ -19,8 +16,25 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  min-width: 300px;
+}
+.navbarContainer{
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  pointer-events: none;
+}
+.centre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .navbar {
+  pointer-events: all;
+  width: 100%;
+  position: absolute;
+  min-width: 300px;
+  background-color: var(--background);
 }
 .title {
   font-size: 30px;
@@ -31,7 +45,7 @@ body {
   display: flex;
   justify-content: end;
   align-items: center;
-  height: 80px;
+  height: 70px;
   width: 100%;
 }
 .right > * {
@@ -46,23 +60,24 @@ body {
   transition-property: background, border-radius, color, border;
   overflow: hidden;
 }
-.right > *:hover {
-  color: white;
-  background: var(--primary);
-  cursor: pointer;
-  border-radius: 20%;
-  border: 2px solid transparent;
-}
+
 .user > img {
   width: 150%;
+}
+.transitionContainer {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
 }
 .transition {
   background: var(--primary);
   z-index: 9;
   position: absolute;
   transform: translate(-50%, -50%);
-  animation: transition 1s ease-out;
+  animation: transition .5s ease-out;
   border-radius: 50%;
+  filter: blur(20px);
 }
 @keyframes transition {
   0% {
@@ -82,18 +97,59 @@ body {
     background: transparent;
   }
 }
-.transitionContainer {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
 .selected {
-  transition: 100ms;
+  transition: 300ms;
   border-bottom: 2px solid var(--primary);
-  border-radius: 10%;
+  border-radius: 20%;
   pointer-events: none;
 }
 .main {
-  margin-top: 30px;
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 50px;
+}
+.main>*{
+  max-width: 800px;
+  background-color: var(--secondaryBackground);
+  width: 100%;
+  border-radius: 10px;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+@media (hover:hover){
+  .right > *:hover {
+    color: white;
+    background: var(--primary);
+    cursor: pointer;
+    border-radius: 20%;
+    border: 2px solid transparent;
+  }
+}
+@media(hover:none){
+  
+}
+@media screen and (max-width:600px) {
+  .navbar{
+    bottom: 0;
+  }
+  .title{
+    display: none;
+  }
+  .right{
+    justify-content: space-around;
+  }
+  .main{
+    margin-top: 0;
+    padding: 0;
+  }
+  .main>*{
+    border-radius: 0;
+  }
+}
+
+.selectedStar{
+  color: gold;
 }
