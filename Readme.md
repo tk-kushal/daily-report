@@ -9,3 +9,4 @@ to remind the user to write this journal everyday there can be an extension whic
 ## Future Prospects
 - add a graph or calander view to show how was each month or year accorind to what is beeen imporved
 - additional catagories can be added to make the data more usefull like what type of work did you do today etc
+- add daily quote on the top
