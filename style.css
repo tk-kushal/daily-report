@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 :root {
   --background: hsl(268, 87%, 94%);
   --secondaryBackground: hsl(275, 35%, 80%);
@@ -48,13 +48,13 @@ body {
   display: flex;
   justify-content: end;
   align-items: center;
-  height: 70px;
+  height: 60px;
   width: 100%;
 }
 .right > * {
-  font-size: 23px;
-  width: 35px;
-  height: 35px;
+  font-size: 20px;
+  width: 28px;
+  height: 28px;
   margin-right: 15px;
   padding: 8px;
   border-radius: 50%;
@@ -65,7 +65,7 @@ body {
 }
 
 .user > img {
-  width: 53px;
+  width: 48px;
 }
 .transitionContainer {
   width: 100%;
@@ -121,6 +121,7 @@ body {
   padding: 20px 40px 20px 40px;
   box-sizing: border-box;
   height: 1000px;
+  font-size: 20px;
 }
 @media (hover: hover) {
   .right > *:hover {
@@ -140,20 +141,12 @@ body {
   .right>*{
     margin-right: 0;
   }
-  .title {
-    display: none;
-  }
   .right {
     justify-content: space-around;
   }
   .main {
-    margin-top: 0;
-    padding: 0;
-  }
-  .main > * {
-    border-radius: 0;
-    padding: 30px;
-    padding-top: 80px;
+    margin: 50px 0 50px;
+    padding: 20px;
   }
   .title{
     margin: 0;
@@ -162,13 +155,13 @@ body {
     justify-content: center;
     top: 0;
     font-size: 20px;
-    background:linear-gradient(var(--secondaryBackground)70%, transparent 100%);
+    background:linear-gradient(var(--background)70%, transparent 100%);
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     padding-bottom: 30px;
   }
   .text{
-    background-color: var(--background);
+    background-color: var(--secondaryBackground);
     border-radius: 30px;
     padding: 8px 80px;
   }
@@ -205,8 +198,26 @@ body {
 }
 .lable{
   margin-top: 20px;
-  font-size: 22px;
+  font-size: 18px;
 }
 .status{
   font-size: 16px;
+}
+.daysQuote{
+  font-family:  'Times New Roman', Times, serif;
+  text-align: center;
+  height: fit-content;
+  margin: 20px;
+  background-color: transparent;
+  border: 2px solid var(--secondaryBackground);
+}
+.daysQuote>i{
+  font-size: 16px;
+  transform: translateY(-5px);
+}
+.author{
+  margin-top: 10px;
+  width: 100%;
+  text-align: right;
+  font-size: 14px;
 }
