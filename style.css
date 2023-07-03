@@ -1,14 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
   --background: hsl(268, 87%, 94%);
   --secondaryBackground: hsl(275, 35%, 80%);
-  --primaryButton: #71C9CE;
-  --uncheckedStar: #71C9CE;
+  --primaryButton: #71c9ce;
+  --uncheckedStar: #71c9ce;
   --primary: hsl(275, 49%, 63%);
   --circleSize: 1000px;
   --textColor: hsl(275, 49%, 20%);
+  --secondaryText: hsla(275, 49%, 20%, 0.568);
   --textInvert: hsl(275, 49%, 100%);
-  --selectedColor:yellow;
+  --selectedColor: yellow;
+}
+input, textarea {
+  font-family: "Montserrat", sans-serif;
 }
 body {
   font-family: "Montserrat", sans-serif;
@@ -106,7 +110,7 @@ body {
   pointer-events: none;
 }
 .main {
-  margin-top: 80px;
+  margin-top: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,10 +122,13 @@ body {
   background-color: var(--secondaryBackground);
   width: 100%;
   border-radius: 10px;
-  padding: 20px 40px 20px 40px;
+  padding: 20px 20px 20px 20px;
   box-sizing: border-box;
   height: 1000px;
   font-size: 20px;
+}
+.report {
+  font-weight: 500;
 }
 @media (hover: hover) {
   .right > *:hover {
@@ -138,7 +145,7 @@ body {
   .navbar {
     bottom: 0;
   }
-  .right>*{
+  .right > * {
     margin-right: 0;
   }
   .right {
@@ -148,76 +155,110 @@ body {
     margin: 50px 0 50px;
     padding: 20px;
   }
-  .title{
+  .title {
     margin: 0;
     display: flex;
     position: fixed;
     justify-content: center;
     top: 0;
     font-size: 20px;
-    background:linear-gradient(var(--background)70%, transparent 100%);
+    background: linear-gradient(var(--background) 70%, transparent 100%);
     width: 100%;
     padding: 15px;
     padding-bottom: 30px;
   }
-  .text{
+  .text {
     background-color: var(--secondaryBackground);
     border-radius: 30px;
     padding: 8px 80px;
   }
 }
-.slider{
+.slider {
   position: relative;
+  width: 200px;
+  max-width: 100%;
+  margin-right: 20px;
 }
-.star-input{
+.star-input {
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  top:5px;
-  font-size: 28px;
-  pointer-events:none;
+  top: 5px;
+  font-size: 30px;
+  pointer-events: none;
   left: 125px;
-  margin-left: -15px;
-  border: 2px solid var(--textColor);
-  border-radius: 50%;
-  padding: 2px;
-  background-color: var(--textInvert);
+  margin-left: -20px;
   z-index: 1;
-
+  padding: 3px 0;
 }
-.star-input>i {
+.star-input > i,
+.star-input > span {
   display: none;
   cursor: pointer;
   transition: 300ms color ease;
-  color:var(--textColor);
-  
+  color: var(--textColor);
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  border-radius: 50%;
+  text-shadow: 0 0 5px var(--textColor);
 }
-.selectedEmoji{
+.selectedEmoji {
   display: none;
 }
-.lable{
-  margin-top: 20px;
+.lable {
   font-size: 18px;
+  margin: 10px 0;
 }
-.status{
+.status {
   font-size: 16px;
 }
-.daysQuote{
-  font-family:  'Times New Roman', Times, serif;
+.daysQuote {
+  font-family: "Times New Roman", Times, serif;
   text-align: center;
   height: fit-content;
   margin: 20px;
   background-color: transparent;
   border: 2px solid var(--secondaryBackground);
 }
-.daysQuote>i{
+.daysQuote > i {
   font-size: 16px;
   transform: translateY(-5px);
 }
-.author{
+.author {
   margin-top: 10px;
   width: 100%;
   text-align: right;
   font-size: 14px;
+}
+.question {
+  margin-top: 20px;
+  border-bottom: 1px solid var(--background);
+  padding-bottom: 10px;
+}
+input[type="text"], textarea {
+  color: var(--textColor);
+  max-width: 100%;
+  width: 250px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 18px;
+  background-color: var(--background);
+  outline: 2px solid transparent;
+  transition: 300ms outline;
+  margin: 10px 0;
+}
+input[type="text"]:focus,textarea:focus {
+  outline: 2px solid var(--textColor);
+}
+input[type="text"]::placeholder {
+  color: var(--secondaryText);
+}
+textarea{
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
 }

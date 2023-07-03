@@ -1,52 +1,110 @@
-const REPORT = "report",
-  CALANDER = "calander",
-  PROFILE = "profile";
+const REPORT = "/",
+  CALANDER = "/calander",
+  PROFILE = "/profile";
 const reportBtn = document.getElementsByClassName("report")[0];
 const calanderBtn = document.getElementsByClassName("calander")[0];
 const userBtn = document.getElementsByClassName("user")[0];
 const body = document.getElementsByTagName("body")[0];
 const title = document.getElementsByClassName("text")[0];
-const selectedColors = ["red", "orange", "yellow", "lightgreen", "cyan"];
 const navbarContainer = document.getElementsByClassName("navbarContainer")[0];
 const sliders = document.getElementsByClassName("emojiSlider");
 let currentView = REPORT;
 let currentReport = {
-  feel:null,
-  energy:null
+  feel: null,
+  energy: null,
 };
 let hold = false;
-for (let i = 0; i < sliders.length; i++) {
-  
-  sliders[i].addEventListener('change', (e) => {
-    handleEmojiSliderEvent(e,e.x)
-    });
-  sliders[i].addEventListener('touchstart', (e) => {
-    hold = true;
-    handleEmojiSliderEvent(e,e.changedTouches[0].pageX)
-    });
-  sliders[i].addEventListener('mousedown', (e) => {
-    hold = true;
-    handleEmojiSliderEvent(e,e.x)
-    });
-  sliders[i].addEventListener('touchmove', (e) => {handleEmojiSliderEvent(e,e.changedTouches[0].pageX)
-    hold = true});
-  sliders[i].addEventListener('mousemove', (e) => handleEmojiSliderEvent(e,e.x));
-  sliders[i].addEventListener('touchend', (e) => hold = false);
-  sliders[i].addEventListener('mouseup', (e) => hold = false);
+
+//Setting initial view ot Report
+updateView(REPORT);
+handleUrlChangeEvent();
+window.onpopstate = () => handleUrlChangeEvent();
+//Updating the URL based on current View
+function windowNavigation(view, subpath) {
+  window.history.pushState({}, view, window.location.origin + view + subpath);
 }
-function handleEmojiSliderEvent(e,x) {
+function handleUrlChangeEvent() {
+  let path = window.location.pathname;
+  if (currentView !== path) {
+    if (path === REPORT) {
+      transtition(
+        null,
+        reportBtn,
+        REPORT,
+        reportBtn.getBoundingClientRect().left,
+        reportBtn.getBoundingClientRect().top
+      );
+    } else if (path === CALANDER) {
+      transtition(
+        null,
+        calanderBtn,
+        CALANDER,
+        calanderBtn.getBoundingClientRect().left,
+        calanderBtn.getBoundingClientRect().top
+      );
+    } else if (path === PROFILE) {
+      transtition(
+        null,
+        userBtn,
+        PROFILE,
+        userBtn.getBoundingClientRect().left,
+        userBtn.getBoundingClientRect().top
+      );
+    }
+  }
+}
+//adding event listeners to Sliders
+for (let i = 0; i < sliders.length; i++) {
+  initiateEmojiPosition(sliders[i])
+  sliders[i].addEventListener("change", (e) => {
+    handleEmojiSliderEvent(e, e.x);
+  });
+  sliders[i].addEventListener("touchstart", (e) => {
+    hold = true;
+    handleEmojiSliderEvent(e, e.changedTouches[0].pageX);
+  });
+  sliders[i].addEventListener("mousedown", (e) => {
+    hold = true;
+    handleEmojiSliderEvent(e, e.x);
+  });
+  sliders[i].addEventListener("touchmove", (e) => {
+    handleEmojiSliderEvent(e, e.changedTouches[0].pageX);
+    hold = true;
+  });
+  sliders[i].addEventListener("mousemove", (e) =>
+    handleEmojiSliderEvent(e, e.x)
+  );
+  sliders[i].addEventListener("touchend", (e) => (hold = false));
+  sliders[i].addEventListener("mouseup", (e) => (hold = false));
+}
+//Emoji Slider
+function handleEmojiSliderEvent(e, x) {
   let parent = e.srcElement.parentElement;
   let sliderRect = parent.children[1].getBoundingClientRect();
   let number = e.srcElement.value;
-  let offsetX = x-sliderRect.x;
-  if(offsetX<=sliderRect.width-10&&offsetX>10&&hold){
-    parent.children[0].style.left = offsetX+'px'
+  let offsetX = x - sliderRect.x;
+  if (offsetX <= sliderRect.width - 10 && offsetX > 10 && hold) {
+    parent.children[0].style.left = offsetX + "px";
   }
   for (let i = 0; i < parent.children[0].children.length; i++) {
     if (number == i) {
-      parent.children[0].children[i].style.display = "inline-block"
+      parent.children[0].children[i].style.display = "inline-block";
     } else {
-      parent.children[0].children[i].style.display = "none"
+      parent.children[0].children[i].style.display = "none";
+    }
+  }
+}
+function initiateEmojiPosition(slider){
+  let emoji = slider.parentElement.children[0];
+  let number = slider.value
+  let width = slider.getBoundingClientRect().width;
+  let position = number*(width/(emoji.children.length-1))
+  emoji.style.left = position+'px'
+  for (let i = 0; i < emoji.children.length; i++) {
+    if (number == i) {
+      emoji.children[i].style.display = "inline-block";
+    } else {
+      emoji.children[i].style.display = "none";
     }
   }
 }
@@ -70,13 +128,17 @@ function updateView(view) {
   } else {
   }
 }
-function transtition(e, element, view) {
+function transtition(e, element, view, cordX, cordY) {
   element.style.zIndex = "10";
   let transition = document.createElement("div");
   let transitionContainer = document.createElement("div");
   let rect = element.getBoundingClientRect();
-  let x = rect.left + e.target.clientWidth / 2;
-  let y = rect.top + e.target.clientHeight / 2;
+  let x = cordX+element.clientWidth / 2;
+  let y = cordY+element.clientHeight / 2;
+  if (e) {
+    x = rect.left + e.target.clientWidth / 2;
+    y = rect.top + e.target.clientHeight / 2;
+  }
   window.innerHeight > window.innerWidth
     ? document.documentElement.style.setProperty(
         "--circleSize",
@@ -101,13 +163,15 @@ function transtition(e, element, view) {
     element.style.zIndex = "1";
   }, 600);
 }
-updateView(REPORT);
 reportBtn.addEventListener("click", (e) => {
+  windowNavigation(REPORT, "");
   transtition(e, reportBtn, REPORT);
 });
 calanderBtn.addEventListener("click", (e) => {
+  windowNavigation(CALANDER, "");
   transtition(e, calanderBtn, CALANDER);
 });
 userBtn.addEventListener("click", (e) => {
+  windowNavigation(PROFILE, "");
   transtition(e, userBtn, PROFILE);
 });
