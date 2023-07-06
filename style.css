@@ -68,7 +68,7 @@ body {
   overflow: hidden;
 }
 
-.user > img {
+.userBtn > img {
   width: 48px;
 }
 .transitionContainer {
@@ -261,4 +261,28 @@ textarea{
   width: 100%;
   box-sizing: border-box;
   padding: 10px;
+}
+.weekDays,.days{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border: 1px solid black;
+}
+.weekDay,.day{
+  display: flex;
+  background-color: var(--background);
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  margin: 20px;
+  border-radius: 50%;
+}
+.days{
+  columns: 7;
+  flex-wrap: wrap;
+}
+.day{
+  flex: 1 0 7%;
+  max-width: 30px;
 }

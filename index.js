@@ -1,13 +1,16 @@
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
-const reportBtn = document.getElementsByClassName("report")[0];
-const calanderBtn = document.getElementsByClassName("calander")[0];
-const userBtn = document.getElementsByClassName("user")[0];
+const reportBtn = document.getElementsByClassName("reportBtn")[0];
+const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
+const userBtn = document.getElementsByClassName("userBtn")[0];
 const body = document.getElementsByTagName("body")[0];
 const title = document.getElementsByClassName("text")[0];
 const navbarContainer = document.getElementsByClassName("navbarContainer")[0];
 const sliders = document.getElementsByClassName("emojiSlider");
+const reportSection = document.getElementsByClassName("report")[0];
+const calanderSection = document.getElementsByClassName("calander")[0];
+const profileSection = document.getElementsByClassName("profile")[0];
 let currentView = REPORT;
 let currentReport = {
   feel: null,
@@ -16,7 +19,6 @@ let currentReport = {
 let hold = false;
 
 //Setting initial view ot Report
-updateView(REPORT);
 handleUrlChangeEvent();
 window.onpopstate = () => handleUrlChangeEvent();
 //Updating the URL based on current View
@@ -51,11 +53,13 @@ function handleUrlChangeEvent() {
         userBtn.getBoundingClientRect().top
       );
     }
+  }else{
+    updateView(currentView);
   }
 }
 //adding event listeners to Sliders
 for (let i = 0; i < sliders.length; i++) {
-  initiateEmojiPosition(sliders[i])
+  initiateEmojiPosition(sliders[i]);
   sliders[i].addEventListener("change", (e) => {
     handleEmojiSliderEvent(e, e.x);
   });
@@ -94,12 +98,12 @@ function handleEmojiSliderEvent(e, x) {
     }
   }
 }
-function initiateEmojiPosition(slider){
+function initiateEmojiPosition(slider) {
   let emoji = slider.parentElement.children[0];
-  let number = slider.value
+  let number = slider.value;
   let width = slider.getBoundingClientRect().width;
-  let position = number*(width/(emoji.children.length-1))
-  emoji.style.left = position+'px'
+  let position = number * (width / (emoji.children.length - 1));
+  emoji.style.left = position + "px";
   for (let i = 0; i < emoji.children.length; i++) {
     if (number == i) {
       emoji.children[i].style.display = "inline-block";
@@ -115,16 +119,25 @@ function updateView(view) {
     reportBtn.classList.add("selected");
     calanderBtn.classList.remove("selected");
     userBtn.classList.remove("selected");
+    reportSection.style.display = "block";
+    calanderSection.style.display = "none";
+    profileSection.style.display = "none";
   } else if (currentView === CALANDER) {
     title.innerText = "Calander";
     calanderBtn.classList.add("selected");
     reportBtn.classList.remove("selected");
     userBtn.classList.remove("selected");
+    reportSection.style.display = "none";
+    calanderSection.style.display = "block";
+    profileSection.style.display = "none";
   } else if (currentView === PROFILE) {
     title.innerText = "Profile";
     userBtn.classList.add("selected");
     reportBtn.classList.remove("selected");
     calanderBtn.classList.remove("selected");
+    reportSection.style.display = "none";
+    calanderSection.style.display = "none";
+    profileSection.style.display = "block";
   } else {
   }
 }
@@ -133,8 +146,8 @@ function transtition(e, element, view, cordX, cordY) {
   let transition = document.createElement("div");
   let transitionContainer = document.createElement("div");
   let rect = element.getBoundingClientRect();
-  let x = cordX+element.clientWidth / 2;
-  let y = cordY+element.clientHeight / 2;
+  let x = cordX + element.clientWidth / 2;
+  let y = cordY + element.clientHeight / 2;
   if (e) {
     x = rect.left + e.target.clientWidth / 2;
     y = rect.top + e.target.clientHeight / 2;
