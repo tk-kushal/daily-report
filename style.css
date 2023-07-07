@@ -1,17 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
-  --background: hsl(268, 87%, 94%);
-  --secondaryBackground: hsl(275, 35%, 80%);
+  --background: hsl(0, 0%, 0%);
+  --secondaryBackground: hsl(0, 0%, 11%);
   --primaryButton: #71c9ce;
   --uncheckedStar: #71c9ce;
-  --primary: hsl(275, 49%, 63%);
+  --primary: hsl(0, 0%, 65%);
   --circleSize: 1000px;
-  --textColor: hsl(275, 49%, 20%);
-  --secondaryText: hsla(275, 49%, 20%, 0.568);
-  --textInvert: hsl(275, 49%, 100%);
-  --selectedColor: yellow;
+  --textColor: hsl(0, 0%, 100%);
+  --secondaryText: hsla(0, 20%, 98%, 0.463);
+  --textInvert: hsl(0, 0%, 51%);
+  --selectedColor: rgb(182, 182, 182);
 }
-input, textarea {
+input,
+textarea {
   font-family: "Montserrat", sans-serif;
 }
 body {
@@ -124,55 +125,12 @@ body {
   border-radius: 10px;
   padding: 20px 20px 20px 20px;
   box-sizing: border-box;
-  height: 1000px;
   font-size: 20px;
 }
 .report {
   font-weight: 500;
 }
-@media (hover: hover) {
-  .right > *:hover {
-    color: white;
-    background: var(--primary);
-    cursor: pointer;
-    border-radius: 20%;
-    border: 2px solid transparent;
-  }
-}
-@media (hover: none) {
-}
-@media screen and (max-width: 600px) {
-  .navbar {
-    bottom: 0;
-  }
-  .right > * {
-    margin-right: 0;
-  }
-  .right {
-    justify-content: space-around;
-  }
-  .main {
-    margin: 50px 0 50px;
-    padding: 20px;
-  }
-  .title {
-    margin: 0;
-    display: flex;
-    position: fixed;
-    justify-content: center;
-    top: 0;
-    font-size: 20px;
-    background: linear-gradient(var(--background) 70%, transparent 100%);
-    width: 100%;
-    padding: 15px;
-    padding-bottom: 30px;
-  }
-  .text {
-    background-color: var(--secondaryBackground);
-    border-radius: 30px;
-    padding: 8px 80px;
-  }
-}
+
 .slider {
   position: relative;
   width: 200px;
@@ -219,6 +177,7 @@ body {
   text-align: center;
   height: fit-content;
   margin: 20px;
+  padding-top: 30px;
   background-color: transparent;
   border: 2px solid var(--secondaryBackground);
 }
@@ -232,12 +191,13 @@ body {
   text-align: right;
   font-size: 14px;
 }
-.question {
+.question:not(:last-child) {
   margin-top: 20px;
   border-bottom: 1px solid var(--background);
   padding-bottom: 10px;
 }
-input[type="text"], textarea {
+input[type="text"],
+textarea {
   color: var(--textColor);
   max-width: 100%;
   width: 250px;
@@ -248,41 +208,126 @@ input[type="text"], textarea {
   background-color: var(--background);
   outline: 2px solid transparent;
   transition: 300ms outline;
-  margin: 10px 0;
+  margin: 10px 0 0;
 }
-input[type="text"]:focus,textarea:focus {
+input[type="text"]:focus,
+textarea:focus {
   outline: 2px solid var(--textColor);
 }
 input[type="text"]::placeholder {
   color: var(--secondaryText);
 }
-textarea{
+textarea {
   resize: none;
   width: 100%;
   box-sizing: border-box;
   padding: 10px;
 }
-.weekDays,.days{
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  box-sizing: border-box;
-  border: 1px solid black;
+.days,
+.weekDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: fit-content;
+  min-width: 300px;
 }
-.weekDay,.day{
+.weekDays{
+  border-bottom: 1px solid var(--background);
+}
+.weekDay,
+.day {
   display: flex;
   background-color: var(--background);
-  font-size: 20px;
+  font-size: 23px;
   width: 30px;
   height: 30px;
-  margin: 20px;
+  margin: 20px auto;
   border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  user-select: none;
+  transition: 500ms;
+  transition-property: background, border-radius, color, border;
 }
-.days{
-  columns: 7;
-  flex-wrap: wrap;
+
+.weekDay{
+  background-color: var(--secondaryBackground);
+  margin-top: 10px;
 }
-.day{
-  flex: 1 0 7%;
-  max-width: 30px;
+.prevMonthDay{
+  opacity: 0.3;
+  pointer-events: none;
+}
+.completedDay{
+  background-color: hsla(28, 100%, 50%, 0.507);
+}
+@media (hover: hover) {
+  .right > *:hover {
+    color: white;
+    background: var(--primary);
+    cursor: pointer;
+    border-radius: 20%;
+    border: 2px solid transparent;
+  }
+  .day:hover {
+    cursor: pointer;
+    border-radius: 20%;
+    background-color: var(--primary);
+  }
+  .completedDay:hover{
+    background-color: hsl(28, 100%, 50%);
+  }
+}
+@media (hover: none) {
+}
+
+@media screen and (max-width: 600px) {
+  .navbar {
+    bottom: 0;
+  }
+  .right > * {
+    margin-right: 0;
+  }
+  .right {
+    justify-content: space-around;
+  }
+  .report{
+    padding: 10px;
+  }
+  .lable,.slider{
+    margin: 10px;
+  }
+  .main {
+    margin: 50px 0 60px;
+    padding: 5px;
+  }
+  .title {
+    margin: 0;
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    top: 0;
+    font-size: 20px;
+    background: linear-gradient(var(--background) 70%, transparent 100%);
+    width: 100%;
+    padding: 15px;
+    padding-bottom: 30px;
+  }
+  .text {
+    background-color: var(--secondaryBackground);
+    border-radius: 30px;
+    padding: 8px 80px;
+  }
+  .weekDay,
+  .day {
+    display: flex;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    margin: 10px auto;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+  }
 }
