@@ -297,6 +297,9 @@ textarea {
   .lable,.slider{
     margin: 10px;
   }
+  .calander{
+    margin-top: 60px;
+  }
   .main {
     margin: 50px 0 60px;
     padding: 5px;
