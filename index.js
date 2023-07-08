@@ -6,7 +6,6 @@ const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
 const userBtn = document.getElementsByClassName("userBtn")[0];
 const body = document.getElementsByTagName("body")[0];
 const title = document.getElementsByClassName("text")[0];
-const daysQuote = document.getElementsByClassName('daysQuote')[0];
 const navbarContainer = document.getElementsByClassName("navbarContainer")[0];
 const sliders = document.getElementsByClassName("emojiSlider");
 const reportSection = document.getElementsByClassName("report")[0];
@@ -123,7 +122,6 @@ function updateView(view) {
     reportSection.style.display = "block";
     calanderSection.style.display = "none";
     profileSection.style.display = "none";
-    daysQuote.style.display = 'block';
   } else if (currentView === CALANDER) {
     title.innerText = "Calander";
     calanderBtn.classList.add("selected");
@@ -132,7 +130,6 @@ function updateView(view) {
     reportSection.style.display = "none";
     calanderSection.style.display = "block";
     profileSection.style.display = "none";
-    daysQuote.style.display = 'none';
   } else if (currentView === PROFILE) {
     title.innerText = "Profile";
     userBtn.classList.add("selected");
@@ -141,7 +138,6 @@ function updateView(view) {
     reportSection.style.display = "none";
     calanderSection.style.display = "none";
     profileSection.style.display = "block";
-    daysQuote.style.display = 'none';
   } else {
   }
 }

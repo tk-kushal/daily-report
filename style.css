@@ -16,6 +16,7 @@ textarea {
   font-family: "Montserrat", sans-serif;
 }
 body {
+  -webkit-tap-highlight-color: transparent;
   font-family: "Montserrat", sans-serif;
   background-color: var(--background);
   color: var(--textColor);
@@ -120,15 +121,22 @@ body {
 }
 .main > * {
   max-width: 800px;
-  background-color: var(--secondaryBackground);
   width: 100%;
   border-radius: 10px;
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
   box-sizing: border-box;
   font-size: 20px;
 }
-.report {
+.reportContainer,.calanderContainer,.profileContainer {
+  width: 100%;
   font-weight: 500;
+  background-color: var(--secondaryBackground);
+  max-width: 800px;
+  width: 100%;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 20px;
 }
 
 .slider {
@@ -176,10 +184,15 @@ body {
   font-family: "Times New Roman", Times, serif;
   text-align: center;
   height: fit-content;
-  margin: 20px;
+  margin: 20px 0;
+  padding: 20px;
   padding-top: 30px;
   background-color: transparent;
   border: 2px solid var(--secondaryBackground);
+  width: 100%;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 20px;
 }
 .daysQuote > i {
   font-size: 16px;
@@ -231,7 +244,8 @@ textarea {
   min-width: 300px;
 }
 .weekDays{
-  border-bottom: 1px solid var(--background);
+  border-bottom: 3px solid var(--background);
+  margin-bottom: 10px;
 }
 .weekDay,
 .day {
@@ -261,6 +275,41 @@ textarea {
 .completedDay{
   background-color: hsla(28, 100%, 50%, 0.507);
 }
+.calanderControlls{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.yearAndMonth,.calanderButtons{
+  display: flex;
+}
+.calanderButtons>*{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 20px;
+  height: 20px;
+  font-size: 22px;
+  margin: 15px 10px;
+  border: 2px solid var(--textColor);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 500ms background-color;
+}
+
+.yearAndMonth>*{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  padding: 0 10px;
+  margin: 10px 0;
+  font-weight: bold;
+}
+.yearControlls{
+  border-right: 1px solid var(--primary);
+}
 @media (hover: hover) {
   .right > *:hover {
     color: white;
@@ -277,6 +326,9 @@ textarea {
   .completedDay:hover{
     background-color: hsl(28, 100%, 50%);
   }
+  .calanderButtons>*:hover{
+    background-color: var(--primary);
+  }
 }
 @media (hover: none) {
 }
@@ -284,6 +336,8 @@ textarea {
 @media screen and (max-width: 600px) {
   .navbar {
     bottom: 0;
+    left: 0;
+    right: 0;
   }
   .right > * {
     margin-right: 0;
@@ -291,17 +345,14 @@ textarea {
   .right {
     justify-content: space-around;
   }
-  .report{
+  .reportContainer{
     padding: 10px;
   }
   .lable,.slider{
     margin: 10px;
   }
-  .calander{
-    margin-top: 60px;
-  }
   .main {
-    margin: 50px 0 60px;
+    margin: 60px 0 60px;
     padding: 5px;
   }
   .title {
@@ -332,5 +383,13 @@ textarea {
     justify-content: center;
     align-items: center;
     padding: 5px;
+  }
+  .calanderButtons>*{
+    font-size: 18px;
+    width: 15px;
+    height: 15px;
+  }
+  .yearAndMonth>*{
+    font-size: 23px;
   }
 }
