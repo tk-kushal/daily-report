@@ -184,7 +184,7 @@ body {
   font-family: "Times New Roman", Times, serif;
   text-align: center;
   height: fit-content;
-  margin: 20px 0;
+  margin: 0 0 20px;
   padding: 20px;
   padding-top: 30px;
   background-color: transparent;
@@ -335,6 +335,7 @@ textarea {
 
 @media screen and (max-width: 600px) {
   .navbar {
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
@@ -361,14 +362,12 @@ textarea {
     position: fixed;
     justify-content: center;
     top: 0;
-    font-size: 20px;
     background: linear-gradient(var(--background) 70%, transparent 100%);
     width: 100%;
-    padding: 15px;
-    padding-bottom: 30px;
+    padding: 10px;
+    padding-bottom: 25px;
   }
   .text {
-    background-color: var(--secondaryBackground);
     border-radius: 30px;
     padding: 8px 80px;
   }
