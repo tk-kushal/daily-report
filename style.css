@@ -392,3 +392,20 @@ textarea {
     font-size: 23px;
   }
 }
+.profileContainer{
+  display: flex;
+  justify-content: center;
+}
+.loginBtn{
+  color: var(--textColor);
+  padding: 10px 20px;
+  border: 2px solid var(--primary);
+  font-size: 22px;
+  border-radius: 40px;
+  transition: 400ms;
+}
+.loginBtn:hover{
+  cursor: pointer;
+  background-color: hsl(0, 0%,50%);
+  border-radius: 10px;
+}
