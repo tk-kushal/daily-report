@@ -25,11 +25,12 @@
             <i class="fa-solid fa-calendar-days cetner"></i>
           </div>
           <div class="userBtn centre">
-            <i class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-user" id="profileIcon"></i>
             <img
               style="display: none;"
-              src="https://lh3.googleusercontent.com/a/AGNmyxZ1xs_-dntzOmIGNlJEevbHUl3SU-EgjMcpx1V7=s96-c"
+              src=""
               alt=""
+              id="profilePicture"
             />
           </div>
         </div>
@@ -169,12 +170,13 @@
       </div>
       <div class="profile" style="display: none;">
         <div class="profileContainer">
-          <div class="loginBtn">
+          <div class="loginBtn" style="display: none;">
             Login
           </div>
         </div>
       </div>
     </div>
   </body>
-  <script src="index.js"></script>
+  <script src="index.js" type="module"></script>
+  <script type="module" src="firebase.js"></script>
 </html>

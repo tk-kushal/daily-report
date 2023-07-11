@@ -1,3 +1,4 @@
+import {auth,signIn,signOut} from "./firebase.js"
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
@@ -11,13 +12,39 @@ const sliders = document.getElementsByClassName("emojiSlider");
 const reportSection = document.getElementsByClassName("report")[0];
 const calanderSection = document.getElementsByClassName("calander")[0];
 const profileSection = document.getElementsByClassName("profile")[0];
+const loginBtn = document.getElementsByClassName('loginBtn')[0];
+const profilePicture = document.getElementById('profilePicture');
+const profileIcon = document.getElementById('profileIcon')
 let currentView = REPORT;
 let currentReport = {
   feel: null,
   energy: null,
 };
+//for Dragging in Slider
 let hold = false;
-
+let currentUser = null
+auth.onAuthStateChanged((user)=>{
+  currentUser = user
+  if(currentUser){
+    loginBtn.style.display = 'flex'
+    loginBtn.innerText = "Logout"
+    profilePicture.src = currentUser.photoURL
+    profilePicture.style.display = 'flex'
+    profileIcon.style.display = 'none'
+  }else{
+    loginBtn.style.display = 'flex'
+    loginBtn.innerText = "Login"
+    profilePicture.style.display = 'none'
+    profileIcon.style.display = 'flex'
+  }
+})
+loginBtn.addEventListener('click',()=>{
+  if(currentUser){
+    signOut()
+  }else{
+    signIn()
+  }
+})
 //Setting initial view ot Report
 handleUrlChangeEvent();
 window.onpopstate = () => handleUrlChangeEvent();
@@ -51,6 +78,15 @@ function handleUrlChangeEvent() {
         PROFILE,
         userBtn.getBoundingClientRect().left,
         userBtn.getBoundingClientRect().top
+      );
+    }
+    else{
+      transtition(
+        null,
+        reportBtn,
+        REPORT,
+        reportBtn.getBoundingClientRect().left,
+        reportBtn.getBoundingClientRect().top
       );
     }
   }else{
