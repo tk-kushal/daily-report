@@ -11,6 +11,7 @@
     ></script>
     <title>Daily Journal</title>
   </head>
+
   <body>
     <div class="navbarContainer">
       <div class="navbar centre">
@@ -26,27 +27,28 @@
           </div>
           <div class="userBtn centre">
             <i class="fa-solid fa-user" id="profileIcon"></i>
-            <img
-              style="display: none;"
-              src=""
-              alt=""
-              id="profilePicture"
-            />
+            <img style="display: none" src="" alt="" id="profilePicture" />
           </div>
         </div>
       </div>
     </div>
     <div class="main">
-      <div class="report" style="display: none;">
+      <div class="report" style="display: none">
         <div class="daysQuote">
-        <i class="fa-solid fa-quote-left"></i>
-        <span class="quote">
-          NOTHING IS IMPOSSIBLE. THE WORD ITSELF SAYS 'I'M POSSIBLE!'
-        </span>
-        <i class="fa-solid fa-quote-right"></i>
-        <div class="author">-Audrey Hepburn</div>
-      </div>
-      <div class="reportContainer" ">
+          <i class="fa-solid fa-quote-left"></i>
+          <span class="quote">
+            NOTHING IS IMPOSSIBLE. THE WORD ITSELF SAYS 'I'M POSSIBLE!'
+          </span>
+          <i class="fa-solid fa-quote-right"></i>
+          <div class="author">-Audrey Hepburn</div>
+        </div>
+        <div class="date">
+          
+        </div>
+        <div class="reportContainer" ">
+        <div class="question">
+          <input type="text" placeholder="Name Your Day" id="title" />
+        </div>
         <div class="question">
           <div class="lable">How did you Feel today?</div>
           <div class="slider">
@@ -66,11 +68,6 @@
               max="4"
             />
           </div>
-          <input
-            type="text"
-            class="description"
-            placeholder="Possible Causes?"
-          />
         </div>
         <div class="question">
           <div class="lable">What was your energy level?</div>
@@ -91,89 +88,124 @@
               max="4"
             />
           </div>
-          <input
-            type="text"
-            class="description"
-            placeholder="Possible Causes?"
-          />
         </div>
         <div class="question">
-          <div class="lable">What happened Today?</div>
+          <div class="lable">How was your Health?</div>
+          <div class="slider">
+            <div class="star-input" id="energy">
+              <span>☹️</span>
+              <span>🙁</span>
+              <span style="display: inline-block">😐</span>
+              <span>🙂</span>
+              <span>😄</span>
+            </div>
+            <input
+              type="range"
+              name=""
+              id=""
+              class="emojiSlider"
+              value="2"
+              max="4"
+            />
+          </div>
+        </div>
+        <div class="question">
+          <div class="lable">How did you feel Emotionaly?</div>
+          <div class="slider">
+            <div class="star-input" id="energy">
+              <span>💔</span>
+              <span>❤️‍🩹</span>
+              <span style="display: inline-block">❤️</span>
+              <span>💓</span>
+              <span>💖</span>
+            </div>
+            <input
+              type="range"
+              name=""
+              id=""
+              class="emojiSlider"
+              value="2"
+              max="4"
+            />
+          </div>
+        </div>
+        <div class="question">
           <textarea
             name="daysEvents"
             id="daysEvents"
             rows="20"
-            placeholder="Daily Activities"
+            placeholder="Write about your day"
           ></textarea>
         </div>
       </div>
     </div>
-      <div class="calander" style="display: none;">
-        <div class="calanderControlls">
-          <div class="yearAndMonth">
-            <div class="yearControlls">2023</div>
-            <div class="monthControlls">July</div>
-          </div>
-          <div class="calanderButtons">
-            <div class="previousMonthBtn"><i class="fa-solid fa-angle-left"></i></div>
-            <div class="nextMonthBtn"><i class="fa-solid fa-angle-right"></i></div>
-          </div>
+    <div class="calander" style="display: none">
+      <div class="calanderControlls">
+        <div class="yearAndMonth">
+          <div class="yearControlls">2023</div>
+          <div class="monthControlls">July</div>
         </div>
-        <div class="calanderContainer">
-          <div class="weekDays">
-            <div class="weekDay">S</div>
-            <div class="weekDay">M</div>
-            <div class="weekDay">T</div>
-            <div class="weekDay">W</div>
-            <div class="weekDay">T</div>
-            <div class="weekDay">F</div>
-            <div class="weekDay">S</div>
+        <div class="calanderButtons">
+          <div class="previousMonthBtn">
+            <i class="fa-solid fa-angle-left"></i>
           </div>
-          <div class="days">
-            <div class="day prevMonthDay">28</div>
-            <div class="day prevMonthDay">29</div>
-            <div class="day completedDay prevMonthDay ">30</div>
-            <div class="day completedDay">1</div>
-            <div class="day">2</div>
-            <div class="day">3</div>
-            <div class="day">4</div>
-            <div class="day">5</div>
-            <div class="day">6</div>
-            <div class="day">7</div>
-            <div class="day">8</div>
-            <div class="day">9</div>
-            <div class="day">10</div>
-            <div class="day">11</div>
-            <div class="day">12</div>
-            <div class="day">13</div>
-            <div class="day">14</div>
-            <div class="day">15</div>
-            <div class="day">16</div>
-            <div class="day">17</div>
-            <div class="day">18</div>
-            <div class="day">19</div>
-            <div class="day">20</div>
-            <div class="day">21</div>
-            <div class="day">22</div>
-            <div class="day">23</div>
-            <div class="day">24</div>
-            <div class="day">25</div>
-            <div class="day">26</div>
-            <div class="day">27</div>
-            <div class="day">28</div>
-            <div class="day">29</div>
-            <div class="day">30</div>
-            <div class="day">31</div>
-            <div class="day prevMonthDay">1</div>
+          <div class="nextMonthBtn">
+            <i class="fa-solid fa-angle-right"></i>
           </div>
         </div>
       </div>
-      <div class="profile" style="display: none;">
-        <div class="profileContainer">
-          <div class="loginBtn" style="display: none;">
-            Login
-          </div>
+      <div class="calanderContainer">
+        <div class="weekDays">
+          <div class="weekDay">S</div>
+          <div class="weekDay">M</div>
+          <div class="weekDay">T</div>
+          <div class="weekDay">W</div>
+          <div class="weekDay">T</div>
+          <div class="weekDay">F</div>
+          <div class="weekDay">S</div>
         </div>
+        <div class="days">
+          <div class="day prevMonthDay">28</div>
+          <div class="day prevMonthDay">29</div>
+          <div class="day completedDay prevMonthDay">30</div>
+          <div class="day completedDay">1</div>
+          <div class="day">2</div>
+          <div class="day">3</div>
+          <div class="day">4</div>
+          <div class="day">5</div>
+          <div class="day">6</div>
+          <div class="day">7</div>
+          <div class="day">8</div>
+          <div class="day">9</div>
+          <div class="day">10</div>
+          <div class="day">11</div>
+          <div class="day">12</div>
+          <div class="day">13</div>
+          <div class="day">14</div>
+          <div class="day">15</div>
+          <div class="day">16</div>
+          <div class="day">17</div>
+          <div class="day">18</div>
+          <div class="day">19</div>
+          <div class="day">20</div>
+          <div class="day">21</div>
+          <div class="day">22</div>
+          <div class="day">23</div>
+          <div class="day">24</div>
+          <div class="day">25</div>
+          <div class="day">26</div>
+          <div class="day">27</div>
+          <div class="day">28</div>
+          <div class="day">29</div>
+          <div class="day">30</div>
+          <div class="day">31</div>
+          <div class="day prevMonthDay">1</div>
+        </div>
+      </div>
+    </div>
+    <div class="profile" style="display: none">
+      <div class="profileContainer">
+        <div class="loginBtn" style="display: none">Login</div>
       </div>
     </div>
   </body>

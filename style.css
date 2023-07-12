@@ -175,7 +175,7 @@ body {
 }
 .lable {
   font-size: 18px;
-  margin: 10px 0;
+  margin: 10px 0 0 2px;
 }
 .status {
   font-size: 16px;
@@ -205,27 +205,34 @@ body {
   font-size: 14px;
 }
 .question:not(:last-child) {
-  margin-top: 20px;
   border-bottom: 1px solid var(--background);
   padding-bottom: 10px;
+}
+.question:not(:first-child){
+  margin-top: 20px;
+}
+#title{
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 20px;
 }
 input[type="text"],
 textarea {
   color: var(--textColor);
   max-width: 100%;
-  width: 250px;
+  width: 100%;
   border: none;
-  padding: 5px 10px;
+  padding: 15px 20px;
   border-radius: 10px;
   font-size: 18px;
   background-color: var(--background);
-  outline: 2px solid transparent;
+  outline: 1px solid transparent;
   transition: 300ms outline;
-  margin: 10px 0 0;
+  box-sizing: border-box;
 }
 input[type="text"]:focus,
 textarea:focus {
-  outline: 2px solid var(--textColor);
+  outline: 1px solid rgb(90, 90, 90);
 }
 input[type="text"]::placeholder {
   color: var(--secondaryText);
@@ -234,7 +241,6 @@ textarea {
   resize: none;
   width: 100%;
   box-sizing: border-box;
-  padding: 10px;
 }
 .days,
 .weekDays {
@@ -334,6 +340,9 @@ textarea {
 }
 
 @media screen and (max-width: 600px) {
+  .report{
+    padding: 30px 0 0;
+  }
   .navbar {
     position: fixed;
     bottom: 0;
