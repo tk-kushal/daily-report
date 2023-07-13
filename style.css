@@ -418,3 +418,54 @@ textarea {
   background-color: hsl(0, 0%,50%);
   border-radius: 10px;
 }
+.report-date{
+  display: flex;
+  font-size: 22px;
+}
+.report-date>*{
+  margin: 10px 0;
+  padding: 0 5px ;
+  font-weight: bold;
+}
+.report-date>*:not(:last-child){
+  border-right: 2px solid var(--primary);
+}
+.report-controlls>.left{
+  display: flex;
+  align-items: center;
+}
+.left>i{
+  margin-left: 5px;
+
+}
+.left>i:hover{
+  cursor: pointer;
+}
+.report-controlls{
+  width: 100%;
+  display: flex;
+  justify-content:space-between;
+}
+.report-controlls-right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.report-controlls-right>i{
+  padding: 5px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  transition: 500ms;
+  transition-property:border-radius, background-color;
+}
+.report-controlls-right>i:hover{
+  border-radius: 20%;
+  cursor: pointer;
+  background-color: var(--primary);
+}
