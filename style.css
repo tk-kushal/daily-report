@@ -247,7 +247,6 @@ textarea {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   height: fit-content;
-  min-width: 300px;
 }
 .weekDays{
   border-bottom: 3px solid var(--background);
@@ -285,11 +284,24 @@ textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 5px;
 }
-.yearAndMonth,.calanderButtons{
+.yearAndMonth{
+  display: flex;
+  border-radius: 30px;
+  height: 30px;
+  padding: 10px;
+  padding-right: 15px;
+  transition: 500ms;
+}
+.yearAndMonth>i{
+  font-size: 20px;
+  padding-left: 0;
+}
+.calanderButtons{
   display: flex;
 }
-.calanderButtons>*{
+.calanderButtons>*,.report-controlls-right>*{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -297,24 +309,79 @@ textarea {
   width: 20px;
   height: 20px;
   font-size: 22px;
-  margin: 15px 10px;
-  border: 2px solid var(--textColor);
+  margin: 10px 10px;
+  border: 2px solid var(--primary);
   border-radius: 50%;
   cursor: pointer;
-  transition: 500ms background-color;
+  transition: 500ms ;
+  transition-property: background-color, border-radius;
 }
 
-.yearAndMonth>*{
+.yearAndMonth>*,.report-date>*{
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 30px;
   padding: 0 10px;
-  margin: 10px 0;
+  margin: 0px 0;
   font-weight: bold;
+  user-select: none;
+  cursor: pointer;
 }
 .yearControlls{
   border-right: 1px solid var(--primary);
+}
+.profileContainer{
+  display: flex;
+  justify-content: center;
+}
+.loginBtn{
+  color: var(--textColor);
+  padding: 10px 20px;
+  border: 2px solid var(--primary);
+  font-size: 22px;
+  border-radius: 30px;
+  transition: 500ms;
+}
+.loginBtn:hover{
+  cursor: pointer;
+  background-color: var(--primary);
+  border-radius: 10px;
+}
+.report-date{
+  display: flex;
+  font-size: 20px;
+  margin: 0;
+}
+.report-date>*:not(:last-child){
+  border-right: 1px solid var(--primary);
+}
+.report-controlls>.left{
+  display: flex;
+  align-items: center;
+}
+.report-controlls-right>:nth-child(1){
+  font-size: 18px;
+}
+.report-controlls{
+  width: 100%;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.left{
+  border-radius: 30px;
+  height: 30px;
+  padding: 10px;
+  padding-right: 15px;
+  transition: 500ms;
+}
+
+.report-controlls-right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media (hover: hover) {
   .right > *:hover {
@@ -332,8 +399,14 @@ textarea {
   .completedDay:hover{
     background-color: hsl(28, 100%, 50%);
   }
-  .calanderButtons>*:hover{
+  .calanderButtons>*:hover,.report-controlls-right>*:hover{
     background-color: var(--primary);
+    border-radius: 20%;
+  }
+  .yearAndMonth:hover,.left:hover{
+    cursor: pointer;
+    background-color: rgb(74, 74, 74);
+    border-radius: 10px;
   }
 }
 @media (hover: none) {
@@ -392,80 +465,51 @@ textarea {
     align-items: center;
     padding: 5px;
   }
-  .calanderButtons>*{
+  .calanderButtons>*,.report-controlls-right>*{
     font-size: 18px;
-    width: 15px;
-    height: 15px;
+    height: 16px;
+    width: 16px;
+    padding: 8px;
   }
-  .yearAndMonth>*{
+  .yearAndMonth{
+    padding: 5px;
+  }
+  .yearAndMonth>*,.report-date>*{
     font-size: 23px;
   }
+  .left{
+    padding: 5px 0;
+    padding-right: 10px;
+  }
+  .report-controlls-right>:nth-child(1){
+    font-size: 16px;
+  }
 }
-.profileContainer{
-  display: flex;
-  justify-content: center;
-}
-.loginBtn{
-  color: var(--textColor);
-  padding: 10px 20px;
-  border: 2px solid var(--primary);
-  font-size: 22px;
-  border-radius: 40px;
-  transition: 400ms;
-}
-.loginBtn:hover{
-  cursor: pointer;
-  background-color: hsl(0, 0%,50%);
-  border-radius: 10px;
-}
-.report-date{
-  display: flex;
-  font-size: 22px;
-}
-.report-date>*{
-  margin: 10px 0;
-  padding: 0 5px ;
-  font-weight: bold;
-}
-.report-date>*:not(:last-child){
-  border-right: 2px solid var(--primary);
-}
-.report-controlls>.left{
-  display: flex;
-  align-items: center;
-}
-.left>i{
-  margin-left: 5px;
-
-}
-.left>i:hover{
-  cursor: pointer;
-}
-.report-controlls{
-  width: 100%;
-  display: flex;
-  justify-content:space-between;
-}
-.report-controlls-right{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.report-controlls-right>i{
-  padding: 5px;
-  border: 2px solid var(--primary);
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 5px;
-  transition: 500ms;
-  transition-property:border-radius, background-color;
-}
-.report-controlls-right>i:hover{
-  border-radius: 20%;
-  cursor: pointer;
-  background-color: var(--primary);
+@media screen and (max-width: 400px){
+  .weekDay,
+  .day {
+    display: flex;
+    font-size: 16px;
+    width: 20px;
+    height: 20px;
+    margin: 10px auto;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+  }
+  .calanderContainer{
+    padding: 10px;
+  }
+  .yearAndMonth>*{
+    font-size: 20px;
+  }
+  .calanderButtons>*{
+    font-size: 18px;
+    margin: 5px;
+    padding: 5px;
+  }
+  .calander{
+    padding: 10px;
+  }
 }
