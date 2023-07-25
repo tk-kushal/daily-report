@@ -9,6 +9,7 @@ const body = document.getElementsByTagName("body")[0];
 const title = document.getElementsByClassName("text")[0];
 const navbarContainer = document.getElementsByClassName("navbarContainer")[0];
 const sliders = document.getElementsByClassName("emojiSlider");
+const toggleButtons = document.getElementsByClassName('yes-no-button');
 const reportSection = document.getElementsByClassName("report")[0];
 const calanderSection = document.getElementsByClassName("calander")[0];
 const profileSection = document.getElementsByClassName("profile")[0];
@@ -116,6 +117,21 @@ for (let i = 0; i < sliders.length; i++) {
   );
   sliders[i].addEventListener("touchend", (e) => (hold = false));
   sliders[i].addEventListener("mouseup", (e) => (hold = false));
+}
+for (let i = 0; i < toggleButtons.length; i++) {
+  let yesButton = toggleButtons[i].getElementsByClassName('yes')[0]
+  let noButton = toggleButtons[i].getElementsByClassName('No')[0]
+  let indicator = toggleButtons[i].getElementsByClassName('indicator')[0]
+  yesButton.addEventListener('click',()=>{
+    indicator.classList.remove('indicator-off')
+    noButton.classList.remove('selectedYesNoBtn')
+    yesButton.classList.add('selectedYesNoBtn')
+  })
+  noButton.addEventListener('click',()=>{
+    indicator.classList.add('indicator-off')
+    yesButton.classList.remove('selectedYesNoBtn')
+    noButton.classList.add('selectedYesNoBtn')
+  })
 }
 //Emoji Slider
 function handleEmojiSliderEvent(e, x) {

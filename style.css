@@ -4,7 +4,8 @@
   --secondaryBackground: hsl(0, 0%, 11%);
   --primaryButton: #71c9ce;
   --uncheckedStar: #71c9ce;
-  --primary: hsl(0, 0%, 65%);
+  --primary: hsl(0, 100%, 69%);
+  --secondary :hsla(0, 85%, 66%, 0.203);
   --circleSize: 1000px;
   --textColor: hsl(0, 0%, 100%);
   --secondaryText: hsla(0, 20%, 98%, 0.463);
@@ -372,14 +373,15 @@ textarea {
 .left{
   border-radius: 30px;
   height: 30px;
-  padding: 10px;
+  padding: 10px 0;
   padding-right: 15px;
   transition: 500ms;
 }
 
-.report-controlls-right{
+.report-controlls-right>*,.report-controlls-right{
   display: flex;
   justify-content: center;
+  align-items: center;
   align-items: center;
 }
 @media (hover: hover) {
@@ -402,7 +404,7 @@ textarea {
     background-color: var(--primary);
     border-radius: 20%;
   }
-  .yearAndMonth:hover,.left:hover{
+  .yearAndMonth:hover{
     cursor: pointer;
     background-color: rgb(74, 74, 74);
     border-radius: 10px;
@@ -515,24 +517,35 @@ textarea {
 .yes-no-button{
   display: flex;
   align-items: center;
-  background-color: var(--background);
+  background-color: var(--secondary);
   width: fit-content;
-  padding: 2px;
+  padding: 3px;
+  border-radius: 30px;
+  user-select: none;
+  margin: 10px 0;
 }
 .yes-no-button>*{
   padding: 5px;
-  width: 35px;
+  width: 40px;
   display: flex;
   justify-content: center;
+  color: var(--textColor);
+  z-index: 2;
+  cursor: pointer;
 }
 .indicator{
-  width: 45px;
+  width: 50px;
   height: 34px;
-  background-color: rgba(255, 0, 0, 0.21);
+  background-color: var(--primary);
   position: absolute;
   padding: 0;
   transition: 300ms;
+  border-radius: 30px;
+  z-index: 1;
 }
 .indicator-off{
-  transform: translate(45px);
+  transform: translate(50px);
+}
+.selectedYesNoBtn{
+  cursor:default;
 }
