@@ -1,4 +1,4 @@
-import {auth,signIn,signOut} from "./firebase.js"
+import { auth, signIn, signOut } from "./firebase.js";
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
@@ -9,13 +9,13 @@ const body = document.getElementsByTagName("body")[0];
 const title = document.getElementsByClassName("text")[0];
 const navbarContainer = document.getElementsByClassName("navbarContainer")[0];
 const sliders = document.getElementsByClassName("emojiSlider");
-const toggleButtons = document.getElementsByClassName('yes-no-button');
+const toggleButtons = document.getElementsByClassName("yes-no-button");
 const reportSection = document.getElementsByClassName("report")[0];
 const calanderSection = document.getElementsByClassName("calander")[0];
 const profileSection = document.getElementsByClassName("profile")[0];
-const loginBtn = document.getElementsByClassName('loginBtn')[0];
-const profilePicture = document.getElementById('profilePicture');
-const profileIcon = document.getElementById('profileIcon')
+const loginBtn = document.getElementsByClassName("loginBtn")[0];
+const profilePicture = document.getElementById("profilePicture");
+const profileIcon = document.getElementById("profileIcon");
 let currentView = REPORT;
 let currentReport = {
   feel: null,
@@ -23,29 +23,29 @@ let currentReport = {
 };
 //for Dragging in Slider
 let hold = false;
-let currentUser = null
-auth.onAuthStateChanged((user)=>{
-  currentUser = user
-  if(currentUser){
-    loginBtn.style.display = 'flex'
-    loginBtn.innerText = "Logout"
-    profilePicture.src = currentUser.photoURL
-    profilePicture.style.display = 'flex'
-    profileIcon.style.display = 'none'
-  }else{
-    loginBtn.style.display = 'flex'
-    loginBtn.innerText = "Login"
-    profilePicture.style.display = 'none'
-    profileIcon.style.display = 'flex'
+let currentUser = null;
+auth.onAuthStateChanged((user) => {
+  currentUser = user;
+  if (currentUser) {
+    loginBtn.style.display = "flex";
+    loginBtn.innerText = "Logout";
+    profilePicture.src = currentUser.photoURL;
+    profilePicture.style.display = "flex";
+    profileIcon.style.display = "none";
+  } else {
+    loginBtn.style.display = "flex";
+    loginBtn.innerText = "Login";
+    profilePicture.style.display = "none";
+    profileIcon.style.display = "flex";
   }
-})
-loginBtn.addEventListener('click',()=>{
-  if(currentUser){
-    signOut()
-  }else{
-    signIn()
+});
+loginBtn.addEventListener("click", () => {
+  if (currentUser) {
+    signOut();
+  } else {
+    signIn();
   }
-})
+});
 //Setting initial view ot Report
 handleUrlChangeEvent();
 window.onpopstate = () => handleUrlChangeEvent();
@@ -80,8 +80,7 @@ function handleUrlChangeEvent() {
         userBtn.getBoundingClientRect().left,
         userBtn.getBoundingClientRect().top
       );
-    }
-    else{
+    } else {
       transtition(
         null,
         reportBtn,
@@ -90,7 +89,7 @@ function handleUrlChangeEvent() {
         reportBtn.getBoundingClientRect().top
       );
     }
-  }else{
+  } else {
     updateView(currentView);
   }
 }
@@ -119,19 +118,19 @@ for (let i = 0; i < sliders.length; i++) {
   sliders[i].addEventListener("mouseup", (e) => (hold = false));
 }
 for (let i = 0; i < toggleButtons.length; i++) {
-  let yesButton = toggleButtons[i].getElementsByClassName('yes')[0]
-  let noButton = toggleButtons[i].getElementsByClassName('No')[0]
-  let indicator = toggleButtons[i].getElementsByClassName('indicator')[0]
-  yesButton.addEventListener('click',()=>{
-    indicator.classList.remove('indicator-off')
-    noButton.classList.remove('selectedYesNoBtn')
-    yesButton.classList.add('selectedYesNoBtn')
-  })
-  noButton.addEventListener('click',()=>{
-    indicator.classList.add('indicator-off')
-    yesButton.classList.remove('selectedYesNoBtn')
-    noButton.classList.add('selectedYesNoBtn')
-  })
+  let yesButton = toggleButtons[i].getElementsByClassName("yes")[0];
+  let noButton = toggleButtons[i].getElementsByClassName("No")[0];
+  let indicator = toggleButtons[i].getElementsByClassName("indicator")[0];
+  yesButton.addEventListener("click", () => {
+    indicator.classList.remove("indicator-off");
+    noButton.classList.remove("selectedYesNoBtn");
+    yesButton.classList.add("selectedYesNoBtn");
+  });
+  noButton.addEventListener("click", () => {
+    indicator.classList.add("indicator-off");
+    yesButton.classList.remove("selectedYesNoBtn");
+    noButton.classList.add("selectedYesNoBtn");
+  });
 }
 //Emoji Slider
 function handleEmojiSliderEvent(e, x) {
@@ -182,6 +181,7 @@ function updateView(view) {
     reportSection.style.display = "none";
     calanderSection.style.display = "block";
     profileSection.style.display = "none";
+    initCalander();
   } else if (currentView === PROFILE) {
     title.innerText = "Profile";
     userBtn.classList.add("selected");
@@ -191,6 +191,114 @@ function updateView(view) {
     calanderSection.style.display = "none";
     profileSection.style.display = "block";
   } else {
+  }
+}
+function initCalander() {
+  let overallDate = new Date();
+  let todaysDate = overallDate.getDate();
+  let todaysDay = overallDate.getDay();
+  let todaysMonth = overallDate.getMonth();
+  let todaysYear = overallDate.getFullYear();
+  let yearControlls = document.getElementsByClassName("yearControlls")[0];
+  let monthControlls = document.getElementsByClassName("monthControlls")[0];
+  yearControlls.innerText = todaysYear;
+  monthControlls.innerText = getMonth(todaysMonth);
+  populateCalander(todaysDay, todaysDate, todaysMonth, todaysYear);
+}
+function populateCalander(day, date, month, year) {
+  let leapYear = false;
+  if (year % 100 == 0) {
+    if (year % 400 == 0) {
+      leapYear = true;
+    }
+  } else if (year % 4 == 0) {
+    leapYear = true;
+  }
+  let prevMonthDays = getDaysInMonth(leapYear,month-1)
+  let thisMonthDays = getDaysInMonth(leapYear,month)
+  let firstDateDay = getFirstDateDay(month,year)
+  console.log(day)
+  console.log(firstDateDay)
+}
+function getFirstDateDay(month,year){
+  
+}
+function getDaysInMonth(leapYear,month){
+  if(month<0){
+    month==11+month;
+  }else if(month>11){
+    month = month-10
+  }
+  if(month<=6){
+    if(month%2==0){
+      return 31;
+    }else if(month == 1 && leapYear){
+      return 29;
+    }else if(month == 1){
+      return 28;
+    }else{
+      return 30;
+    }
+  }else if(month<=11){
+    if(month%2==0){
+      return 30;
+    }
+    else{return 31}
+  }else{
+    return 0;
+  }
+}
+function getMonth(month) {
+  switch (month) {
+    case 0:
+      return "January";
+      break;
+
+    case 1:
+      return "February";
+      break;
+
+    case 2:
+      return "March";
+      break;
+
+    case 3:
+      return "April";
+      break;
+
+    case 4:
+      return "May";
+      break;
+
+    case 5:
+      return "June";
+      break;
+
+    case 6:
+      return "July";
+      break;
+
+    case 7:
+      return "Augst";
+      break;
+
+    case 8:
+      return "September";
+      break;
+
+    case 9:
+      return "October";
+      break;
+
+    case 10:
+      return "November";
+      break;
+    case 11:
+      return "December";
+      break;
+    default:
+      return "";
+      break;
   }
 }
 function transtition(e, element, view, cordX, cordY) {

@@ -274,7 +274,7 @@ textarea {
   background-color: var(--secondaryBackground);
   margin-top: 10px;
 }
-.prevMonthDay{
+.otherMonthDay{
   opacity: 0.3;
   pointer-events: none;
 }
@@ -548,4 +548,7 @@ textarea {
 }
 .selectedYesNoBtn{
   cursor:default;
+}
+.selectedDay{
+  border: 2px solid var(--primary);
 }
