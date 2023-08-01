@@ -5,7 +5,6 @@ const REPORT = "/",
 const reportBtn = document.getElementsByClassName("reportBtn")[0];
 const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
 const userBtn = document.getElementsByClassName("userBtn")[0];
-const body = document.getElementsByTagName("body")[0];
 const title = document.getElementsByClassName("text")[0];
 const navbarContainer = document.getElementsByClassName("navbarContainer")[0];
 const sliders = document.getElementsByClassName("emojiSlider");
@@ -16,14 +15,28 @@ const profileSection = document.getElementsByClassName("profile")[0];
 const loginBtn = document.getElementsByClassName("loginBtn")[0];
 const profilePicture = document.getElementById("profilePicture");
 const profileIcon = document.getElementById("profileIcon");
+const yearControlls = document.getElementsByClassName("yearControlls")[0];
+const monthControlls = document.getElementsByClassName("monthControlls")[0];
+const prevMonthButton = document.getElementsByClassName("previousMonthBtn")[0];
+const nextMonthButton = document.getElementsByClassName("nextMonthBtn")[0];
+const resetCalanderButton = document.getElementsByClassName("resetBtn")[0];
+let overallDate = new Date();
+let todaysDate = overallDate.getDate();
+let todaysMonth = overallDate.getMonth();
+let todaysYear = overallDate.getFullYear();
+let currentMonth = todaysMonth;
+let currentYear = todaysYear;
+let selectedMonth = todaysMonth;
+let selectedYear = todaysYear;
+let selectedDate = todaysDate;
 let currentView = REPORT;
 let currentReport = {
   feel: null,
   energy: null,
 };
-//for Dragging in Slider
-let hold = false;
+let hold = false; //for Dragging in Slider
 let currentUser = null;
+
 auth.onAuthStateChanged((user) => {
   currentUser = user;
   if (currentUser) {
@@ -117,6 +130,7 @@ for (let i = 0; i < sliders.length; i++) {
   sliders[i].addEventListener("touchend", (e) => (hold = false));
   sliders[i].addEventListener("mouseup", (e) => (hold = false));
 }
+//adding event listeners for toggle buttons
 for (let i = 0; i < toggleButtons.length; i++) {
   let yesButton = toggleButtons[i].getElementsByClassName("yes")[0];
   let noButton = toggleButtons[i].getElementsByClassName("No")[0];
@@ -181,7 +195,7 @@ function updateView(view) {
     reportSection.style.display = "none";
     calanderSection.style.display = "block";
     profileSection.style.display = "none";
-    initCalander();
+    updateCalander();
   } else if (currentView === PROFILE) {
     title.innerText = "Profile";
     userBtn.classList.add("selected");
@@ -193,19 +207,41 @@ function updateView(view) {
   } else {
   }
 }
-function initCalander() {
-  let overallDate = new Date();
-  let todaysDate = overallDate.getDate();
-  let todaysDay = overallDate.getDay();
-  let todaysMonth = overallDate.getMonth();
-  let todaysYear = overallDate.getFullYear();
-  let yearControlls = document.getElementsByClassName("yearControlls")[0];
-  let monthControlls = document.getElementsByClassName("monthControlls")[0];
-  yearControlls.innerText = todaysYear;
-  monthControlls.innerText = getMonth(todaysMonth);
-  populateCalander(todaysDay, todaysDate, todaysMonth, todaysYear);
+function updateCalander() {
+  yearControlls.innerText = currentYear;
+  monthControlls.innerText = getMonth(currentMonth);
+  populateCalander(todaysDate, currentMonth, currentYear);
 }
-function populateCalander(day, date, month, year) {
+function populateCalander(date, month, year) {
+  const daysContainer = document.getElementsByClassName("days")[0];
+  let daysDom = "";
+  let leapYear = isLeapYear(year);
+  let prevMonthDays = getDaysInMonth(leapYear, month - 1);
+  let thisMonthDays = getDaysInMonth(leapYear, month);
+  let firstDateDay = getDateDay(1, month, year);
+  let lastDateDay = getDateDay(thisMonthDays, month, year);
+  for (let i = prevMonthDays - firstDateDay + 1; i <= prevMonthDays; i++) {
+    daysDom += `
+    <div class="day otherMonthDay">${i}</div>
+    `;
+  }
+  for (let i = 1; i <= thisMonthDays; i++) {
+    daysDom += `
+    <div class="day ${
+      selectedDate == i && month == selectedMonth && year == selectedYear
+        ? "selectedDay"
+        : ""
+    }">${i}</div>
+    `;
+  }
+  for (let i = 1; i <= 6 - lastDateDay; i++) {
+    daysDom += `
+    <div class="day otherMonthDay">${i}</div>
+    `;
+  }
+  daysContainer.innerHTML = daysDom;
+}
+function isLeapYear(year) {
   let leapYear = false;
   if (year % 100 == 0) {
     if (year % 400 == 0) {
@@ -214,56 +250,89 @@ function populateCalander(day, date, month, year) {
   } else if (year % 4 == 0) {
     leapYear = true;
   }
-  let prevMonthDays = getDaysInMonth(leapYear,month-1)
-  let thisMonthDays = getDaysInMonth(leapYear,month)
-  let firstDateDay = getFirstDateDay(month,year)
-  console.log(day)
-  console.log(firstDateDay)
+  return leapYear;
 }
-function getFirstDateDay(month,year){
-  
-}
-function getDaysInMonth(leapYear,month){
-  if(month<0){
-    month==11+month;
-  }else if(month>11){
-    month = month-10
+function getDateDay(date, month, year) {
+  let ReferenceYear = 2023;
+  let YearsFirstDay = 0;
+  let yearOffset = year - ReferenceYear;
+  let daysOffset = 0;
+  let day = 0;
+  if (year < ReferenceYear) {
+    let leapYearsInBetween = 0;
+    for (let i = year; i < ReferenceYear; i++) {
+      if (isLeapYear(i)) {
+        leapYearsInBetween++;
+      }
+    }
+    yearOffset = yearOffset - leapYearsInBetween;
+  } else if (year > ReferenceYear) {
+    let leapYearsInBetween = 0;
+    for (let i = ReferenceYear; i < year; i++) {
+      if (isLeapYear(i)) {
+        leapYearsInBetween++;
+      }
+    }
+    yearOffset = yearOffset + leapYearsInBetween;
   }
-  if(month<=6){
-    if(month%2==0){
+  if (yearOffset > 0) {
+    YearsFirstDay = yearOffset % 7;
+  }
+  if (yearOffset < 0) {
+    YearsFirstDay = yearOffset % 7;
+    if (yearOffset % 7 < 0) {
+      YearsFirstDay = 7 + (yearOffset % 7);
+    }
+  }
+  for (let i = 0; i < month; i++) {
+    daysOffset += getDaysInMonth(isLeapYear(year), i);
+  }
+  daysOffset += date - 1;
+  day = (daysOffset + YearsFirstDay) % 7;
+  return day;
+}
+function getDaysInMonth(leapYear, month) {
+  if (month < 0) {
+    month == 11 + month;
+  } else if (month > 11) {
+    month = month - 10;
+  }
+  if (month <= 6) {
+    if (month % 2 == 0) {
       return 31;
-    }else if(month == 1 && leapYear){
+    } else if (month == 1 && leapYear) {
       return 29;
-    }else if(month == 1){
+    } else if (month == 1) {
       return 28;
-    }else{
+    } else {
       return 30;
     }
-  }else if(month<=11){
-    if(month%2==0){
+  } else if (month <= 11) {
+    if (month % 2 == 0) {
       return 30;
+    } else {
+      return 31;
     }
-    else{return 31}
-  }else{
+  } else {
     return 0;
   }
 }
 function getMonth(month) {
   switch (month) {
     case 0:
-      return "January";
+      return "Jan";
       break;
 
     case 1:
-      return "February";
+      return "Feb";
       break;
 
     case 2:
-      return "March";
+      return "Mar";
       break;
 
     case 3:
-      return "April";
+      return "Apr";
       break;
 
     case 4:
@@ -271,30 +340,30 @@ function getMonth(month) {
       break;
 
     case 5:
-      return "June";
+      return "Jun";
       break;
 
     case 6:
-      return "July";
+      return "Jul";
       break;
 
     case 7:
-      return "Augst";
+      return "Aug";
       break;
 
     case 8:
-      return "September";
+      return "Sep";
       break;
 
     case 9:
-      return "October";
+      return "Oct";
       break;
 
     case 10:
-      return "November";
+      return "Nov";
       break;
     case 11:
-      return "December";
+      return "Dec";
       break;
     default:
       return "";
@@ -347,4 +416,25 @@ calanderBtn.addEventListener("click", (e) => {
 userBtn.addEventListener("click", (e) => {
   windowNavigation(PROFILE, "");
   transtition(e, userBtn, PROFILE);
+});
+prevMonthButton.addEventListener("click", () => {
+  currentMonth--;
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  }
+  updateCalander();
+});
+nextMonthButton.addEventListener("click", () => {
+  currentMonth++;
+  if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  updateCalander();
+});
+resetCalanderButton.addEventListener("click", () => {
+  currentMonth = todaysMonth;
+  currentYear = todaysYear;
+  updateCalander();
 });

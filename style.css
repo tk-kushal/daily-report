@@ -5,7 +5,7 @@
   --primaryButton: #71c9ce;
   --uncheckedStar: #71c9ce;
   --primary: hsl(0, 100%, 69%);
-  --secondary :hsla(0, 85%, 66%, 0.203);
+  --secondary :hsla(0, 85%, 66%, 0.507);
   --circleSize: 1000px;
   --textColor: hsl(0, 0%, 100%);
   --secondaryText: hsla(0, 20%, 98%, 0.463);
@@ -123,6 +123,7 @@ body {
 .main > * {
   max-width: 800px;
   width: 100%;
+  min-width: 315px;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
@@ -279,7 +280,8 @@ textarea {
   pointer-events: none;
 }
 .completedDay{
-  background-color: hsla(28, 100%, 50%, 0.507);
+  background-color: var(--primary);
+
 }
 .calanderControlls{
   display: flex;
@@ -327,6 +329,12 @@ textarea {
   font-weight: bold;
   user-select: none;
   cursor: pointer;
+}
+.yearAndMonth>i{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
 }
 .yearControlls{
   border-right: 1px solid var(--primary);
@@ -395,10 +403,10 @@ textarea {
   .day:hover {
     cursor: pointer;
     border-radius: 20%;
-    background-color: var(--primary);
+    background-color: var(--secondary);
   }
   .completedDay:hover{
-    background-color: hsl(28, 100%, 50%);
+    background-color: var(--primary);
   }
   .calanderButtons>*:hover,.report-controlls-right>*:hover{
     background-color: var(--primary);
@@ -550,5 +558,23 @@ textarea {
   cursor:default;
 }
 .selectedDay{
-  border: 2px solid var(--primary);
+  position: relative;
+  transition: 500ms;
+  transition-property: background, border-radius, color, border;
+}
+.selectedDay:before {
+  content: " ";
+  position: absolute;
+  z-index: 1;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+  transition: 500ms;
+  transition-property: background, border-radius, color, border;
+}
+.selectedDay:hover:before {
+  border-radius: 22%;
 }
