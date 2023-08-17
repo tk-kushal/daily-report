@@ -292,14 +292,14 @@ textarea {
 .yearAndMonth{
   display: flex;
   border-radius: 30px;
-  height: 30px;
-  padding: 10px;
-  padding-right: 15px;
+  padding: 5px;
   transition: 500ms;
+  background-color: var(--secondaryBackground);
+  border-radius: 10px;
 }
 .yearAndMonth>i{
   font-size: 20px;
-  padding-left: 0;
+  margin: 0 10px 0 3px;
 }
 .calanderButtons{
   display: flex;
@@ -324,21 +324,34 @@ textarea {
   justify-content: center;
   align-items: center;
   font-size: 30px;
-  padding: 0 10px;
+  padding: 3px 10px;
   margin: 0px 0;
   font-weight: bold;
   user-select: none;
+}
+.yearControlls,.monthControlls{
+  border-radius: 7px;
+  transition: 500ms;
+}
+.yearControlls:hover,.monthControlls:hover{
+  background-color: gray;
   cursor: pointer;
+}
+
+.line{
+  width: 2px;
+  padding: 0;
+  margin: 5px 5px;
+  background-color: var(--primary);
 }
 .yearAndMonth>i{
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 5px;
+  padding: 0;
 }
-.yearControlls{
-  border-right: 1px solid var(--primary);
-}
+
 .profileContainer{
   display: flex;
   justify-content: center;
@@ -411,11 +424,6 @@ textarea {
   .calanderButtons>*:hover,.report-controlls-right>*:hover{
     background-color: var(--primary);
     border-radius: 20%;
-  }
-  .yearAndMonth:hover{
-    cursor: pointer;
-    background-color: rgb(74, 74, 74);
-    border-radius: 10px;
   }
 }
 @media (hover: none) {
