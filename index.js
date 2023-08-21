@@ -20,6 +20,9 @@ const monthControlls = document.getElementsByClassName("monthControlls")[0];
 const prevMonthButton = document.getElementsByClassName("previousMonthBtn")[0];
 const nextMonthButton = document.getElementsByClassName("nextMonthBtn")[0];
 const resetCalanderButton = document.getElementsByClassName("resetBtn")[0];
+const reportDate = document.getElementsByClassName("date-day")[0];
+const reportMonth = document.getElementsByClassName("month")[0];
+const reportYear = document.getElementsByClassName("year")[0];
 let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
@@ -30,6 +33,7 @@ let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
 let currentView = REPORT;
+let initialize = true;
 let currentReport = {
   feel: null,
   energy: null,
@@ -68,6 +72,11 @@ function windowNavigation(view, subpath) {
 }
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
+  //so that the transition does not occur when reloading the page or loading another page besies the report page directly form url
+  if (initialize) {
+    currentView = path;
+    initialize = false;
+  }
   if (currentView !== path) {
     if (path === REPORT) {
       transtition(
@@ -180,6 +189,9 @@ function initiateEmojiPosition(slider) {
 function updateView(view) {
   currentView = view;
   if (currentView === REPORT) {
+    reportDate.innerText = todaysDate;
+    reportMonth.innerText = getMonth(todaysMonth);
+    reportYear.innerText = todaysYear;
     title.innerText = "Report";
     reportBtn.classList.add("selected");
     calanderBtn.classList.remove("selected");

@@ -125,9 +125,10 @@ body {
   width: 100%;
   min-width: 315px;
   border-radius: 10px;
-  padding: 20px;
+  margin-top: 20px;
   box-sizing: border-box;
   font-size: 20px;
+  transition: 300ms;
 }
 .reportContainer,.calanderContainer,.profileContainer {
   width: 100%;
@@ -139,8 +140,8 @@ body {
   padding: 20px;
   box-sizing: border-box;
   font-size: 20px;
+  transition: 300ms;
 }
-
 .slider {
   position: relative;
   width: 200px;
@@ -430,6 +431,9 @@ textarea {
 }
 
 @media screen and (max-width: 600px) {
+  .main>*{
+    transition: 300ms;
+  }
   .report{
     padding: 30px 0 0;
   }
@@ -438,6 +442,7 @@ textarea {
     bottom: 0;
     left: 0;
     right: 0;
+    transition: 300ms;
   }
   .right > * {
     margin-right: 0;
@@ -454,6 +459,7 @@ textarea {
   .main {
     margin: 60px 0 60px;
     padding: 5px;
+    transition: 300ms;
   }
   .title {
     margin: 0;
@@ -481,6 +487,7 @@ textarea {
     justify-content: center;
     align-items: center;
     padding: 5px;
+    transition: 300ms;
   }
   .calanderButtons>*,.report-controlls-right>*{
     font-size: 18px;
@@ -514,6 +521,7 @@ textarea {
     justify-content: center;
     align-items: center;
     padding: 5px;
+    transition: 300ms;
   }
   .calanderContainer{
     padding: 10px;
@@ -527,7 +535,6 @@ textarea {
     padding: 5px;
   }
   .calander{
-    padding: 10px;
   }
 }
 .yes-no-button{
