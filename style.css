@@ -291,6 +291,7 @@ textarea {
   margin-bottom: 5px;
 }
 .yearAndMonth{
+  position: relative;
   display: flex;
   border-radius: 30px;
   padding: 5px;
@@ -334,8 +335,8 @@ textarea {
   border-radius: 7px;
   transition: 500ms;
 }
-.yearControlls:hover,.monthControlls:hover{
-  background-color: gray;
+.yearAndMonth:hover{
+  background-color: rgb(93, 93, 93);
   cursor: pointer;
 }
 
@@ -533,8 +534,6 @@ textarea {
     font-size: 18px;
     margin: 5px;
     padding: 5px;
-  }
-  .calander{
   }
 }
 .yes-no-button{
