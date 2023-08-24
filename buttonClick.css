@@ -10,7 +10,7 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.6);
   transform: scale(0);
-  animation: ripple-animation 0.5s linear;
+  animation: ripple-animation 0.3s linear;
 }
 
 @keyframes ripple-animation {

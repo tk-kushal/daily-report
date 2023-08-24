@@ -49,33 +49,30 @@ body {
   align-items: center;
 }
 .navbar {
-  pointer-events: none;
+  pointer-events: all;
   width: 100%;
-  top: 0;
-  bottom: 0;
-  position: fixed;
+  position: absolute;
   min-width: 300px;
 }
 .title {
-  position: absolute;
-  top: 0;
-  left: 0;
   font-size: 30px;
-  z-index: 2;
   font-weight: bold;
   margin: 10px 20px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
 }
 .right {
-  pointer-events: all;
   display: flex;
-  position: absolute;
-  right: 0;
-  top: 0;
   justify-content: end;
   align-items: center;
   height: 60px;
   width: 100%;
+  position: absolute;
+  top: 0;
   background-color: var(--background);
+
 }
 .right > * {
   font-size: 20px;
@@ -463,7 +460,6 @@ textarea {
   }
   .navbar {
     position: fixed;
-    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
@@ -474,10 +470,8 @@ textarea {
   }
   .right {
     justify-content: space-around;
-    position: absolute;
     top: auto;
     bottom: 0;
-    right: 0;
   }
   .reportContainer{
     padding: 10px;
