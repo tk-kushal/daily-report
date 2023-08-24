@@ -17,6 +17,12 @@ textarea {
   font-family: "Montserrat", sans-serif;
 }
 #daysEvents{
+  resize: none;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 50px;
+  overflow: hidden;
   transition: 500ms height;
 }
 body {
@@ -43,23 +49,33 @@ body {
   align-items: center;
 }
 .navbar {
-  pointer-events: all;
+  pointer-events: none;
   width: 100%;
-  position: absolute;
+  top: 0;
+  bottom: 0;
+  position: fixed;
   min-width: 300px;
-  background-color: var(--background);
 }
 .title {
+  position: absolute;
+  top: 0;
+  left: 0;
   font-size: 30px;
+  z-index: 2;
   font-weight: bold;
   margin: 10px 20px;
 }
 .right {
+  pointer-events: all;
   display: flex;
+  position: absolute;
+  right: 0;
+  top: 0;
   justify-content: end;
   align-items: center;
   height: 60px;
   width: 100%;
+  background-color: var(--background);
 }
 .right > * {
   font-size: 20px;
@@ -317,7 +333,7 @@ textarea {
   height: 40px;
   font-size: 22px;
   margin: 10px 10px;
-  border: 2px solid var(--primary);
+  border: 1px solid var(--primary);
   border-radius: 50%;
   cursor: pointer;
   transition: 500ms ;
@@ -337,10 +353,6 @@ textarea {
 .yearControlls,.monthControlls{
   border-radius: 7px;
   transition: 500ms;
-}
-.yearAndMonth:hover{
-  background-color: rgb(93, 93, 93);
-  cursor: pointer;
 }
 
 .line{
@@ -369,11 +381,7 @@ textarea {
   border-radius: 30px;
   transition: 500ms;
 }
-.loginBtn:hover{
-  cursor: pointer;
-  background-color: var(--primary);
-  border-radius: 10px;
-}
+
 .report-date{
   display: flex;
   font-size: 20px;
@@ -411,6 +419,15 @@ textarea {
   align-items: center;
 }
 @media (hover: hover) {
+  .yearAndMonth:hover{
+    background-color: rgb(93, 93, 93);
+    cursor: pointer;
+  }  
+  .loginBtn:hover{
+    cursor: pointer;
+    background-color: var(--primary);
+    border-radius: 10px;
+  }
   .right > *:hover {
     color: white;
     background: var(--primary);
@@ -430,6 +447,9 @@ textarea {
     background-color: var(--primary);
     border-radius: 20%;
   }
+  .selectedDay:hover:before {
+    border-radius: 22%;
+  }
 }
 @media (hover: none) {
 }
@@ -443,6 +463,7 @@ textarea {
   }
   .navbar {
     position: fixed;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
@@ -453,6 +474,10 @@ textarea {
   }
   .right {
     justify-content: space-around;
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    right: 0;
   }
   .reportContainer{
     padding: 10px;
@@ -494,10 +519,7 @@ textarea {
     transition: 300ms;
   }
   .calanderButtons>*,.report-controlls-right>*{
-    font-size: 18px;
-    height: 16px;
-    width: 16px;
-    padding: 8px;
+    transform: scale(.9);
   }
   .yearAndMonth{
     padding: 5px;
@@ -534,9 +556,8 @@ textarea {
     font-size: 20px;
   }
   .calanderButtons>*{
-    font-size: 18px;
-    margin: 5px;
-    padding: 5px;
+    transform: scale(.8);
+    margin: 2px;
   }
 }
 .yes-no-button{
@@ -591,7 +612,4 @@ textarea {
   border-radius: 50%;
   transition: 500ms;
   transition-property: background, border-radius, color, border;
-}
-.selectedDay:hover:before {
-  border-radius: 22%;
 }

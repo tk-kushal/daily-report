@@ -6,7 +6,7 @@ const reportBtn = document.getElementsByClassName("reportBtn")[0];
 const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
 const userBtn = document.getElementsByClassName("userBtn")[0];
 const title = document.getElementsByClassName("text")[0];
-const navbarContainer = document.getElementsByClassName("navbarContainer")[0];
+const navbarContainer = document.getElementsByClassName("navbar")[0];
 const sliders = document.getElementsByClassName("emojiSlider");
 const toggleButtons = document.getElementsByClassName("yes-no-button");
 const reportSection = document.getElementsByClassName("report")[0];
@@ -23,6 +23,7 @@ const resetCalanderButton = document.getElementsByClassName("resetBtn")[0];
 const reportDate = document.getElementsByClassName("date-day")[0];
 const reportMonth = document.getElementsByClassName("month")[0];
 const reportYear = document.getElementsByClassName("year")[0];
+const textArea = document.getElementById("daysEvents");
 let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
@@ -69,6 +70,12 @@ window.onpopstate = () => handleUrlChangeEvent();
 //Updating the URL based on current View
 function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
+}
+textArea.addEventListener('input',()=>resizeTextbox())
+function resizeTextbox() {
+  const textarea = textArea;
+  textarea.style.height = 'auto'; // Reset the height to calculate the new height
+  textarea.style.height = (textarea.scrollHeight > textarea.offsetHeight) ? textarea.scrollHeight + 'px' : textarea.offsetHeight + 'px';
 }
 function handleUrlChangeEvent() {
   let path = window.location.pathname;

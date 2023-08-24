@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="slider.css" />
+    <link rel="stylesheet" href="buttonClick.css">
     <script
       src="https://kit.fontawesome.com/ad418b86d4.js"
       crossorigin="anonymous"
@@ -51,10 +52,10 @@
             </div>
           </div>
           <div class="report-controlls-right">
-            <div class="edit">
+            <div class="edit ripple-button">
               <i class="fa-solid fa-pen"></i>
             </div>
-            <div class="add">
+            <div class="add ripple-button">
               <i class="fa-solid fa-plus"></i>
             </div>
           </div>
@@ -171,7 +172,7 @@
             <textarea
               name="daysEvents"
               id="daysEvents"
-              rows="30"
+              rows="15"
               placeholder="Write about your day"
             ></textarea>
           </div>
@@ -179,19 +180,19 @@
       </div>
       <div class="calander" style="display: none">
         <div class="calanderControlls">
-          <div class="yearAndMonth">
+          <div class="yearAndMonth ripple-button">
             <div class="yearControlls"></div>
             <div class="line"></div>
             <div class="monthControlls"></div>
           </div>
           <div class="calanderButtons">
-            <div class="resetBtn">
+            <div class="resetBtn ripple-button">
               <i class="fa-solid fa-arrow-rotate-left"></i>
             </div>
-            <div class="previousMonthBtn">
+            <div class="previousMonthBtn ripple-button">
               <i class="fa-solid fa-angle-left"></i>
             </div>
-            <div class="nextMonthBtn">
+            <div class="nextMonthBtn ripple-button">
               <i class="fa-solid fa-angle-right"></i>
             </div>
           </div>
@@ -219,5 +220,6 @@
     </div>
   </body>
   <script src="index.js" type="module"></script>
+  <script src="buttonClick.js"></script>
   <script type="module" src="firebase.js"></script>
 </html>
