@@ -1,5 +1,9 @@
-console.log('butotn click js')
+import { monthChange } from "./index.js";
 const buttons = document.querySelectorAll(".ripple-button");
+const calander = document.getElementsByClassName('ripple-calander')[0];
+
+let touchstartX = 0
+let touchendX = 0
 
 buttons.forEach(button => {
   button.addEventListener("click", function (e) {
@@ -19,3 +23,31 @@ buttons.forEach(button => {
     });
   });
 });
+
+export function calanderSwipe(direction){
+    const ripple = document.createElement("span");
+    ripple.classList.add("calander-ripple");
+    const rect = calander.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = direction=='left'?0 - size / 2:direction=='right'?rect.width - size / 2:rect.width/2- size / 2;
+    const y = rect.height/2 -size/2;
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    calander.appendChild(ripple);
+
+    ripple.addEventListener("animationend", () => {
+      ripple.remove();
+    });
+}
+
+
+calander.addEventListener('swiped-left', e => {
+  calanderSwipe('right')
+  monthChange('next')
+})
+
+calander.addEventListener('swiped-right', e => {
+  calanderSwipe('left')
+  monthChange('previous')
+})

@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="slider.css" />
-    <link rel="stylesheet" href="buttonClick.css">
+    <link rel="stylesheet" href="buttonClick.css" />
     <script
       src="https://kit.fontawesome.com/ad418b86d4.js"
       crossorigin="anonymous"
     ></script>
+    <script src="pure-swipe.min.js"></script>
     <title>Daily Journal</title>
   </head>
 
@@ -67,7 +68,7 @@
           <div class="question">
             <div class="lable">Did You Exercise today?</div>
             <div class="yes-no-button">
-              <div class="yes ">Yes</div>
+              <div class="yes">Yes</div>
               <div class="No selectedYesNoBtn">No</div>
               <div class="indicator indicator-off"></div>
             </div>
@@ -75,17 +76,17 @@
           <div class="question">
             <div class="lable">Did You Read Today?</div>
             <div class="yes-no-button">
-              <div class="yes ">Yes</div>
+              <div class="yes">Yes</div>
               <div class="No selectedYesNoBtn">No</div>
-              <div class="indicator indicator-off "></div>
+              <div class="indicator indicator-off"></div>
             </div>
           </div>
           <div class="question">
             <div class="lable">Did You Meditate Today?</div>
             <div class="yes-no-button">
-              <div class="yes ">Yes</div>
+              <div class="yes">Yes</div>
               <div class="No selectedYesNoBtn">No</div>
-              <div class="indicator indicator-off "></div>
+              <div class="indicator indicator-off"></div>
             </div>
           </div>
           <div class="question">
@@ -197,7 +198,7 @@
             </div>
           </div>
         </div>
-        <div class="calanderContainer">
+        <div class="calanderContainer ripple-calander">
           <div class="weekDays">
             <div class="weekDay">S</div>
             <div class="weekDay">M</div>
@@ -207,9 +208,7 @@
             <div class="weekDay">F</div>
             <div class="weekDay">S</div>
           </div>
-          <div class="days">
-            
-          </div>
+          <div class="days"></div>
         </div>
       </div>
       <div class="profile" style="display: none">
@@ -218,8 +217,13 @@
         </div>
       </div>
     </div>
+    <div
+      data-swipe-threshold="20"
+      data-swipe-timeout="300"
+      data-swipe-ignore="false"
+    ></div>
   </body>
   <script src="index.js" type="module"></script>
-  <script src="buttonClick.js"></script>
+  <script src="buttonClick.js" type="module"></script>
   <script type="module" src="firebase.js"></script>
 </html>

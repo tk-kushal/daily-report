@@ -1,3 +1,4 @@
+import { calanderSwipe } from "./buttonClick.js";
 import { auth, signIn, signOut } from "./firebase.js";
 const REPORT = "/",
   CALANDER = "/calander",
@@ -71,11 +72,14 @@ window.onpopstate = () => handleUrlChangeEvent();
 function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
 }
-textArea.addEventListener('input',()=>resizeTextbox())
+textArea.addEventListener("input", () => resizeTextbox());
 function resizeTextbox() {
   const textarea = textArea;
-  textarea.style.height = 'auto'; // Reset the height to calculate the new height
-  textarea.style.height = (textarea.scrollHeight > textarea.offsetHeight) ? textarea.scrollHeight + 'px' : textarea.offsetHeight + 'px';
+  textarea.style.height = "auto"; // Reset the height to calculate the new height
+  textarea.style.height =
+    textarea.scrollHeight > textarea.offsetHeight
+      ? textarea.scrollHeight + "px"
+      : textarea.offsetHeight + "px";
 }
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
@@ -160,6 +164,16 @@ for (let i = 0; i < toggleButtons.length; i++) {
     indicator.classList.add("indicator-off");
     yesButton.classList.remove("selectedYesNoBtn");
     noButton.classList.add("selectedYesNoBtn");
+  });
+  toggleButtons[i].addEventListener("swiped-right", () => {
+    indicator.classList.add("indicator-off");
+    yesButton.classList.remove("selectedYesNoBtn");
+    noButton.classList.add("selectedYesNoBtn");
+  });
+  toggleButtons[i].addEventListener("swiped-left", () => {
+    indicator.classList.remove("indicator-off");
+    noButton.classList.remove("selectedYesNoBtn");
+    yesButton.classList.add("selectedYesNoBtn");
   });
 }
 //Emoji Slider
@@ -437,23 +451,32 @@ userBtn.addEventListener("click", (e) => {
   transtition(e, userBtn, PROFILE);
 });
 prevMonthButton.addEventListener("click", () => {
-  currentMonth--;
-  if (currentMonth < 0) {
-    currentMonth = 11;
-    currentYear--;
-  }
-  updateCalander();
+  monthChange("previous");
 });
 nextMonthButton.addEventListener("click", () => {
-  currentMonth++;
-  if (currentMonth > 11) {
-    currentMonth = 0;
-    currentYear++;
-  }
-  updateCalander();
+  monthChange("next");
 });
 resetCalanderButton.addEventListener("click", () => {
   currentMonth = todaysMonth;
   currentYear = todaysYear;
+  calanderSwipe("reset");
   updateCalander();
 });
+export function monthChange(direction) {
+  if (direction === "previous") {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    calanderSwipe("left");
+  } else if (direction === "next") {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    calanderSwipe("right");
+  }
+  updateCalander();
+}
