@@ -34,6 +34,7 @@
         </div>
       </div>
     </div>
+
     <div class="main">
       <div class="report" style="display: none">
         <div class="daysQuote">
@@ -61,8 +62,9 @@
             </div>
           </div>
         </div>
-        <div class="reportContainer">
-          <div class="question">
+
+        <div class="questionsContainer">
+          <div class="question" >
             <input type="text" placeholder="Name Your Day" id="title" />
           </div>
           <div class="question">
@@ -95,7 +97,7 @@
               <div class="star-input" id="energy">
                 <span>☹️</span>
                 <span>🙁</span>
-                <span style="display: inline-block">😐</span>
+                <span>😐</span>
                 <span>🙂</span>
                 <span>😄</span>
               </div>
@@ -115,7 +117,7 @@
               <div class="star-input" id="energy">
                 <span>☹️</span>
                 <span>🙁</span>
-                <span style="display: inline-block">😐</span>
+                <span>😐</span>
                 <span>🙂</span>
                 <span>😄</span>
               </div>
@@ -171,14 +173,15 @@
           </div>
           <div class="question">
             <textarea
-              name="daysEvents"
               id="daysEvents"
               rows="15"
               placeholder="Write about your day"
+              oninput="resizeTextbox(this)"
             ></textarea>
           </div>
         </div>
       </div>
+
       <div class="calander" style="display: none">
         <div class="calanderControlls">
           <div class="yearAndMonth ripple-button">
@@ -211,18 +214,30 @@
           <div class="days"></div>
         </div>
       </div>
+
       <div class="profile" style="display: none">
         <div class="profileContainer">
           <div class="loginBtn" style="display: none">Login</div>
         </div>
       </div>
     </div>
+
     <div
       data-swipe-threshold="20"
       data-swipe-timeout="300"
       data-swipe-ignore="false"
     ></div>
   </body>
+  <script>
+    function resizeTextbox(e) {
+      const textarea = e;
+      textarea.style.height = "auto"; // Reset the height to calculate the new height
+      textarea.style.height =
+        textarea.scrollHeight > textarea.offsetHeight
+          ? textarea.scrollHeight + "px"
+          : textarea.offsetHeight + "px";
+    }
+  </script>
   <script src="index.js" type="module"></script>
   <script src="buttonClick.js" type="module"></script>
   <script type="module" src="firebase.js"></script>

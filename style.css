@@ -16,6 +16,9 @@ input,
 textarea {
   font-family: "Montserrat", sans-serif;
 }
+textarea::-webkit-scrollbar{
+  width: 0;
+}
 #daysEvents{
   resize: none;
   border: 1px solid #ccc;
@@ -146,7 +149,7 @@ body {
   font-size: 20px;
   transition: 300ms;
 }
-.reportContainer,.calanderContainer,.profileContainer {
+.questionsContainer,.calanderContainer,.profileContainer {
   width: 100%;
   font-weight: 500;
   background-color: var(--secondaryBackground);
@@ -473,7 +476,7 @@ textarea {
     top: auto;
     bottom: 0;
   }
-  .reportContainer{
+  .questionsContainer{
     padding: 10px;
   }
   .lable,.slider{

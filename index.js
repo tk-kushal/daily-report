@@ -3,13 +3,67 @@ import { auth, signIn, signOut } from "./firebase.js";
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
+let questions = {
+  title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
+  exercise: {
+    type: "toggle",
+    id: "exercise",
+    lable: "Did You Exercise Today?",
+    order: 2,
+  },
+  reading: {
+    type: "toggle",
+    id: "reading",
+    lable: "Did You Read Today?",
+    order: 3,
+  },
+  meditation: {
+    type: "toggle",
+    id: "meditation",
+    lable: "Did You Meditate Today?",
+    order: 4,
+  },
+  feel: {
+    type: "slider",
+    id: "feel",
+    lable: "How did you feel today?",
+    order: 5,
+    emotes: ["☹️", "🙁", "😐", "🙂", "😄"],
+  },
+  energylevel: {
+    type: "slider",
+    id: "energylevel",
+    lable: "What was your energy level?",
+    order: 6,
+    emotes: ["☹️", "🙁", "😐", "🙂", "😄"],
+  },
+  health: {
+    type: "slider",
+    id: "health",
+    lable: "How was your Health?",
+    order: 7,
+    emotes: ["☹️", "🙁", "😐", "🙂", "😄"],
+  },
+  emotions: {
+    type: "slider",
+    id: "emotions",
+    lable: "How did you feel Emotionaly?",
+    order: 8,
+    emotes: ["💔", "❤️‍🩹", "❤️", "💓", "💖"],
+  },
+  aboutday: {
+    type: "large-text",
+    id: "aboutday",
+    lable: "Write about your day",
+    order: 9,
+  },
+};
+const questionsContainer = document.getElementsByClassName('questionsContainer')[0]
 const reportBtn = document.getElementsByClassName("reportBtn")[0];
 const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
 const userBtn = document.getElementsByClassName("userBtn")[0];
 const title = document.getElementsByClassName("text")[0];
 const navbarContainer = document.getElementsByClassName("navbar")[0];
-const sliders = document.getElementsByClassName("emojiSlider");
-const toggleButtons = document.getElementsByClassName("yes-no-button");
 const reportSection = document.getElementsByClassName("report")[0];
 const calanderSection = document.getElementsByClassName("calander")[0];
 const profileSection = document.getElementsByClassName("profile")[0];
@@ -25,6 +79,9 @@ const reportDate = document.getElementsByClassName("date-day")[0];
 const reportMonth = document.getElementsByClassName("month")[0];
 const reportYear = document.getElementsByClassName("year")[0];
 const textArea = document.getElementById("daysEvents");
+
+let sliders = document.getElementsByClassName("emojiSlider");
+let toggleButtons = document.getElementsByClassName("yes-no-button");
 let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
@@ -35,6 +92,7 @@ let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
 let currentView = REPORT;
+
 let initialize = true;
 let currentReport = {
   feel: null,
@@ -42,7 +100,6 @@ let currentReport = {
 };
 let hold = false; //for Dragging in Slider
 let currentUser = null;
-
 auth.onAuthStateChanged((user) => {
   currentUser = user;
   if (currentUser) {
@@ -72,14 +129,128 @@ window.onpopstate = () => handleUrlChangeEvent();
 function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
 }
-textArea.addEventListener("input", () => resizeTextbox());
-function resizeTextbox() {
-  const textarea = textArea;
-  textarea.style.height = "auto"; // Reset the height to calculate the new height
-  textarea.style.height =
-    textarea.scrollHeight > textarea.offsetHeight
-      ? textarea.scrollHeight + "px"
-      : textarea.offsetHeight + "px";
+setupReportSection();
+
+function setupReportSection() {
+  let questionsKeys = Object.keys(questions);
+  questionsContainer.innerHTML = ''
+  for (let i = 0; i < questionsKeys.length; i++) {
+    let questionData = questions[questionsKeys[i]];
+    let type = questionData.type;
+    let question = document.createElement("div");
+    question.classList.add('question')
+    question.style.order = questionData.order;
+    switch (type) {
+      case "small-text":
+        question.innerHTML = `
+          <input type="text" placeholder="${questionData.lable}" id="${questionData.id}" />
+        `;
+        question
+          .getElementsByTagName("input")[0]
+          .addEventListener("change", (e) => {
+            console.log(e.value);
+          });
+        break;
+      case "toggle":
+        question.innerHTML = `
+          <div class="lable">${questionData.lable}</div>
+          <div class="yes-no-button" id=${questionData.id}>
+            <div class="yes">Yes</div>
+            <div class="No selectedYesNoBtn">No</div>
+            <div class="indicator indicator-off"></div>
+          </div>
+          `;
+        break;
+      case "slider":
+        question.innerHTML = `
+            <div class="lable">${questionData.lable}</div>
+            <div class="slider" id="${questionData.id}">
+              <div class="star-input">
+                <span>${questionData.emotes[0]}</span>
+                <span>${questionData.emotes[1]}</span>
+                <span>${questionData.emotes[2]}</span>
+                <span>${questionData.emotes[3]}</span>
+                <span>${questionData.emotes[4]}</span>
+              </div>
+              <input
+                type="range"
+                class="emojiSlider"
+                value="2"
+                max="4"
+              />
+            </div>
+          `;
+        break;
+      case "large-text":
+        question.innerHTML = `
+            <textarea
+              id="${questionData.id}"
+              rows="20"
+              placeholder="${questionData.lable}"
+              oninput="resizeTextbox(this)"
+            ></textarea>
+          `;
+        question
+          .getElementsByTagName("textarea")[0]
+          .addEventListener("change", (e) => {
+            console.log(e.value);
+          });
+        break;
+      default:
+        break;
+    }
+    questionsContainer.appendChild(question)
+  }
+  for (let i = 0; i < sliders.length; i++) {
+  }
+  for (let i = 0; i < toggleButtons.length; i++) {
+    let yesButton = toggleButtons[i].getElementsByClassName("yes")[0];
+    let noButton = toggleButtons[i].getElementsByClassName("No")[0];
+    let indicator = toggleButtons[i].getElementsByClassName("indicator")[0];
+    yesButton.addEventListener("click", () => {
+      indicator.classList.remove("indicator-off");
+      noButton.classList.remove("selectedYesNoBtn");
+      yesButton.classList.add("selectedYesNoBtn");
+    });
+    noButton.addEventListener("click", () => {
+      indicator.classList.add("indicator-off");
+      yesButton.classList.remove("selectedYesNoBtn");
+      noButton.classList.add("selectedYesNoBtn");
+    });
+    toggleButtons[i].addEventListener("swiped-right", () => {
+      indicator.classList.add("indicator-off");
+      yesButton.classList.remove("selectedYesNoBtn");
+      noButton.classList.add("selectedYesNoBtn");
+    });
+    toggleButtons[i].addEventListener("swiped-left", () => {
+      indicator.classList.remove("indicator-off");
+      noButton.classList.remove("selectedYesNoBtn");
+      yesButton.classList.add("selectedYesNoBtn");
+    });
+  }
+  for (let i = 0; i < sliders.length; i++) {
+    sliders[i].addEventListener("change", (e) => {
+      handleEmojiSliderEvent(e, e.x);
+    });
+    sliders[i].addEventListener("touchstart", (e) => {
+      hold = true;
+      handleEmojiSliderEvent(e, e.changedTouches[0].pageX);
+    });
+    sliders[i].addEventListener("mousedown", (e) => {
+      hold = true;
+      handleEmojiSliderEvent(e, e.x);
+    });
+    sliders[i].addEventListener("touchmove", (e) => {
+      handleEmojiSliderEvent(e, e.changedTouches[0].pageX);
+      hold = true;
+    });
+    sliders[i].addEventListener("mousemove", (e) =>
+    handleEmojiSliderEvent(e, e.x)
+    );
+    sliders[i].addEventListener("touchend", (e) => (hold = false));
+    sliders[i].addEventListener("mouseup", (e) => (hold = false));
+    initiateEmojiPosition(sliders[i]);
+  }
 }
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
@@ -126,56 +297,6 @@ function handleUrlChangeEvent() {
     updateView(currentView);
   }
 }
-//adding event listeners to Sliders
-for (let i = 0; i < sliders.length; i++) {
-  initiateEmojiPosition(sliders[i]);
-  sliders[i].addEventListener("change", (e) => {
-    handleEmojiSliderEvent(e, e.x);
-  });
-  sliders[i].addEventListener("touchstart", (e) => {
-    hold = true;
-    handleEmojiSliderEvent(e, e.changedTouches[0].pageX);
-  });
-  sliders[i].addEventListener("mousedown", (e) => {
-    hold = true;
-    handleEmojiSliderEvent(e, e.x);
-  });
-  sliders[i].addEventListener("touchmove", (e) => {
-    handleEmojiSliderEvent(e, e.changedTouches[0].pageX);
-    hold = true;
-  });
-  sliders[i].addEventListener("mousemove", (e) =>
-    handleEmojiSliderEvent(e, e.x)
-  );
-  sliders[i].addEventListener("touchend", (e) => (hold = false));
-  sliders[i].addEventListener("mouseup", (e) => (hold = false));
-}
-//adding event listeners for toggle buttons
-for (let i = 0; i < toggleButtons.length; i++) {
-  let yesButton = toggleButtons[i].getElementsByClassName("yes")[0];
-  let noButton = toggleButtons[i].getElementsByClassName("No")[0];
-  let indicator = toggleButtons[i].getElementsByClassName("indicator")[0];
-  yesButton.addEventListener("click", () => {
-    indicator.classList.remove("indicator-off");
-    noButton.classList.remove("selectedYesNoBtn");
-    yesButton.classList.add("selectedYesNoBtn");
-  });
-  noButton.addEventListener("click", () => {
-    indicator.classList.add("indicator-off");
-    yesButton.classList.remove("selectedYesNoBtn");
-    noButton.classList.add("selectedYesNoBtn");
-  });
-  toggleButtons[i].addEventListener("swiped-right", () => {
-    indicator.classList.add("indicator-off");
-    yesButton.classList.remove("selectedYesNoBtn");
-    noButton.classList.add("selectedYesNoBtn");
-  });
-  toggleButtons[i].addEventListener("swiped-left", () => {
-    indicator.classList.remove("indicator-off");
-    noButton.classList.remove("selectedYesNoBtn");
-    yesButton.classList.add("selectedYesNoBtn");
-  });
-}
 //Emoji Slider
 function handleEmojiSliderEvent(e, x) {
   let parent = e.srcElement.parentElement;
@@ -207,6 +328,11 @@ function initiateEmojiPosition(slider) {
     }
   }
 }
+function updateReportSection() {
+  for (let i = 0; i < sliders.length; i++) {
+    initiateEmojiPosition(sliders[i]);
+  }
+}
 function updateView(view) {
   currentView = view;
   if (currentView === REPORT) {
@@ -220,6 +346,7 @@ function updateView(view) {
     reportSection.style.display = "block";
     calanderSection.style.display = "none";
     profileSection.style.display = "none";
+    updateReportSection();
   } else if (currentView === CALANDER) {
     title.innerText = "Calander";
     calanderBtn.classList.add("selected");
