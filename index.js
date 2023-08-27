@@ -58,7 +58,8 @@ let questions = {
     order: 9,
   },
 };
-const questionsContainer = document.getElementsByClassName('questionsContainer')[0]
+const questionsContainer =
+  document.getElementsByClassName("questionsContainer")[0];
 const reportBtn = document.getElementsByClassName("reportBtn")[0];
 const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
 const userBtn = document.getElementsByClassName("userBtn")[0];
@@ -133,12 +134,12 @@ setupReportSection();
 
 function setupReportSection() {
   let questionsKeys = Object.keys(questions);
-  questionsContainer.innerHTML = ''
+  questionsContainer.innerHTML = "";
   for (let i = 0; i < questionsKeys.length; i++) {
     let questionData = questions[questionsKeys[i]];
     let type = questionData.type;
     let question = document.createElement("div");
-    question.classList.add('question')
+    question.classList.add("question");
     question.style.order = questionData.order;
     switch (type) {
       case "small-text":
@@ -147,8 +148,8 @@ function setupReportSection() {
         `;
         question
           .getElementsByTagName("input")[0]
-          .addEventListener("change", (e) => {
-            console.log(e.value);
+          .addEventListener("input", (e) => {
+            changeQuestionValue(questionData.id,e.target.value)
           });
         break;
       case "toggle":
@@ -192,43 +193,50 @@ function setupReportSection() {
           `;
         question
           .getElementsByTagName("textarea")[0]
-          .addEventListener("change", (e) => {
-            console.log(e.value);
+          .addEventListener("input", (e) => {
+            changeQuestionValue(questionData.id,e.target.value)
           });
         break;
       default:
         break;
     }
-    questionsContainer.appendChild(question)
+    questionsContainer.appendChild(question);
   }
-  for (let i = 0; i < sliders.length; i++) {
-  }
+  for (let i = 0; i < sliders.length; i++) {}
   for (let i = 0; i < toggleButtons.length; i++) {
     let yesButton = toggleButtons[i].getElementsByClassName("yes")[0];
     let noButton = toggleButtons[i].getElementsByClassName("No")[0];
     let indicator = toggleButtons[i].getElementsByClassName("indicator")[0];
+    let id = toggleButtons[i].id;
     yesButton.addEventListener("click", () => {
       indicator.classList.remove("indicator-off");
       noButton.classList.remove("selectedYesNoBtn");
       yesButton.classList.add("selectedYesNoBtn");
+      changeQuestionValue(id, true);
     });
     noButton.addEventListener("click", () => {
       indicator.classList.add("indicator-off");
       yesButton.classList.remove("selectedYesNoBtn");
       noButton.classList.add("selectedYesNoBtn");
+      changeQuestionValue(id, false);
     });
-    toggleButtons[i].addEventListener("swiped-right", () => {
-      indicator.classList.add("indicator-off");
-      yesButton.classList.remove("selectedYesNoBtn");
-      noButton.classList.add("selectedYesNoBtn");
-    });
+    //yes
     toggleButtons[i].addEventListener("swiped-left", () => {
       indicator.classList.remove("indicator-off");
       noButton.classList.remove("selectedYesNoBtn");
       yesButton.classList.add("selectedYesNoBtn");
+      changeQuestionValue(id, true);
+    });
+    //no
+    toggleButtons[i].addEventListener("swiped-right", () => {
+      indicator.classList.add("indicator-off");
+      yesButton.classList.remove("selectedYesNoBtn");
+      noButton.classList.add("selectedYesNoBtn");
+      changeQuestionValue(id, false);
     });
   }
   for (let i = 0; i < sliders.length; i++) {
+    let id = sliders[i].parentElement.id
     sliders[i].addEventListener("change", (e) => {
       handleEmojiSliderEvent(e, e.x);
     });
@@ -245,20 +253,32 @@ function setupReportSection() {
       hold = true;
     });
     sliders[i].addEventListener("mousemove", (e) =>
-    handleEmojiSliderEvent(e, e.x)
+      handleEmojiSliderEvent(e, e.x)
     );
-    sliders[i].addEventListener("touchend", (e) => (hold = false));
-    sliders[i].addEventListener("mouseup", (e) => (hold = false));
+    sliders[i].addEventListener("touchend", (e) => {
+      changeQuestionValue(id,e.target.value)
+      hold = false;
+    });
+    sliders[i].addEventListener("mouseup", (e) => {
+      changeQuestionValue(id,e.target.value)
+      hold = false;
+    });
     initiateEmojiPosition(sliders[i]);
   }
+}
+function changeQuestionValue(id, value) {
+  console.log(id);
+  console.log(value);
 }
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
   //so that the transition does not occur when reloading the page or loading another page besies the report page directly form url
-  if (initialize) {
+  if (initialize && (path == REPORT || path == CALANDER || path == PROFILE)) {
     currentView = path;
     initialize = false;
   }
+  console.log(path);
+  console.log(currentView);
   if (currentView !== path) {
     if (path === REPORT) {
       transtition(
