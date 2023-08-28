@@ -93,7 +93,8 @@ let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
 let currentView = REPORT;
-
+let updateTimeout = 2000 // 3 seconds
+let dataChanged = false;
 let initialize = true;
 let currentReport = {
   feel: null,
@@ -130,76 +131,81 @@ window.onpopstate = () => handleUrlChangeEvent();
 function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
 }
-setupReportSection();
 
+//setupReportSection();
+
+function createQuestion(questionData){
+  let type = questionData.type;
+  let question = document.createElement("div");
+  let questionContainer = document.createElement('div');
+  question.classList.add("question");
+  question.style.order = questionData.order;
+  switch (type) {
+    case "small-text":
+      question.innerHTML = `
+        <input type="text" placeholder="${questionData.lable}" id="${questionData.id}" />
+      `;
+      question
+        .getElementsByTagName("input")[0]
+        .addEventListener("input", (e) => {
+          changeQuestionValue(questionData.id,e.target.value)
+        });
+      break;
+    case "toggle":
+      question.innerHTML = `
+        <div class="lable">${questionData.lable}</div>
+        <div class="yes-no-button" id=${questionData.id}>
+          <div class="yes">Yes</div>
+          <div class="No selectedYesNoBtn">No</div>
+          <div class="indicator indicator-off"></div>
+        </div>
+        `;
+      break;
+    case "slider":
+      question.innerHTML = `
+          <div class="lable">${questionData.lable}</div>
+          <div class="slider" id="${questionData.id}">
+            <div class="star-input">
+              <span>${questionData.emotes[0]}</span>
+              <span>${questionData.emotes[1]}</span>
+              <span>${questionData.emotes[2]}</span>
+              <span>${questionData.emotes[3]}</span>
+              <span>${questionData.emotes[4]}</span>
+            </div>
+            <input
+              type="range"
+              class="emojiSlider"
+              value="2"
+              max="4"
+            />
+          </div>
+        `;
+      break;
+    case "large-text":
+      question.innerHTML = `
+          <textarea
+            id="${questionData.id}"
+            rows="20"
+            placeholder="${questionData.lable}"
+            oninput="resizeTextbox(this)"
+          ></textarea>
+        `;
+      question
+        .getElementsByTagName("textarea")[0]
+        .addEventListener("input", (e) => {
+          changeQuestionValue(questionData.id,e.target.value)
+        });
+      break;
+    default:
+      break;
+  }
+  return question;
+}
 function setupReportSection() {
   let questionsKeys = Object.keys(questions);
   questionsContainer.innerHTML = "";
   for (let i = 0; i < questionsKeys.length; i++) {
-    let questionData = questions[questionsKeys[i]];
-    let type = questionData.type;
-    let question = document.createElement("div");
-    question.classList.add("question");
-    question.style.order = questionData.order;
-    switch (type) {
-      case "small-text":
-        question.innerHTML = `
-          <input type="text" placeholder="${questionData.lable}" id="${questionData.id}" />
-        `;
-        question
-          .getElementsByTagName("input")[0]
-          .addEventListener("input", (e) => {
-            changeQuestionValue(questionData.id,e.target.value)
-          });
-        break;
-      case "toggle":
-        question.innerHTML = `
-          <div class="lable">${questionData.lable}</div>
-          <div class="yes-no-button" id=${questionData.id}>
-            <div class="yes">Yes</div>
-            <div class="No selectedYesNoBtn">No</div>
-            <div class="indicator indicator-off"></div>
-          </div>
-          `;
-        break;
-      case "slider":
-        question.innerHTML = `
-            <div class="lable">${questionData.lable}</div>
-            <div class="slider" id="${questionData.id}">
-              <div class="star-input">
-                <span>${questionData.emotes[0]}</span>
-                <span>${questionData.emotes[1]}</span>
-                <span>${questionData.emotes[2]}</span>
-                <span>${questionData.emotes[3]}</span>
-                <span>${questionData.emotes[4]}</span>
-              </div>
-              <input
-                type="range"
-                class="emojiSlider"
-                value="2"
-                max="4"
-              />
-            </div>
-          `;
-        break;
-      case "large-text":
-        question.innerHTML = `
-            <textarea
-              id="${questionData.id}"
-              rows="20"
-              placeholder="${questionData.lable}"
-              oninput="resizeTextbox(this)"
-            ></textarea>
-          `;
-        question
-          .getElementsByTagName("textarea")[0]
-          .addEventListener("input", (e) => {
-            changeQuestionValue(questionData.id,e.target.value)
-          });
-        break;
-      default:
-        break;
-    }
+    let question = createQuestion(questions[questionsKeys[i]]);
     questionsContainer.appendChild(question);
   }
   for (let i = 0; i < sliders.length; i++) {}
@@ -267,9 +273,22 @@ function setupReportSection() {
   }
 }
 function changeQuestionValue(id, value) {
-  console.log(id);
-  console.log(value);
+  if(questions[id].value!=value){
+    questions[id].value = value
+    updateTimeout = 2000;
+    dataChanged = true;
+  }
 }
+//this will update the data to the server if certain time passed after an input
+setInterval(() => {
+  if(updateTimeout>0){
+    updateTimeout-=100;
+  } else if ( dataChanged ) {
+    console.log("data changed and updating")
+    console.log(questions)
+    dataChanged = false;
+  }
+}, 100);
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
   //so that the transition does not occur when reloading the page or loading another page besies the report page directly form url
@@ -627,3 +646,4 @@ export function monthChange(direction) {
   }
   updateCalander();
 }
+

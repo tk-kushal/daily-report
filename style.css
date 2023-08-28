@@ -610,3 +610,46 @@ textarea {
   transition: 500ms;
   transition-property: background, border-radius, color, border;
 }
+.editControlls>*,.detailedControllsContainer>*{
+  display: flex;
+  margin: 2px 0;
+}
+.detailedControllsContainer{
+  flex-direction: column;
+}
+.positionControlls,.detailedControlls{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.positionControlls{
+  margin-right: auto;
+}
+.editControlls input[type='text']{
+  font-size: 16px;
+}
+.positionControlls>*,.detailedControlls>*,.detailedEditBtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 5px;
+  padding: 3px;
+}
+.detailedEditBtn{
+  font-size: 16px;
+}
+.questionEditing{
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.3;
+}
+.hidden{
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
