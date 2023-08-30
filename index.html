@@ -53,25 +53,29 @@
               <div class="year"></div>
             </div>
           </div>
-          <div class="report-controlls-right">
-            <div class="edit ripple-button">
-              <i class="fa-solid fa-pen"></i>
+          <div class="flex">
+            <div class="report-controlls-right">
+              <div class="edit ripple-button">
+                <i class="fa-solid fa-pen"></i>
+              </div>
             </div>
-            <div class="add ripple-button">
-              <i class="fa-solid fa-plus"></i>
-            </div>
-            <div class="add ripple-button">
-              <i class="fa-solid fa-xmark"></i>
-            </div>
-            <div class="add ripple-button">
-              <i class="fa-solid fa-check"></i>
+            <div class="report-controlls-right report-edit-controlls hidden">
+              <div class="add ripple-button">
+                <i class="fa-solid fa-plus"></i>
+              </div>
+              <div class="add ripple-button">
+                <i class="fa-solid fa-xmark"></i>
+              </div>
+              <div class="add ripple-button">
+                <i class="fa-solid fa-check"></i>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="questionsContainer">
-          <div class="question" >
-            <div class="editControlls ">
+          <div class="question">
+            <div class="editControlls hidden">
               <div>
                 <div class="positionControlls">
                   <div class="downbtn ripple-button">
@@ -84,7 +88,7 @@
                 <div class="detailedEditBtn ripple-button">
                   <i class="fa-solid fa-pen"></i>
                 </div>
-                <div class="detailedControlls ">
+                <div class="detailedControlls">
                   <div class="delete ripple-button">
                     <i class="fa-solid fa-trash"></i>
                   </div>
@@ -96,13 +100,22 @@
                   </div>
                 </div>
               </div>
-              
-              <div class="detailedControllsContainer ">
-                <input type="text" name="" placeholder="name" class="editInput">
-                <input type="text" name="" placeholder="Lable" class="editInput">
+              <div class="detailedControllsContainer">
+                <input
+                  type="text"
+                  name=""
+                  placeholder="name"
+                  class="editInput"
+                />
+                <input
+                  type="text"
+                  name=""
+                  placeholder="Lable"
+                  class="editInput"
+                />
               </div>
             </div>
-            <div class="questionContainer questionEditing">
+            <div class="questionContainer">
               <input type="text" placeholder="Name Your Day" id="title" />
             </div>
           </div>

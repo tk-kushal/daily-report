@@ -1,4 +1,4 @@
-import { calanderSwipe } from "./buttonClick.js";
+import { calanderSwipe, updateButtons } from "./buttonClick.js";
 import { auth, signIn, signOut } from "./firebase.js";
 const REPORT = "/",
   CALANDER = "/calander",
@@ -93,7 +93,7 @@ let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
 let currentView = REPORT;
-let updateTimeout = 2000 // 3 seconds
+let updateTimeout = 2000; // 3 seconds
 let dataChanged = false;
 let initialize = true;
 let currentReport = {
@@ -132,27 +132,71 @@ function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
 }
 
-//setupReportSection();
+setupReportSection();
 
-function createQuestion(questionData){
+function createQuestion(questionData) {
   let type = questionData.type;
   let question = document.createElement("div");
-  let questionContainer = document.createElement('div');
+  let questionEditControlls = document.createElement("div");
+  let questionContainer = document.createElement("div");
   question.classList.add("question");
+  questionEditControlls.classList.add("editControlls");
+  questionContainer.classList.add("questionContainer");
+
+  questionEditControlls.innerHTML=`
+              <div>
+                <div class="positionControlls">
+                  <div class="downbtn ripple-button">
+                    <i class="fa-solid fa-angle-down"></i>
+                  </div>
+                  <div class="upbtn ripple-button">
+                    <i class="fa-solid fa-angle-up"></i>
+                  </div>
+                </div>
+                <div class="detailedEditBtn ripple-button">
+                  <i class="fa-solid fa-pen"></i>
+                </div>
+                <div class="detailedControlls hidden">
+                  <div class="delete ripple-button">
+                    <i class="fa-solid fa-trash"></i>
+                  </div>
+                  <div class="cancle ripple-button">
+                    <i class="fa-solid fa-xmark"></i>
+                  </div>
+                  <div class="done ripple-button">
+                    <i class="fa-solid fa-check"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="detailedControllsContainer hidden">
+                <input
+                  type="text"
+                  name=""
+                  placeholder="name"
+                  class="editInput"
+                />
+                <input
+                  type="text"
+                  name=""
+                  placeholder="Lable"
+                  class="editInput"
+                />
+              </div>
+  `;
   question.style.order = questionData.order;
   switch (type) {
     case "small-text":
-      question.innerHTML = `
+      questionContainer.innerHTML = `
         <input type="text" placeholder="${questionData.lable}" id="${questionData.id}" />
       `;
-      question
+      questionContainer
         .getElementsByTagName("input")[0]
         .addEventListener("input", (e) => {
-          changeQuestionValue(questionData.id,e.target.value)
+          changeQuestionValue(questionData.id, e.target.value);
         });
       break;
     case "toggle":
-      question.innerHTML = `
+      questionContainer.innerHTML = `
         <div class="lable">${questionData.lable}</div>
         <div class="yes-no-button" id=${questionData.id}>
           <div class="yes">Yes</div>
@@ -162,7 +206,7 @@ function createQuestion(questionData){
         `;
       break;
     case "slider":
-      question.innerHTML = `
+      questionContainer.innerHTML = `
           <div class="lable">${questionData.lable}</div>
           <div class="slider" id="${questionData.id}">
             <div class="star-input">
@@ -182,7 +226,7 @@ function createQuestion(questionData){
         `;
       break;
     case "large-text":
-      question.innerHTML = `
+      questionContainer.innerHTML = `
           <textarea
             id="${questionData.id}"
             rows="20"
@@ -190,15 +234,17 @@ function createQuestion(questionData){
             oninput="resizeTextbox(this)"
           ></textarea>
         `;
-      question
+      questionContainer
         .getElementsByTagName("textarea")[0]
         .addEventListener("input", (e) => {
-          changeQuestionValue(questionData.id,e.target.value)
+          changeQuestionValue(questionData.id, e.target.value);
         });
       break;
     default:
       break;
   }
+  question.appendChild(questionEditControlls);
+  question.appendChild(questionContainer);
   return question;
 }
 function setupReportSection() {
@@ -242,7 +288,7 @@ function setupReportSection() {
     });
   }
   for (let i = 0; i < sliders.length; i++) {
-    let id = sliders[i].parentElement.id
+    let id = sliders[i].parentElement.id;
     sliders[i].addEventListener("change", (e) => {
       handleEmojiSliderEvent(e, e.x);
     });
@@ -262,30 +308,31 @@ function setupReportSection() {
       handleEmojiSliderEvent(e, e.x)
     );
     sliders[i].addEventListener("touchend", (e) => {
-      changeQuestionValue(id,e.target.value)
+      changeQuestionValue(id, e.target.value);
       hold = false;
     });
     sliders[i].addEventListener("mouseup", (e) => {
-      changeQuestionValue(id,e.target.value)
+      changeQuestionValue(id, e.target.value);
       hold = false;
     });
     initiateEmojiPosition(sliders[i]);
   }
+  updateButtons()
 }
 function changeQuestionValue(id, value) {
-  if(questions[id].value!=value){
-    questions[id].value = value
+  if (questions[id].value != value) {
+    questions[id].value = value;
     updateTimeout = 2000;
     dataChanged = true;
   }
 }
 //this will update the data to the server if certain time passed after an input
 setInterval(() => {
-  if(updateTimeout>0){
-    updateTimeout-=100;
-  } else if ( dataChanged ) {
-    console.log("data changed and updating")
-    console.log(questions)
+  if (updateTimeout > 0) {
+    updateTimeout -= 100;
+  } else if (dataChanged) {
+    console.log("data changed and updating");
+    console.log(questions);
     dataChanged = false;
   }
 }, 100);
@@ -646,4 +693,3 @@ export function monthChange(direction) {
   }
   updateCalander();
 }
-

@@ -5,7 +5,7 @@
   --primaryButton: #71c9ce;
   --uncheckedStar: #71c9ce;
   --primary: hsl(0, 100%, 69%);
-  --secondary :hsla(0, 85%, 66%, 0.507);
+  --secondary: hsla(0, 85%, 66%, 0.507);
   --circleSize: 1000px;
   --textColor: hsl(0, 0%, 100%);
   --secondaryText: hsla(0, 20%, 98%, 0.463);
@@ -16,10 +16,10 @@ input,
 textarea {
   font-family: "Montserrat", sans-serif;
 }
-textarea::-webkit-scrollbar{
+textarea::-webkit-scrollbar {
   width: 0;
 }
-#daysEvents{
+#daysEvents {
   resize: none;
   border: 1px solid #ccc;
   width: 100%;
@@ -75,7 +75,6 @@ body {
   position: absolute;
   top: 0;
   background-color: var(--background);
-
 }
 .right > * {
   font-size: 20px;
@@ -149,7 +148,9 @@ body {
   font-size: 20px;
   transition: 300ms;
 }
-.questionsContainer,.calanderContainer,.profileContainer {
+.questionsContainer,
+.calanderContainer,
+.profileContainer {
   width: 100%;
   font-weight: 500;
   background-color: var(--secondaryBackground);
@@ -230,10 +231,10 @@ body {
   border-bottom: 1px solid var(--background);
   padding-bottom: 10px;
 }
-.question:not(:first-child){
+.question:not(:first-child) {
   margin-top: 20px;
 }
-#title{
+#title {
   margin-top: 0;
   margin-bottom: 5px;
   font-size: 20px;
@@ -270,7 +271,7 @@ textarea {
   grid-template-columns: repeat(7, 1fr);
   height: fit-content;
 }
-.weekDays{
+.weekDays {
   border-bottom: 3px solid var(--background);
   margin-bottom: 10px;
 }
@@ -291,25 +292,24 @@ textarea {
   transition-property: background, border-radius, color, border;
 }
 
-.weekDay{
+.weekDay {
   background-color: var(--secondaryBackground);
   margin-top: 10px;
 }
-.otherMonthDay{
+.otherMonthDay {
   opacity: 0.3;
   pointer-events: none;
 }
-.completedDay{
+.completedDay {
   background-color: var(--primary);
-
 }
-.calanderControlls{
+.calanderControlls {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 5px;
 }
-.yearAndMonth{
+.yearAndMonth {
   position: relative;
   display: flex;
   border-radius: 30px;
@@ -318,14 +318,15 @@ textarea {
   background-color: var(--secondaryBackground);
   border-radius: 10px;
 }
-.yearAndMonth>i{
+.yearAndMonth > i {
   font-size: 20px;
   margin: 0 10px 0 3px;
 }
-.calanderButtons{
+.calanderButtons {
   display: flex;
 }
-.calanderButtons>*,.report-controlls-right>*{
+.calanderButtons > *,
+.report-controlls-right > * {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -333,14 +334,17 @@ textarea {
   height: 40px;
   font-size: 22px;
   margin: 10px 10px;
-  border: 1px solid var(--primary);
+  margin-right: 0;
+  border: 1px solid rgb(66, 66, 66);
+  background: var(--secondaryBackground);
   border-radius: 50%;
   cursor: pointer;
-  transition: 500ms ;
+  transition: 500ms;
   transition-property: background-color, border-radius;
 }
 
-.yearAndMonth>*,.report-date>*{
+.yearAndMonth > *,
+.report-date > * {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -350,18 +354,19 @@ textarea {
   font-weight: bold;
   user-select: none;
 }
-.yearControlls,.monthControlls{
+.yearControlls,
+.monthControlls {
   border-radius: 7px;
   transition: 500ms;
 }
 
-.line{
+.line {
   width: 2px;
   padding: 0;
   margin: 5px 5px;
   background-color: var(--primary);
 }
-.yearAndMonth>i{
+.yearAndMonth > i {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -369,11 +374,11 @@ textarea {
   padding: 0;
 }
 
-.profileContainer{
+.profileContainer {
   display: flex;
   justify-content: center;
 }
-.loginBtn{
+.loginBtn {
   color: var(--textColor);
   padding: 10px 20px;
   border: 2px solid var(--primary);
@@ -382,29 +387,29 @@ textarea {
   transition: 500ms;
 }
 
-.report-date{
+.report-date {
   display: flex;
   font-size: 20px;
   margin: 0;
 }
-.report-date>*:not(:last-child){
+.report-date > *:not(:last-child) {
   border-right: 1px solid var(--primary);
 }
-.report-controlls>.left{
+.report-controlls > .left {
   display: flex;
   align-items: center;
 }
-.report-controlls-right>:nth-child(1){
+.report-controlls-right > :nth-child(1) {
   font-size: 18px;
 }
-.report-controlls{
+.report-controlls {
   width: 100%;
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 5px;
 }
-.left{
+.left {
   border-radius: 30px;
   height: 30px;
   padding: 10px 0;
@@ -412,18 +417,19 @@ textarea {
   transition: 500ms;
 }
 
-.report-controlls-right>*,.report-controlls-right{
+.report-controlls-right > *,
+.report-controlls-right {
   display: flex;
   justify-content: center;
   align-items: center;
   align-items: center;
 }
 @media (hover: hover) {
-  .yearAndMonth:hover{
+  .yearAndMonth:hover {
     background-color: rgb(93, 93, 93);
     cursor: pointer;
-  }  
-  .loginBtn:hover{
+  }
+  .loginBtn:hover {
     cursor: pointer;
     background-color: var(--primary);
     border-radius: 10px;
@@ -440,10 +446,11 @@ textarea {
     border-radius: 20%;
     background-color: var(--secondary);
   }
-  .completedDay:hover{
+  .completedDay:hover {
     background-color: var(--primary);
   }
-  .calanderButtons>*:hover,.report-controlls-right>*:hover{
+  .calanderButtons > *:hover,
+  .report-controlls-right > *:hover {
     background-color: var(--primary);
     border-radius: 20%;
   }
@@ -455,10 +462,10 @@ textarea {
 }
 
 @media screen and (max-width: 600px) {
-  .main>*{
+  .main > * {
     transition: 300ms;
   }
-  .report{
+  .report {
     padding: 30px 0 0;
   }
   .navbar {
@@ -476,10 +483,11 @@ textarea {
     top: auto;
     bottom: 0;
   }
-  .questionsContainer{
+  .questionsContainer {
     padding: 10px;
   }
-  .lable,.slider{
+  .lable,
+  .slider {
     margin: 10px;
   }
   .main {
@@ -515,24 +523,26 @@ textarea {
     padding: 5px;
     transition: 300ms;
   }
-  .calanderButtons>*,.report-controlls-right>*{
-    transform: scale(.9);
+  .calanderButtons > *,
+  .report-controlls-right > * {
+    transform: scale(0.9);
   }
-  .yearAndMonth{
+  .yearAndMonth {
     padding: 5px;
   }
-  .yearAndMonth>*,.report-date>*{
+  .yearAndMonth > *,
+  .report-date > * {
     font-size: 23px;
   }
-  .left{
+  .left {
     padding: 5px 0;
     padding-right: 10px;
   }
-  .report-controlls-right>:nth-child(1){
+  .report-controlls-right > :nth-child(1) {
     font-size: 16px;
   }
 }
-@media screen and (max-width: 400px){
+@media screen and (max-width: 400px) {
   .weekDay,
   .day {
     display: flex;
@@ -546,18 +556,18 @@ textarea {
     padding: 5px;
     transition: 300ms;
   }
-  .calanderContainer{
+  .calanderContainer {
     padding: 10px;
   }
-  .yearAndMonth>*{
+  .yearAndMonth > * {
     font-size: 20px;
   }
-  .calanderButtons>*{
-    transform: scale(.8);
+  .calanderButtons > * {
+    transform: scale(0.8);
     margin: 2px;
   }
 }
-.yes-no-button{
+.yes-no-button {
   display: flex;
   align-items: center;
   background-color: var(--secondary);
@@ -567,7 +577,7 @@ textarea {
   user-select: none;
   margin: 10px 0;
 }
-.yes-no-button>*{
+.yes-no-button > * {
   padding: 5px;
   width: 40px;
   display: flex;
@@ -576,7 +586,7 @@ textarea {
   z-index: 2;
   cursor: pointer;
 }
-.indicator{
+.indicator {
   width: 50px;
   height: 34px;
   background-color: var(--primary);
@@ -586,13 +596,13 @@ textarea {
   border-radius: 30px;
   z-index: 1;
 }
-.indicator-off{
+.indicator-off {
   transform: translate(50px);
 }
-.selectedYesNoBtn{
-  cursor:default;
+.selectedYesNoBtn {
+  cursor: default;
 }
-.selectedDay{
+.selectedDay {
   position: relative;
   transition: 500ms;
   transition-property: background, border-radius, color, border;
@@ -610,25 +620,29 @@ textarea {
   transition: 500ms;
   transition-property: background, border-radius, color, border;
 }
-.editControlls>*,.detailedControllsContainer>*{
+.editControlls > *,
+.detailedControllsContainer > * {
   display: flex;
   margin: 2px 0;
 }
-.detailedControllsContainer{
+.detailedControllsContainer {
   flex-direction: column;
 }
-.positionControlls,.detailedControlls{
+.positionControlls,
+.detailedControlls {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.positionControlls{
+.positionControlls {
   margin-right: auto;
 }
-.editControlls input[type='text']{
+.editControlls input[type="text"] {
   font-size: 16px;
 }
-.positionControlls>*,.detailedControlls>*,.detailedEditBtn{
+.positionControlls > *,
+.detailedControlls > *,
+.detailedEditBtn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -638,18 +652,22 @@ textarea {
   margin: 5px;
   padding: 3px;
 }
-.detailedEditBtn{
+.detailedEditBtn {
   font-size: 16px;
 }
-.questionEditing{
+.questionEditing {
   pointer-events: none;
   user-select: none;
   opacity: 0.3;
 }
-.hidden{
+.hidden {
   width: 0;
   height: 0;
   margin: 0;
   pointer-events: none;
   overflow: hidden;
+}
+.flex {
+  display: flex;
+  justify-content: center;
 }
