@@ -13,8 +13,6 @@ export function updateButtons() {
     });
     let button = currentButtons[i]
     if(ifadd){
-      console.log('adding event listener to this button')
-      console.log(button)
       button.addEventListener("click", function (e) {
         const ripple = document.createElement("span");
         ripple.classList.add("ripple");

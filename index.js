@@ -58,6 +58,8 @@ let questions = {
     order: 9,
   },
 };
+let editQuestions = questions;
+let questionsDom = [];
 const questionsContainer =
   document.getElementsByClassName("questionsContainer")[0];
 const reportBtn = document.getElementsByClassName("reportBtn")[0];
@@ -79,7 +81,13 @@ const resetCalanderButton = document.getElementsByClassName("resetBtn")[0];
 const reportDate = document.getElementsByClassName("date-day")[0];
 const reportMonth = document.getElementsByClassName("month")[0];
 const reportYear = document.getElementsByClassName("year")[0];
-const textArea = document.getElementById("daysEvents");
+const reportEditBtn = document.getElementsByClassName("edit")[0];
+const reportAddQuestionBtn = document.getElementsByClassName("add")[0];
+const reportEditCancleBtn = document.getElementsByClassName("cancle")[0];
+const reportEditDoneBtn = document.getElementsByClassName("done")[0];
+const reportEditControlls = document.getElementsByClassName(
+  "report-edit-controlls"
+)[0];
 
 let sliders = document.getElementsByClassName("emojiSlider");
 let toggleButtons = document.getElementsByClassName("yes-no-button");
@@ -141,9 +149,9 @@ function createQuestion(questionData) {
   let questionContainer = document.createElement("div");
   question.classList.add("question");
   questionEditControlls.classList.add("editControlls");
+  questionEditControlls.classList.add("hidden");
   questionContainer.classList.add("questionContainer");
-
-  questionEditControlls.innerHTML=`
+  questionEditControlls.innerHTML = `
               <div>
                 <div class="positionControlls">
                   <div class="downbtn ripple-button">
@@ -173,16 +181,56 @@ function createQuestion(questionData) {
                   type="text"
                   name=""
                   placeholder="name"
-                  class="editInput"
+                  class="questionId editInput"
                 />
                 <input
                   type="text"
                   name=""
                   placeholder="Lable"
-                  class="editInput"
+                  class="questionLable editInput"
                 />
               </div>
   `;
+
+  let upBtn = questionEditControlls.getElementsByClassName("upbtn")[0];
+  let downBtn = questionEditControlls.getElementsByClassName("downbtn")[0];
+  let detailedEditBtn =
+    questionEditControlls.getElementsByClassName("detailedEditBtn")[0];
+  let deleteBtn = questionEditControlls.getElementsByClassName("delete")[0];
+  let cancleBtn = questionEditControlls.getElementsByClassName("cancle")[0];
+  let doneBtn = questionEditControlls.getElementsByClassName("done")[0];
+  let questionDetailedControlls =
+    questionEditControlls.getElementsByClassName("detailedControlls")[0];
+  let questionDetailedControllsContainer =
+    questionEditControlls.getElementsByClassName(
+      "detailedControllsContainer"
+    )[0];
+  let questionIdInput =
+    questionEditControlls.getElementsByClassName("questionId")[0];
+  let questionLableInput =
+    questionEditControlls.getElementsByClassName("questionLable")[0];
+
+  upBtn.addEventListener("click", () => {
+    questionOrderChangeUp(questionData.id);
+  });
+  downBtn.addEventListener("click", () => {
+    questionOrderChangeDown(questionData.id);
+  });
+  detailedEditBtn.addEventListener("click", () => {
+    setTimeout(() => {
+      detailedEditBtn.classList.add("hidden");
+      questionDetailedControlls.classList.remove("hidden");
+      questionDetailedControllsContainer.classList.remove("hidden");
+    }, 200);
+  });
+  cancleBtn.addEventListener("click", () => {
+    setTimeout(() => {
+      detailedEditBtn.classList.remove("hidden");
+      questionDetailedControlls.classList.add("hidden");
+      questionDetailedControllsContainer.classList.add("hidden");
+    }, 200);
+  });
+
   question.style.order = questionData.order;
   switch (type) {
     case "small-text":
@@ -253,6 +301,7 @@ function setupReportSection() {
   for (let i = 0; i < questionsKeys.length; i++) {
     let question = createQuestion(questions[questionsKeys[i]]);
     questionsContainer.appendChild(question);
+    questionsDom[questionsKeys[i]] = question;
   }
   for (let i = 0; i < sliders.length; i++) {}
   for (let i = 0; i < toggleButtons.length; i++) {
@@ -317,7 +366,7 @@ function setupReportSection() {
     });
     initiateEmojiPosition(sliders[i]);
   }
-  updateButtons()
+  updateButtons();
 }
 function changeQuestionValue(id, value) {
   if (questions[id].value != value) {
@@ -343,8 +392,7 @@ function handleUrlChangeEvent() {
     currentView = path;
     initialize = false;
   }
-  console.log(path);
-  console.log(currentView);
+
   if (currentView !== path) {
     if (path === REPORT) {
       transtition(
@@ -675,6 +723,76 @@ resetCalanderButton.addEventListener("click", () => {
   calanderSwipe("reset");
   updateCalander();
 });
+reportEditBtn.addEventListener("click", () => {
+  setTimeout(() => {
+    reportEditControlls.classList.remove("hidden");
+    reportEditBtn.parentElement.classList.add("hidden");
+    showQuestionsEditControlls();
+  }, 200);
+});
+reportEditCancleBtn.addEventListener("click", () => {
+  setTimeout(() => {
+    reportEditControlls.classList.add("hidden");
+    reportEditBtn.parentElement.classList.remove("hidden");
+    hideQuestionsEditControlls();
+  }, 200);
+});
+function showQuestionsEditControlls() {
+  let questionsKeys = Object.keys(questions);
+  for (let i = 0; i < questionsKeys.length; i++) {
+    let question = questionsDom[questionsKeys[i]];
+
+    question.children[0].classList.remove("hidden");
+    question.children[1].classList.add("questionEditing");
+  }
+}
+function hideQuestionsEditControlls() {
+  let questionsKeys = Object.keys(questions);
+  for (let i = 0; i < questionsKeys.length; i++) {
+    let question = questionsDom[questionsKeys[i]];
+    question.children[0].classList.add("hidden");
+    question.children[0]
+      .getElementsByClassName("detailedEditBtn")[0]
+      .classList.remove("hidden");
+    question.children[0]
+      .getElementsByClassName("detailedControlls")[0]
+      .classList.add("hidden");
+    question.children[0]
+      .getElementsByClassName("detailedControllsContainer")[0]
+      .classList.add("hidden");
+    question.children[1].classList.remove("questionEditing");
+  }
+}
+function questionOrderChangeUp(id) {
+  let questionsKeys = Object.keys(questions);
+  let currentQuestion = questionsDom[id];
+  let order = editQuestions[id].order;
+  for (let i = 0; i < questionsKeys.length; i++) {
+    let questionOrder = editQuestions[questionsKeys[i]].order;
+    if (order - 1 == questionOrder && questionsKeys[i]!=id) {
+      currentQuestion.style.order = order-1;
+      questionsDom[questionsKeys[i]].style.order =
+        editQuestions[questionsKeys[i]].order + 1;
+      editQuestions[questionsKeys[i]].order += 1;
+      editQuestions[id].order -= 1;
+    }
+  }
+}
+function questionOrderChangeDown(id) {
+  let questionsKeys = Object.keys(questions);
+  let currentQuestion = questionsDom[id];
+  let order = editQuestions[id].order;
+  for (let i = 0; i < questionsKeys.length; i++) {
+    let questionOrder = editQuestions[questionsKeys[i]].order;
+    if (order + 1 == questionOrder && questionsKeys[i]!=id) {
+      currentQuestion.style.order = order+1;
+      questionsDom[questionsKeys[i]].style.order =
+        editQuestions[questionsKeys[i]].order - 1;
+      editQuestions[questionsKeys[i]].order -= 1;
+      editQuestions[id].order += 1;
+    }
+  }
+}
 export function monthChange(direction) {
   if (direction === "previous") {
     currentMonth--;

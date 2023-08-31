@@ -16,6 +16,14 @@ input,
 textarea {
   font-family: "Montserrat", sans-serif;
 }
+textarea{
+  margin-bottom: -4px;
+}
+.questionContainer{
+  padding: 0;
+  height: 100%;
+  margin: 0;
+}
 textarea::-webkit-scrollbar {
   width: 0;
 }
@@ -424,6 +432,41 @@ textarea {
   align-items: center;
   align-items: center;
 }
+.yes-no-button {
+  display: flex;
+  align-items: center;
+  background-color: var(--secondary);
+  width: fit-content;
+  padding: 3px;
+  border-radius: 30px;
+  user-select: none;
+  margin: 10px 0;
+}
+.yes-no-button > * {
+  padding: 5px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  color: var(--textColor);
+  z-index: 2;
+  cursor: pointer;
+}
+.indicator {
+  width: 50px;
+  height: 34px;
+  background-color: var(--primary);
+  position: absolute;
+  padding: 0;
+  transition: 300ms;
+  border-radius: 30px;
+  z-index: 1;
+}
+.indicator-off {
+  transform: translate(50px);
+}
+.selectedYesNoBtn {
+  cursor: default;
+}
 @media (hover: hover) {
   .yearAndMonth:hover {
     background-color: rgb(93, 93, 93);
@@ -477,6 +520,9 @@ textarea {
   }
   .right > * {
     margin-right: 0;
+  }
+  .yes-no-button{
+    margin-left: 10px;
   }
   .right {
     justify-content: space-around;
@@ -567,41 +613,7 @@ textarea {
     margin: 2px;
   }
 }
-.yes-no-button {
-  display: flex;
-  align-items: center;
-  background-color: var(--secondary);
-  width: fit-content;
-  padding: 3px;
-  border-radius: 30px;
-  user-select: none;
-  margin: 10px 0;
-}
-.yes-no-button > * {
-  padding: 5px;
-  width: 40px;
-  display: flex;
-  justify-content: center;
-  color: var(--textColor);
-  z-index: 2;
-  cursor: pointer;
-}
-.indicator {
-  width: 50px;
-  height: 34px;
-  background-color: var(--primary);
-  position: absolute;
-  padding: 0;
-  transition: 300ms;
-  border-radius: 30px;
-  z-index: 1;
-}
-.indicator-off {
-  transform: translate(50px);
-}
-.selectedYesNoBtn {
-  cursor: default;
-}
+
 .selectedDay {
   position: relative;
   transition: 500ms;
@@ -658,16 +670,21 @@ textarea {
 .questionEditing {
   pointer-events: none;
   user-select: none;
-  opacity: 0.3;
+  opacity: 0.5;
 }
 .hidden {
   width: 0;
   height: 0;
   margin: 0;
+  opacity: 0;
   pointer-events: none;
   overflow: hidden;
 }
 .flex {
   display: flex;
   justify-content: center;
+}
+.questionsContainer{
+  display: flex;
+  flex-direction: column;
 }
