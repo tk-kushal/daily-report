@@ -169,6 +169,7 @@ body {
   box-sizing: border-box;
   font-size: 20px;
   transition: 300ms;
+  flex-direction: column;
 }
 .slider {
   position: relative;
@@ -278,6 +279,7 @@ textarea {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   height: fit-content;
+  width: 100%;
 }
 .weekDays {
   border-bottom: 3px solid var(--background);
@@ -680,10 +682,7 @@ textarea {
   pointer-events: none;
   overflow: hidden;
 }
-.flex {
-  display: flex;
-  justify-content: center;
-}
+
 .questionsContainer{
   display: flex;
   flex-direction: column;

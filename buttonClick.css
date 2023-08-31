@@ -1,17 +1,10 @@
 .ripple-button, .ripple-calander {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
   cursor: pointer;
   overflow: hidden;
   outline: none;
 }
-i{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .ripple {
   position: absolute;
   border-radius: 50%;
