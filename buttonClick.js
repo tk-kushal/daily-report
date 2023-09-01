@@ -58,10 +58,14 @@ export function calanderSwipe(direction) {
 
 calander.addEventListener("swiped-left", (e) => {
   calanderSwipe("right");
-  monthChange("next");
+  setTimeout(() => {
+    monthChange("next",false);
+  }, 100);
 });
 
 calander.addEventListener("swiped-right", (e) => {
   calanderSwipe("left");
-  monthChange("previous");
+  setTimeout(() => {
+    monthChange("previous",false);
+  }, 100);
 });

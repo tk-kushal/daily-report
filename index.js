@@ -793,21 +793,25 @@ function questionOrderChangeDown(id) {
     }
   }
 }
-export function monthChange(direction) {
+export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
     currentMonth--;
     if (currentMonth < 0) {
       currentMonth = 11;
       currentYear--;
     }
-    calanderSwipe("left");
+    if(ripple == true){
+      calanderSwipe("left")
+    }
   } else if (direction === "next") {
     currentMonth++;
     if (currentMonth > 11) {
       currentMonth = 0;
       currentYear++;
     }
-    calanderSwipe("right");
+    if(ripple == true){
+      calanderSwipe('right')
+    }
   }
   updateCalander();
 }

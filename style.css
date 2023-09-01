@@ -469,7 +469,7 @@ textarea {
 .selectedYesNoBtn {
   cursor: default;
 }
-@media (hover: hover) {
+@media not all and (hover: none) {
   .yearAndMonth:hover {
     background-color: rgb(93, 93, 93);
     cursor: pointer;
