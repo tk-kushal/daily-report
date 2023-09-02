@@ -236,11 +236,11 @@ body {
   text-align: right;
   font-size: 14px;
 }
-.question:not(:last-child) {
+.question{
   border-bottom: 1px solid var(--background);
   padding-bottom: 10px;
 }
-.question:not(:first-child) {
+.question{
   margin-top: 20px;
 }
 #title {
@@ -337,6 +337,7 @@ textarea {
 }
 .calanderButtons > *,
 .report-controlls-right > * {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -352,7 +353,6 @@ textarea {
   transition: 500ms;
   transition-property: background-color, border-radius;
 }
-
 .yearAndMonth > *,
 .report-date > * {
   display: flex;
@@ -429,6 +429,7 @@ textarea {
 
 .report-controlls-right > *,
 .report-controlls-right {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -501,6 +502,9 @@ textarea {
   }
   .selectedDay:hover:before {
     border-radius: 22%;
+  }
+  .option:hover{
+    background: var(--primary);
   }
 }
 @media (hover: none) {
@@ -651,6 +655,12 @@ textarea {
 .positionControlls {
   margin-right: auto;
 }
+.editControlls,.report-controlls-right{
+  -webkit-transition: all 200ms linear;
+    -moz-transition: all 200ms linear;
+    -o-transition: all 200ms linear;
+    transition: all 200ms linear;
+}
 .editControlls input[type="text"] {
   font-size: 16px;
 }
@@ -675,15 +685,58 @@ textarea {
   opacity: 0.5;
 }
 .hidden {
-  width: 0;
-  height: 0;
+  width: 1px;
+  height: 1px;
   margin: 0;
   opacity: 0;
   pointer-events: none;
   overflow: hidden;
+  position: relative;
 }
 
 .questionsContainer{
   display: flex;
   flex-direction: column;
+}
+.popup{
+  position: absolute;
+  width: auto;
+  height: max-content;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+  padding: 2px;
+  border-radius: 10px;
+  z-index: 2;
+  margin: 0;
+  padding-right: 2px;
+  box-sizing: border-box;
+  transition: all 100ms linear;
+}
+.popup:hover{
+  border-radius: 10px;
+  background-color: var(--secondaryBackground);
+  cursor: auto;
+}
+.option{
+  cursor: pointer;
+  user-select: none;
+  padding: 5px;
+  background-color: rgb(67, 67, 67);
+  margin: 2px;
+  border-radius: 3px;
+  width: calc(100% - 14px);
+  transition: 300ms;
+}
+.option:first-child{
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.option:last-child{
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.add>*{
+  pointer-events: none;
 }

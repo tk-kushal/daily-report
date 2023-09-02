@@ -58,7 +58,7 @@ let questions = {
     order: 9,
   },
 };
-let editQuestions = questions;
+let editQuestions = window.structuredClone(questions);
 let questionsDom = [];
 const questionsContainer =
   document.getElementsByClassName("questionsContainer")[0];
@@ -83,6 +83,7 @@ const reportMonth = document.getElementsByClassName("month")[0];
 const reportYear = document.getElementsByClassName("year")[0];
 const reportEditBtn = document.getElementsByClassName("edit")[0];
 const reportAddQuestionBtn = document.getElementsByClassName("add")[0];
+const addQuestionPopup = document.getElementsByClassName("popup")[0];
 const reportEditCancleBtn = document.getElementsByClassName("cancle")[0];
 const reportEditDoneBtn = document.getElementsByClassName("done")[0];
 const reportEditControlls = document.getElementsByClassName(
@@ -230,7 +231,13 @@ function createQuestion(questionData) {
       questionDetailedControllsContainer.classList.add("hidden");
     }, 200);
   });
-
+  if (questionData.order == 1) {
+    question.style.marginTop = "0px";
+  }
+  if (questionData.order == Object.keys(questions).length) {
+    question.style.border = "none";
+    question.style.paddingBottom = "0px";
+  }
   question.style.order = questionData.order;
   switch (type) {
     case "small-text":
@@ -303,7 +310,6 @@ function setupReportSection() {
     questionsContainer.appendChild(question);
     questionsDom[questionsKeys[i]] = question;
   }
-  for (let i = 0; i < sliders.length; i++) {}
   for (let i = 0; i < toggleButtons.length; i++) {
     let yesButton = toggleButtons[i].getElementsByClassName("yes")[0];
     let noButton = toggleButtons[i].getElementsByClassName("No")[0];
@@ -699,44 +705,6 @@ function transtition(e, element, view, cordX, cordY) {
     element.style.zIndex = "1";
   }, 600);
 }
-reportBtn.addEventListener("click", (e) => {
-  windowNavigation(REPORT, "");
-  transtition(e, reportBtn, REPORT);
-});
-calanderBtn.addEventListener("click", (e) => {
-  windowNavigation(CALANDER, "");
-  transtition(e, calanderBtn, CALANDER);
-});
-userBtn.addEventListener("click", (e) => {
-  windowNavigation(PROFILE, "");
-  transtition(e, userBtn, PROFILE);
-});
-prevMonthButton.addEventListener("click", () => {
-  monthChange("previous");
-});
-nextMonthButton.addEventListener("click", () => {
-  monthChange("next");
-});
-resetCalanderButton.addEventListener("click", () => {
-  currentMonth = todaysMonth;
-  currentYear = todaysYear;
-  calanderSwipe("reset");
-  updateCalander();
-});
-reportEditBtn.addEventListener("click", () => {
-  setTimeout(() => {
-    reportEditControlls.classList.remove("hidden");
-    reportEditBtn.parentElement.classList.add("hidden");
-    showQuestionsEditControlls();
-  }, 200);
-});
-reportEditCancleBtn.addEventListener("click", () => {
-  setTimeout(() => {
-    reportEditControlls.classList.add("hidden");
-    reportEditBtn.parentElement.classList.remove("hidden");
-    hideQuestionsEditControlls();
-  }, 200);
-});
 function showQuestionsEditControlls() {
   let questionsKeys = Object.keys(questions);
   for (let i = 0; i < questionsKeys.length; i++) {
@@ -769,8 +737,8 @@ function questionOrderChangeUp(id) {
   let order = editQuestions[id].order;
   for (let i = 0; i < questionsKeys.length; i++) {
     let questionOrder = editQuestions[questionsKeys[i]].order;
-    if (order - 1 == questionOrder && questionsKeys[i]!=id) {
-      currentQuestion.style.order = order-1;
+    if (order - 1 == questionOrder && questionsKeys[i] != id) {
+      currentQuestion.style.order = order - 1;
       questionsDom[questionsKeys[i]].style.order =
         editQuestions[questionsKeys[i]].order + 1;
       editQuestions[questionsKeys[i]].order += 1;
@@ -784,8 +752,8 @@ function questionOrderChangeDown(id) {
   let order = editQuestions[id].order;
   for (let i = 0; i < questionsKeys.length; i++) {
     let questionOrder = editQuestions[questionsKeys[i]].order;
-    if (order + 1 == questionOrder && questionsKeys[i]!=id) {
-      currentQuestion.style.order = order+1;
+    if (order + 1 == questionOrder && questionsKeys[i] != id) {
+      currentQuestion.style.order = order + 1;
       questionsDom[questionsKeys[i]].style.order =
         editQuestions[questionsKeys[i]].order - 1;
       editQuestions[questionsKeys[i]].order -= 1;
@@ -800,8 +768,8 @@ export function monthChange(direction, ripple = true) {
       currentMonth = 11;
       currentYear--;
     }
-    if(ripple == true){
-      calanderSwipe("left")
+    if (ripple == true) {
+      calanderSwipe("left");
     }
   } else if (direction === "next") {
     currentMonth++;
@@ -809,9 +777,67 @@ export function monthChange(direction, ripple = true) {
       currentMonth = 0;
       currentYear++;
     }
-    if(ripple == true){
-      calanderSwipe('right')
+    if (ripple == true) {
+      calanderSwipe("right");
     }
   }
   updateCalander();
 }
+reportBtn.addEventListener("click", (e) => {
+  windowNavigation(REPORT, "");
+  transtition(e, reportBtn, REPORT);
+});
+calanderBtn.addEventListener("click", (e) => {
+  windowNavigation(CALANDER, "");
+  transtition(e, calanderBtn, CALANDER);
+});
+userBtn.addEventListener("click", (e) => {
+  windowNavigation(PROFILE, "");
+  transtition(e, userBtn, PROFILE);
+});
+prevMonthButton.addEventListener("click", () => {
+  monthChange("previous");
+});
+nextMonthButton.addEventListener("click", () => {
+  monthChange("next");
+});
+resetCalanderButton.addEventListener("click", () => {
+  currentMonth = todaysMonth;
+  currentYear = todaysYear;
+  calanderSwipe("reset");
+  updateCalander();
+});
+reportEditBtn.addEventListener("click", () => {
+  setTimeout(() => {
+    reportEditControlls.classList.remove("hidden");
+    reportEditBtn.parentElement.classList.add("hidden");
+    showQuestionsEditControlls();
+  }, 100);
+});
+reportEditCancleBtn.addEventListener("click", () => {
+  setTimeout(() => {
+    reportEditControlls.classList.add("hidden");
+    reportEditBtn.parentElement.classList.remove("hidden");
+    addQuestionPopup.classList.add("hidden");
+    setupReportSection();
+  }, 100);
+});
+reportEditDoneBtn.addEventListener("click", () => {
+  setTimeout(() => {
+    reportEditControlls.classList.add("hidden");
+    reportEditBtn.parentElement.classList.remove("hidden");
+    addQuestionPopup.classList.add("hidden");
+    questions = window.structuredClone(editQuestions);
+    hideQuestionsEditControlls();
+    setupReportSection();
+  }, 100);
+});
+reportAddQuestionBtn.addEventListener("click", (e) => {
+  if (addQuestionPopup.classList.contains("hidden")) {
+    let height = e.srcElement.offsetHeight + 20;
+    addQuestionPopup.style.top = height + "px";
+    addQuestionPopup.classList.remove("hidden");
+  } else {
+    addQuestionPopup.classList.add("hidden");
+  }
+});
