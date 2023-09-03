@@ -89,6 +89,11 @@ const reportEditDoneBtn = document.getElementsByClassName("done")[0];
 const reportEditControlls = document.getElementsByClassName(
   "report-edit-controlls"
 )[0];
+const backdrop = document.getElementsByClassName("backdrop")[0];
+const warningContainer =
+  document.getElementsByClassName("warning-container")[0];
+const warningCancle = document.getElementsByClassName("warning-cancle")[0];
+const warningDone = document.getElementsByClassName("warning-done")[0];
 
 let sliders = document.getElementsByClassName("emojiSlider");
 let toggleButtons = document.getElementsByClassName("yes-no-button");
@@ -143,14 +148,19 @@ function windowNavigation(view, subpath) {
 
 setupReportSection();
 
-function createQuestion(questionData) {
+function createQuestion(questionData, creating = false) {
   let type = questionData.type;
   let question = document.createElement("div");
   let questionEditControlls = document.createElement("div");
   let questionContainer = document.createElement("div");
   question.classList.add("question");
   questionEditControlls.classList.add("editControlls");
-  questionEditControlls.classList.add("hidden");
+  if (!creating) {
+    questionEditControlls.classList.add("hidden");
+  }
+  if (creating) {
+    questionContainer.classList.add("questionEditing");
+  }
   questionContainer.classList.add("questionContainer");
   questionEditControlls.innerHTML = `
               <div>
@@ -162,10 +172,12 @@ function createQuestion(questionData) {
                     <i class="fa-solid fa-angle-up"></i>
                   </div>
                 </div>
-                <div class="detailedEditBtn ripple-button">
+                <div class="detailedEditBtn ripple-button ${
+                  !creating ? "" : "hidden"
+                }">
                   <i class="fa-solid fa-pen"></i>
                 </div>
-                <div class="detailedControlls hidden">
+                <div class="detailedControlls ${creating ? "" : "hidden"}">
                   <div class="delete ripple-button">
                     <i class="fa-solid fa-trash"></i>
                   </div>
@@ -177,13 +189,19 @@ function createQuestion(questionData) {
                   </div>
                 </div>
               </div>
-              <div class="detailedControllsContainer hidden">
-                <input
+              <div class="detailedControllsContainer ${
+                creating ? "" : "hidden"
+              }">
+                  ${
+                    creating
+                      ? `<input
                   type="text"
                   name=""
-                  placeholder="name"
-                  class="questionId editInput"
-                />
+                  placeholder="Enter a Id for this question"
+                  class="questionId editInput questionIdInvalid"
+                  />`
+                      : ""
+                  }
                 <input
                   type="text"
                   name=""
@@ -208,9 +226,35 @@ function createQuestion(questionData) {
     )[0];
   let questionIdInput =
     questionEditControlls.getElementsByClassName("questionId")[0];
+  if (questionIdInput) {
+    questionIdInput.addEventListener('input',()=>{
+      if(questionIdInput.value != '' && idNotTaken(questionIdInput.value)){
+        questionIdInput.classList.remove('questionIdInvalid')
+      }
+      else{
+        questionIdInput.classList.add('questionIdInvalid')
+      }
+    })
+  }
   let questionLableInput =
     questionEditControlls.getElementsByClassName("questionLable")[0];
 
+  deleteBtn.addEventListener('click',()=>{
+    question.remove();
+    delete editQuestions[questionData.id]
+    delete questionsDom[questionData.id]
+  })
+  questionLableInput.addEventListener("input", (e) => {
+    if (type == "small-text")
+      questionContainer.getElementsByTagName("input")[0].placeholder =
+        questionLableInput.value;
+    else if (type == "large-text")
+      questionContainer.getElementsByTagName("textarea")[0].placeholder =
+        questionLableInput.value;
+    else
+      questionContainer.getElementsByClassName("lable")[0].innerHTML =
+        questionLableInput.value;
+  });
   upBtn.addEventListener("click", () => {
     questionOrderChangeUp(questionData.id);
   });
@@ -233,10 +277,13 @@ function createQuestion(questionData) {
   });
   if (questionData.order == 1) {
     question.style.marginTop = "0px";
+    question.style.border = "";
+    question.style.paddingBottom = "";
   }
   if (questionData.order == Object.keys(questions).length) {
     question.style.border = "none";
     question.style.paddingBottom = "0px";
+    question.style.marginTop = "";
   }
   question.style.order = questionData.order;
   switch (type) {
@@ -732,7 +779,7 @@ function hideQuestionsEditControlls() {
   }
 }
 function questionOrderChangeUp(id) {
-  let questionsKeys = Object.keys(questions);
+  let questionsKeys = Object.keys(editQuestions);
   let currentQuestion = questionsDom[id];
   let order = editQuestions[id].order;
   for (let i = 0; i < questionsKeys.length; i++) {
@@ -747,7 +794,7 @@ function questionOrderChangeUp(id) {
   }
 }
 function questionOrderChangeDown(id) {
-  let questionsKeys = Object.keys(questions);
+  let questionsKeys = Object.keys(editQuestions);
   let currentQuestion = questionsDom[id];
   let order = editQuestions[id].order;
   for (let i = 0; i < questionsKeys.length; i++) {
@@ -760,6 +807,17 @@ function questionOrderChangeDown(id) {
       editQuestions[id].order += 1;
     }
   }
+}
+function hidePopup() {
+  backdrop.classList.add("hidden");
+  addQuestionPopup.classList.add("hidden");
+}
+function cancleEdit() {
+  editQuestions = window.structuredClone(questions);
+  reportEditControlls.classList.add("hidden");
+  reportEditBtn.parentElement.classList.remove("hidden");
+  hidePopup();
+  setupReportSection();
 }
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
@@ -788,12 +846,23 @@ reportBtn.addEventListener("click", (e) => {
   transtition(e, reportBtn, REPORT);
 });
 calanderBtn.addEventListener("click", (e) => {
-  windowNavigation(CALANDER, "");
-  transtition(e, calanderBtn, CALANDER);
+  if (JSON.stringify(editQuestions) == JSON.stringify(questions)) {
+    cancleEdit();
+    windowNavigation(CALANDER, "");
+    transtition(e, calanderBtn, CALANDER);
+    hidePopup();
+  } else {
+    warningContainer.classList.remove("hidden");
+  }
 });
 userBtn.addEventListener("click", (e) => {
-  windowNavigation(PROFILE, "");
-  transtition(e, userBtn, PROFILE);
+  if (JSON.stringify(editQuestions) == JSON.stringify(questions)) {
+    cancleEdit();
+    windowNavigation(PROFILE, "");
+    transtition(e, userBtn, PROFILE);
+  } else {
+    warningContainer.classList.remove("hidden");
+  }
 });
 prevMonthButton.addEventListener("click", () => {
   monthChange("previous");
@@ -816,18 +885,20 @@ reportEditBtn.addEventListener("click", () => {
 });
 reportEditCancleBtn.addEventListener("click", () => {
   setTimeout(() => {
-    reportEditControlls.classList.add("hidden");
-    reportEditBtn.parentElement.classList.remove("hidden");
-    addQuestionPopup.classList.add("hidden");
-    setupReportSection();
+    if (JSON.stringify(editQuestions) == JSON.stringify(questions)) {
+      cancleEdit();
+    } else {
+      warningContainer.classList.remove("hidden");
+    }
   }, 100);
 });
 reportEditDoneBtn.addEventListener("click", () => {
   setTimeout(() => {
     reportEditControlls.classList.add("hidden");
     reportEditBtn.parentElement.classList.remove("hidden");
-    addQuestionPopup.classList.add("hidden");
+    hidePopup();
     questions = window.structuredClone(editQuestions);
+    reOrderQuestions();
     hideQuestionsEditControlls();
     setupReportSection();
   }, 100);
@@ -837,7 +908,96 @@ reportAddQuestionBtn.addEventListener("click", (e) => {
     let height = e.srcElement.offsetHeight + 20;
     addQuestionPopup.style.top = height + "px";
     addQuestionPopup.classList.remove("hidden");
+    backdrop.classList.remove("hidden");
   } else {
-    addQuestionPopup.classList.add("hidden");
+    hidePopup();
   }
 });
+backdrop.addEventListener("click", () => {
+  hidePopup();
+});
+warningCancle.addEventListener("click", () => {
+  warningContainer.classList.add("hidden");
+});
+warningDone.addEventListener("click", () => {
+  warningContainer.classList.add("hidden");
+  cancleEdit();
+});
+addQuestionPopup
+  .getElementsByClassName("small-text")[0]
+  .addEventListener("click", () => {
+    addQuestion("small-text");
+  });
+addQuestionPopup
+  .getElementsByClassName("toggle")[0]
+  .addEventListener("click", () => {
+    addQuestion("toggle");
+  });
+addQuestionPopup
+  .getElementsByClassName("slider")[0]
+  .addEventListener("click", () => {
+    addQuestion("slider");
+  });
+addQuestionPopup
+  .getElementsByClassName("large-text")[0]
+  .addEventListener("click", () => {
+    addQuestion("large-text");
+  });
+function addQuestion(type) {
+  let questionData = {
+    type: type,
+    id: "new",
+    lable: "enter a lable",
+    order: 1,
+  };
+  let question = createQuestion(questionData, true);
+  let questionsKeys = Object.keys(editQuestions);
+  for (let i = 0; i < questionsKeys.length; i++) {
+    editQuestions[questionsKeys[i]].order += 1;
+    questionsDom[questionsKeys[i]].style.order =
+      editQuestions[questionsKeys[i]].order;
+  }
+  editQuestions[questionData.id] = questionData;
+  questionsDom[questionData.id] = question;
+  refreshQuestionStyling();
+  questionsContainer.appendChild(question);
+  hidePopup();
+  updateButtons();
+}
+function refreshQuestionStyling() {
+  let questionsKeys = Object.keys(editQuestions);
+  for (let i = 0; i < questionsKeys.length; i++) {
+    let questionData = editQuestions[questionsKeys[i]];
+    let question = questionsDom[questionsKeys[i]];
+    if (questionData.order == 1 && question) {
+      question.style.marginTop = "0px";
+      question.style.border = "";
+      question.style.paddingBottom = "";
+    }
+    if (questionData.order == Object.keys(questions).length) {
+      question.style.border = "none";
+      question.style.paddingBottom = "0px";
+      question.style.marginTop = "";
+    }
+  }
+}
+function idNotTaken(value){
+  let notTaken = true;
+  let questionsKeys = Object.keys(questions)
+  for (let i = 0; i < questionsKeys.length; i++) {
+    if(value==questionsKeys[i]){
+      notTaken = false;
+    }
+  }
+  return notTaken;
+}
+function reOrderQuestions(){
+  let questionsKeys = Object.keys(questions)
+  while(pointer <= questionsKeys.length)
+  for (let i = 0; i < questionsKeys.length; i++) {
+    if(value==questionsKeys[i]){
+      notTaken = false;
+    }
+  }
+  editQuestions = window.structuredClone(questions);
+}

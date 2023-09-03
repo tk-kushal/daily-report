@@ -34,7 +34,20 @@
         </div>
       </div>
     </div>
-
+    <div class="backdrop hidden"></div>
+    <div class="warning-container hidden">
+      <div class="warning-popup">
+        <div class="warning">Changes will not be saved Cancle?</div>
+        <div class="warning-buttons report-controlls-right">
+          <div class="warning-cancle ripple-button">
+            <i class="fa-solid fa-xmark"></i>
+          </div>
+          <div class="warning-done ripple-button">
+            <i class="fa-solid fa-check"></i>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="main">
       <div class="report" style="display: none">
         <div class="daysQuote">
@@ -45,7 +58,6 @@
           <i class="fa-solid fa-quote-right"></i>
           <div class="author">-Audrey Hepburn</div>
         </div>
-
 
         <div class="report-controlls">
           <div class="left">
@@ -63,10 +75,10 @@
             </div>
             <div class="report-controlls-right report-edit-controlls hidden">
               <div class="popup hidden">
-                <div class="option ripple-button">TextBox Small</div>
-                <div class="option ripple-button">Toggle Button</div>
-                <div class="option ripple-button">Slider</div>
-                <div class="option ripple-button">TextBox Large</div>
+                <div class="option ripple-button small-text">TextBox Small</div>
+                <div class="option ripple-button toggle">Toggle Button</div>
+                <div class="option ripple-button slider">Slider</div>
+                <div class="option ripple-button large-text">TextBox Large</div>
               </div>
               <div class="add ripple-button">
                 <i class="fa-solid fa-plus"></i>
@@ -277,7 +289,7 @@
 
       <div class="profile" style="display: none">
         <div class="profileContainer">
-          <div class="loginBtn" style="display: none">Login</div>
+          <div class="loginBtn ripple-button" style="display: none">Login</div>
         </div>
       </div>
     </div>
