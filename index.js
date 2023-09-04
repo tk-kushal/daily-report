@@ -3,6 +3,7 @@ import { auth, signIn, signOut } from "./firebase.js";
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
+const NEWQUESTIONID = "newQuestionID";
 let questions = {
   title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
   exercise: {
@@ -181,9 +182,13 @@ function createQuestion(questionData, creating = false) {
                   <div class="delete ripple-button">
                     <i class="fa-solid fa-trash"></i>
                   </div>
-                  <div class="cancle ripple-button">
-                    <i class="fa-solid fa-xmark"></i>
-                  </div>
+                  ${
+                    creating
+                      ? ""
+                      : `<div class="cancle ripple-button">
+                          <i class="fa-solid fa-xmark"></i>
+                        </div>`
+                  }
                   <div class="done ripple-button">
                     <i class="fa-solid fa-check"></i>
                   </div>
@@ -194,12 +199,17 @@ function createQuestion(questionData, creating = false) {
               }">
                   ${
                     creating
-                      ? `<input
-                  type="text"
-                  name=""
-                  placeholder="Enter a Id for this question"
-                  class="questionId editInput questionIdInvalid"
-                  />`
+                      ? `<div class="id-input-container">
+                      <input
+                        type="text"
+                        name=""
+                        placeholder="Enter a ID for the Question"
+                        class="questionId editInput questionIdInvalid"
+                      />
+                      <div class="id-info ripple-button">
+                        <i class="fa-solid fa-question"></i>
+                      </div>
+                    </div>`
                       : ""
                   }
                 <input
@@ -211,70 +221,6 @@ function createQuestion(questionData, creating = false) {
               </div>
   `;
 
-  let upBtn = questionEditControlls.getElementsByClassName("upbtn")[0];
-  let downBtn = questionEditControlls.getElementsByClassName("downbtn")[0];
-  let detailedEditBtn =
-    questionEditControlls.getElementsByClassName("detailedEditBtn")[0];
-  let deleteBtn = questionEditControlls.getElementsByClassName("delete")[0];
-  let cancleBtn = questionEditControlls.getElementsByClassName("cancle")[0];
-  let doneBtn = questionEditControlls.getElementsByClassName("done")[0];
-  let questionDetailedControlls =
-    questionEditControlls.getElementsByClassName("detailedControlls")[0];
-  let questionDetailedControllsContainer =
-    questionEditControlls.getElementsByClassName(
-      "detailedControllsContainer"
-    )[0];
-  let questionIdInput =
-    questionEditControlls.getElementsByClassName("questionId")[0];
-  if (questionIdInput) {
-    questionIdInput.addEventListener('input',()=>{
-      if(questionIdInput.value != '' && idNotTaken(questionIdInput.value)){
-        questionIdInput.classList.remove('questionIdInvalid')
-      }
-      else{
-        questionIdInput.classList.add('questionIdInvalid')
-      }
-    })
-  }
-  let questionLableInput =
-    questionEditControlls.getElementsByClassName("questionLable")[0];
-
-  deleteBtn.addEventListener('click',()=>{
-    question.remove();
-    delete editQuestions[questionData.id]
-    delete questionsDom[questionData.id]
-  })
-  questionLableInput.addEventListener("input", (e) => {
-    if (type == "small-text")
-      questionContainer.getElementsByTagName("input")[0].placeholder =
-        questionLableInput.value;
-    else if (type == "large-text")
-      questionContainer.getElementsByTagName("textarea")[0].placeholder =
-        questionLableInput.value;
-    else
-      questionContainer.getElementsByClassName("lable")[0].innerHTML =
-        questionLableInput.value;
-  });
-  upBtn.addEventListener("click", () => {
-    questionOrderChangeUp(questionData.id);
-  });
-  downBtn.addEventListener("click", () => {
-    questionOrderChangeDown(questionData.id);
-  });
-  detailedEditBtn.addEventListener("click", () => {
-    setTimeout(() => {
-      detailedEditBtn.classList.add("hidden");
-      questionDetailedControlls.classList.remove("hidden");
-      questionDetailedControllsContainer.classList.remove("hidden");
-    }, 200);
-  });
-  cancleBtn.addEventListener("click", () => {
-    setTimeout(() => {
-      detailedEditBtn.classList.remove("hidden");
-      questionDetailedControlls.classList.add("hidden");
-      questionDetailedControllsContainer.classList.add("hidden");
-    }, 200);
-  });
   if (questionData.order == 1) {
     question.style.marginTop = "0px";
     question.style.border = "";
@@ -325,6 +271,23 @@ function createQuestion(questionData, creating = false) {
               max="4"
             />
           </div>
+          <div class="emojiEdit ${creating ? "" : "hidden"}">
+                <input type="text" class="emojiInput" value="${
+                  questionData.emotes[0]
+                }"/>
+                <input type="text" class="emojiInput" value="${
+                  questionData.emotes[1]
+                }"/>
+                <input type="text" class="emojiInput" value="${
+                  questionData.emotes[2]
+                }"/>
+                <input type="text" class="emojiInput" value="${
+                  questionData.emotes[3]
+                }"/>
+                <input type="text" class="emojiInput" value="${
+                  questionData.emotes[4]
+                }"/>
+          </div>
         `;
       break;
     case "large-text":
@@ -345,6 +308,143 @@ function createQuestion(questionData, creating = false) {
     default:
       break;
   }
+  let editQuestionObject = window.structuredClone(questionData);
+  let emojiEditContainer =
+    questionContainer.getElementsByClassName("emojiEdit")[0];
+  let emojiContainer =
+    questionContainer.getElementsByClassName("star-input")[0];
+  let emojiSlider = questionContainer.getElementsByClassName("emojiSlider")[0];
+  let emojiInputs = questionContainer.getElementsByClassName("emojiInput");
+
+  let upBtn = questionEditControlls.getElementsByClassName("upbtn")[0];
+  let downBtn = questionEditControlls.getElementsByClassName("downbtn")[0];
+  let detailedEditBtn =
+    questionEditControlls.getElementsByClassName("detailedEditBtn")[0];
+  let deleteBtn = questionEditControlls.getElementsByClassName("delete")[0];
+  let cancleBtn = questionEditControlls.getElementsByClassName("cancle")[0];
+  let doneBtn = questionEditControlls.getElementsByClassName("done")[0];
+
+  let questionDetailedControlls =
+    questionEditControlls.getElementsByClassName("detailedControlls")[0];
+  let questionDetailedControllsContainer =
+    questionEditControlls.getElementsByClassName(
+      "detailedControllsContainer"
+    )[0];
+  let questionIdInput =
+    questionEditControlls.getElementsByClassName("questionId")[0];
+  let idInfoBtn = questionEditControlls.getElementsByClassName("id-info")[0];
+  let questionLableInput =
+    questionEditControlls.getElementsByClassName("questionLable")[0];
+
+  if (emojiSlider) initiateEmojiPosition(emojiSlider);
+  if (questionIdInput) {
+    questionIdInput.addEventListener("input", () => {
+      if (questionIdInput.value != "" && idNotTaken(questionIdInput.value)) {
+        questionIdInput.classList.remove("questionIdInvalid");
+        editQuestions[questionData.id].id = questionIdInput.value;
+      } else {
+        questionIdInput.classList.add("questionIdInvalid");
+        editQuestions[questionData.id].id = questionData.id;
+      }
+    });
+    idInfoBtn.addEventListener("click", () => {
+      warningPupup(
+        'Think of the question ID as a special code, such as "books" for a question about books. This code helps us organize and identify your questions within the app.',
+        () => {},
+        true
+      );
+    });
+  }
+  for (let i = 0; i < emojiInputs.length; i++) {
+    const element = emojiInputs[i];
+    element.addEventListener("input", (e) => {
+      if (e.data == null) element.value = "";
+      else {
+        element.value = e.data;
+        editQuestions[questionData.id].emotes[i] = e.data;
+        emojiContainer.children[i].innerText = e.data;
+      }
+    });
+    element.addEventListener("focusout", () => {
+      if (element.value == "") {
+        element.value = questionData.emotes[i];
+        editQuestions[questionData.id].emotes[i] = questionData.emotes[i];
+        emojiContainer.children[i].innerText = questionData.emotes[i];
+      }
+    });
+  }
+  doneBtn.addEventListener("click", () => {
+    setTimeout(() => {
+      if (editQuestions[questionData.id].id == NEWQUESTIONID) {
+        warningPupup("Please Enter a Valid ID", (e) => {}, true);
+      } else {
+        detailedEditBtn.classList.remove("hidden");
+        questionDetailedControlls.classList.add("hidden");
+        questionDetailedControllsContainer.classList.add("hidden");
+        if (emojiEditContainer) emojiEditContainer.classList.add("hidden");
+      }
+    }, 200);
+  });
+  if (cancleBtn)
+    cancleBtn.addEventListener("click", () => {
+      setTimeout(() => {
+        detailedEditBtn.classList.remove("hidden");
+        questionDetailedControlls.classList.add("hidden");
+        questionDetailedControllsContainer.classList.add("hidden");
+        if (emojiEditContainer) emojiEditContainer.classList.add("hidden");
+        editQuestions[questionData.id] = {
+          ...window.structuredClone(questions[questionData.id]),
+          order: editQuestions[questionData.id].order,
+        };
+        questionLableInput.value = '';
+        if (type == "small-text")
+          questionContainer.getElementsByTagName("input")[0].placeholder =
+            editQuestions[questionData.id].lable;
+        else if (type == "large-text")
+          questionContainer.getElementsByTagName("textarea")[0].placeholder =
+            editQuestions[questionData.id].lable;
+        else
+          questionContainer.getElementsByClassName("lable")[0].innerHTML =
+            editQuestions[questionData.id].lable;
+        for (let i = 0; i < emojiContainer.children.length; i++) {
+          emojiInputs[i].value = questions[questionData.id].emotes[i];
+          emojiContainer.children[i].innerText = questions[questionData.id].emotes[i];
+        }
+      }, 200);
+    });
+  deleteBtn.addEventListener("click", () => {
+    question.remove();
+    delete editQuestions[questionData.id];
+    delete questionsDom[questionData.id];
+    refreshQuestionStyling();
+  });
+  questionLableInput.addEventListener("input", (e) => {
+    editQuestions[questionData.id].lable = questionLableInput.value;
+    if (type == "small-text")
+      questionContainer.getElementsByTagName("input")[0].placeholder =
+        questionLableInput.value;
+    else if (type == "large-text")
+      questionContainer.getElementsByTagName("textarea")[0].placeholder =
+        questionLableInput.value;
+    else
+      questionContainer.getElementsByClassName("lable")[0].innerHTML =
+        questionLableInput.value;
+  });
+  upBtn.addEventListener("click", () => {
+    questionOrderChangeUp(questionData.id);
+  });
+  downBtn.addEventListener("click", () => {
+    questionOrderChangeDown(questionData.id);
+  });
+  detailedEditBtn.addEventListener("click", () => {
+    setTimeout(() => {
+      detailedEditBtn.classList.add("hidden");
+      questionDetailedControlls.classList.remove("hidden");
+      questionDetailedControllsContainer.classList.remove("hidden");
+      if (emojiEditContainer) emojiEditContainer.classList.remove("hidden");
+    }, 200);
+  });
+
   question.appendChild(questionEditControlls);
   question.appendChild(questionContainer);
   return question;
@@ -428,6 +528,10 @@ function changeQuestionValue(id, value) {
     dataChanged = true;
   }
 }
+function questionsEdited() {
+  updateTimeout = 2000;
+  dataChanged = true;
+}
 //this will update the data to the server if certain time passed after an input
 setInterval(() => {
   if (updateTimeout > 0) {
@@ -505,6 +609,7 @@ function initiateEmojiPosition(slider) {
   let emoji = slider.parentElement.children[0];
   let number = slider.value;
   let width = slider.getBoundingClientRect().width;
+  if (width == 0) width = 250;
   let position = number * (width / (emoji.children.length - 1));
   emoji.style.left = position + "px";
   for (let i = 0; i < emoji.children.length; i++) {
@@ -792,6 +897,8 @@ function questionOrderChangeUp(id) {
       editQuestions[id].order -= 1;
     }
   }
+  refreshQuestionStyling();
+  scrollTo(questionsDom[id]);
 }
 function questionOrderChangeDown(id) {
   let questionsKeys = Object.keys(editQuestions);
@@ -807,6 +914,8 @@ function questionOrderChangeDown(id) {
       editQuestions[id].order += 1;
     }
   }
+  refreshQuestionStyling();
+  scrollTo(questionsDom[id]);
 }
 function hidePopup() {
   backdrop.classList.add("hidden");
@@ -852,7 +961,14 @@ calanderBtn.addEventListener("click", (e) => {
     transtition(e, calanderBtn, CALANDER);
     hidePopup();
   } else {
-    warningContainer.classList.remove("hidden");
+    warningPupup("Changes will not be saved Cancle?", (result) => {
+      if (result) {
+        cancleEdit();
+        windowNavigation(CALANDER, "");
+        transtition(e, calanderBtn, CALANDER);
+        hidePopup();
+      }
+    });
   }
 });
 userBtn.addEventListener("click", (e) => {
@@ -860,8 +976,16 @@ userBtn.addEventListener("click", (e) => {
     cancleEdit();
     windowNavigation(PROFILE, "");
     transtition(e, userBtn, PROFILE);
+    hidePopup();
   } else {
-    warningContainer.classList.remove("hidden");
+    warningPupup("Changes will not be saved Cancle?", (result) => {
+      if (result) {
+        cancleEdit();
+        windowNavigation(PROFILE, "");
+        transtition(e, userBtn, PROFILE);
+        hidePopup();
+      }
+    });
   }
 });
 prevMonthButton.addEventListener("click", () => {
@@ -888,19 +1012,54 @@ reportEditCancleBtn.addEventListener("click", () => {
     if (JSON.stringify(editQuestions) == JSON.stringify(questions)) {
       cancleEdit();
     } else {
-      warningContainer.classList.remove("hidden");
+      warningPupup("Changes will not be saved Cancle?", (result) => {
+        if (result) cancleEdit();
+      });
     }
   }, 100);
 });
 reportEditDoneBtn.addEventListener("click", () => {
   setTimeout(() => {
-    reportEditControlls.classList.add("hidden");
-    reportEditBtn.parentElement.classList.remove("hidden");
-    hidePopup();
-    questions = window.structuredClone(editQuestions);
-    reOrderQuestions();
-    hideQuestionsEditControlls();
-    setupReportSection();
+    if (
+      editQuestions[NEWQUESTIONID] &&
+      editQuestions[NEWQUESTIONID].id == NEWQUESTIONID
+    ) {
+      warningPupup("Please Enter a valid ID", () => {}, true);
+    } else if (
+      editQuestions[NEWQUESTIONID] &&
+      editQuestions[NEWQUESTIONID].id != NEWQUESTIONID
+    ) {
+      questions = window.structuredClone(editQuestions);
+      questions[editQuestions[NEWQUESTIONID].id] = window.structuredClone(
+        editQuestions[NEWQUESTIONID]
+      );
+      questionsDom[editQuestions[NEWQUESTIONID].id] =
+        questionsDom[NEWQUESTIONID];
+      delete questionsDom[NEWQUESTIONID];
+      delete editQuestions[NEWQUESTIONID];
+      delete questions[NEWQUESTIONID];
+      reportEditControlls.classList.add("hidden");
+      reportEditBtn.parentElement.classList.remove("hidden");
+      hidePopup();
+      if (JSON.stringify(editQuestions) != JSON.stringify(questions)) {
+        questionsEdited();
+      }
+      console.log(questions);
+      reOrderQuestions(questions);
+      hideQuestionsEditControlls();
+      setupReportSection();
+    } else {
+      reportEditControlls.classList.add("hidden");
+      reportEditBtn.parentElement.classList.remove("hidden");
+      hidePopup();
+      if (JSON.stringify(editQuestions) != JSON.stringify(questions)) {
+        questionsEdited();
+      }
+      questions = window.structuredClone(editQuestions);
+      reOrderQuestions(questions);
+      hideQuestionsEditControlls();
+      setupReportSection();
+    }
   }, 100);
 });
 reportAddQuestionBtn.addEventListener("click", (e) => {
@@ -915,13 +1074,6 @@ reportAddQuestionBtn.addEventListener("click", (e) => {
 });
 backdrop.addEventListener("click", () => {
   hidePopup();
-});
-warningCancle.addEventListener("click", () => {
-  warningContainer.classList.add("hidden");
-});
-warningDone.addEventListener("click", () => {
-  warningContainer.classList.add("hidden");
-  cancleEdit();
 });
 addQuestionPopup
   .getElementsByClassName("small-text")[0]
@@ -943,13 +1095,45 @@ addQuestionPopup
   .addEventListener("click", () => {
     addQuestion("large-text");
   });
+function warningPupup(warning, callback, info = false) {
+  warningContainer.classList.remove("hidden");
+  if (info) {
+    warningDone.style.display = "none";
+  } else {
+    warningDone.style.display = "flex";
+  }
+  warningContainer.getElementsByClassName("warning")[0].innerText = warning;
+  warningCancle.addEventListener(
+    "click",
+    () => {
+      setTimeout(() => {
+        callback(false);
+        warningContainer.classList.add("hidden");
+      }, 200);
+    },
+    { once: true }
+  );
+  warningDone.addEventListener(
+    "click",
+    () => {
+      setTimeout(() => {
+        callback(true);
+        warningContainer.classList.add("hidden");
+      }, 200);
+    },
+    { once: true }
+  );
+}
 function addQuestion(type) {
   let questionData = {
     type: type,
-    id: "new",
+    id: NEWQUESTIONID,
     lable: "enter a lable",
     order: 1,
   };
+  if (type == "slider") {
+    questionData.emotes = ["☹️", "🙁", "😐", "🙂", "😄"];
+  }
   let question = createQuestion(questionData, true);
   let questionsKeys = Object.keys(editQuestions);
   for (let i = 0; i < questionsKeys.length; i++) {
@@ -957,10 +1141,13 @@ function addQuestion(type) {
     questionsDom[questionsKeys[i]].style.order =
       editQuestions[questionsKeys[i]].order;
   }
+  delete editQuestions[questionData.id];
+  if (questionsDom[questionData.id]) questionsDom[questionData.id].remove();
   editQuestions[questionData.id] = questionData;
   questionsDom[questionData.id] = question;
-  refreshQuestionStyling();
   questionsContainer.appendChild(question);
+  refreshQuestionStyling();
+  reOrderQuestions(editQuestions);
   hidePopup();
   updateButtons();
 }
@@ -978,26 +1165,66 @@ function refreshQuestionStyling() {
       question.style.border = "none";
       question.style.paddingBottom = "0px";
       question.style.marginTop = "";
+    } else {
+      question.style.border = "";
+      question.style.paddingBottom = "";
     }
   }
 }
-function idNotTaken(value){
+function idNotTaken(value) {
   let notTaken = true;
-  let questionsKeys = Object.keys(questions)
+  let questionsKeys = Object.keys(questions);
   for (let i = 0; i < questionsKeys.length; i++) {
-    if(value==questionsKeys[i]){
+    if (value == questionsKeys[i]) {
       notTaken = false;
     }
   }
   return notTaken;
 }
-function reOrderQuestions(){
-  let questionsKeys = Object.keys(questions)
-  while(pointer <= questionsKeys.length)
-  for (let i = 0; i < questionsKeys.length; i++) {
-    if(value==questionsKeys[i]){
-      notTaken = false;
+function reOrderQuestions(questions) {
+  let questionsKeys = Object.keys(questions);
+  let pointer = 1;
+  let tempObj = window.structuredClone(questions);
+  while (pointer <= questionsKeys.length) {
+    let tempKeys = Object.keys(tempObj);
+    let smallestObj = tempKeys.length - 1;
+    for (let i = tempKeys.length - 1; i >= 0; i--) {
+      if (tempObj[tempKeys[smallestObj]].order >= tempObj[tempKeys[i]].order) {
+        smallestObj = i;
+      }
     }
+    questions[tempKeys[smallestObj]].order = pointer;
+    delete tempObj[tempKeys[smallestObj]];
+    pointer++;
   }
   editQuestions = window.structuredClone(questions);
+}
+function scrollTo(element) {
+  const targetElement = element;
+  const windowHeight = window.innerHeight; // Height of the viewport
+  const elementHeight = targetElement.clientHeight; // Height of the target element
+
+  // Calculate the scroll position to center the element
+  const scrollTo = targetElement.offsetTop - (windowHeight - elementHeight) / 2;
+
+  const duration = 50; // Duration of the scroll animation in milliseconds
+  const startTime = performance.now();
+  const startScrollPosition = window.scrollY;
+
+  function animateScroll() {
+    const currentTime = performance.now();
+    const elapsedTime = currentTime - startTime;
+
+    if (elapsedTime < duration) {
+      const scrollProgress = elapsedTime / duration;
+      const newScrollPosition =
+        startScrollPosition + (scrollTo - startScrollPosition) * scrollProgress;
+      window.scrollTo(0, newScrollPosition);
+      requestAnimationFrame(animateScroll);
+    } else {
+      window.scrollTo(0, scrollTo);
+    }
+  }
+
+  requestAnimationFrame(animateScroll);
 }
