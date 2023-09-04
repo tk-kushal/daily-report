@@ -117,6 +117,7 @@ let currentReport = {
 };
 let hold = false; //for Dragging in Slider
 let currentUser = null;
+
 auth.onAuthStateChanged((user) => {
   currentUser = user;
   if (currentUser) {
@@ -132,23 +133,26 @@ auth.onAuthStateChanged((user) => {
     profileIcon.style.display = "flex";
   }
 });
-loginBtn.addEventListener("click", () => {
-  if (currentUser) {
-    signOut();
-  } else {
-    signIn();
-  }
-});
+
 //Setting initial view ot Report
 handleUrlChangeEvent();
 window.onpopstate = () => handleUrlChangeEvent();
 //Updating the URL based on current View
+
+setupReportSection();
+setInterval(() => {
+  //this will update the data to the server if certain time passed after an input
+  if (updateTimeout > 0) {
+    updateTimeout -= 100;
+  } else if (dataChanged) {
+    console.log("data changed and updating");
+    console.log(questions);
+    dataChanged = false;
+  }
+}, 100);
 function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
 }
-
-setupReportSection();
-
 function createQuestion(questionData, creating = false) {
   let type = questionData.type;
   let question = document.createElement("div");
@@ -220,18 +224,6 @@ function createQuestion(questionData, creating = false) {
                 />
               </div>
   `;
-
-  if (questionData.order == 1) {
-    question.style.marginTop = "0px";
-    question.style.border = "";
-    question.style.paddingBottom = "";
-  }
-  if (questionData.order == Object.keys(questions).length) {
-    question.style.border = "none";
-    question.style.paddingBottom = "0px";
-    question.style.marginTop = "";
-  }
-  question.style.order = questionData.order;
   switch (type) {
     case "small-text":
       questionContainer.innerHTML = `
@@ -308,14 +300,12 @@ function createQuestion(questionData, creating = false) {
     default:
       break;
   }
-  let editQuestionObject = window.structuredClone(questionData);
   let emojiEditContainer =
     questionContainer.getElementsByClassName("emojiEdit")[0];
   let emojiContainer =
     questionContainer.getElementsByClassName("star-input")[0];
   let emojiSlider = questionContainer.getElementsByClassName("emojiSlider")[0];
   let emojiInputs = questionContainer.getElementsByClassName("emojiInput");
-
   let upBtn = questionEditControlls.getElementsByClassName("upbtn")[0];
   let downBtn = questionEditControlls.getElementsByClassName("downbtn")[0];
   let detailedEditBtn =
@@ -323,7 +313,6 @@ function createQuestion(questionData, creating = false) {
   let deleteBtn = questionEditControlls.getElementsByClassName("delete")[0];
   let cancleBtn = questionEditControlls.getElementsByClassName("cancle")[0];
   let doneBtn = questionEditControlls.getElementsByClassName("done")[0];
-
   let questionDetailedControlls =
     questionEditControlls.getElementsByClassName("detailedControlls")[0];
   let questionDetailedControllsContainer =
@@ -337,24 +326,6 @@ function createQuestion(questionData, creating = false) {
     questionEditControlls.getElementsByClassName("questionLable")[0];
 
   if (emojiSlider) initiateEmojiPosition(emojiSlider);
-  if (questionIdInput) {
-    questionIdInput.addEventListener("input", () => {
-      if (questionIdInput.value != "" && idNotTaken(questionIdInput.value)) {
-        questionIdInput.classList.remove("questionIdInvalid");
-        editQuestions[questionData.id].id = questionIdInput.value;
-      } else {
-        questionIdInput.classList.add("questionIdInvalid");
-        editQuestions[questionData.id].id = questionData.id;
-      }
-    });
-    idInfoBtn.addEventListener("click", () => {
-      warningPupup(
-        'Think of the question ID as a special code, such as "books" for a question about books. This code helps us organize and identify your questions within the app.',
-        () => {},
-        true
-      );
-    });
-  }
   for (let i = 0; i < emojiInputs.length; i++) {
     const element = emojiInputs[i];
     element.addEventListener("input", (e) => {
@@ -373,6 +344,66 @@ function createQuestion(questionData, creating = false) {
       }
     });
   }
+  if (questionIdInput) {
+    questionIdInput.addEventListener("input", () => {
+      if (questionIdInput.value != "" && idNotTaken(questionIdInput.value)) {
+        questionIdInput.classList.remove("questionIdInvalid");
+        editQuestions[questionData.id].id = questionIdInput.value;
+      } else {
+        questionIdInput.classList.add("questionIdInvalid");
+        editQuestions[questionData.id].id = questionData.id;
+      }
+    });
+    idInfoBtn.addEventListener("click", () => {
+      warningPupup(
+        'Think of the question ID as a special code, such as "books" for a question about books. This code helps us organize and identify your questions within the app.',
+        () => {},
+        true
+      );
+    });
+  }
+  questionLableInput.addEventListener("input", (e) => {
+    editQuestions[questionData.id].lable = questionLableInput.value;
+    if (type == "small-text")
+      questionContainer.getElementsByTagName("input")[0].placeholder =
+        questionLableInput.value;
+    else if (type == "large-text")
+      questionContainer.getElementsByTagName("textarea")[0].placeholder =
+        questionLableInput.value;
+    else
+      questionContainer.getElementsByClassName("lable")[0].innerHTML =
+        questionLableInput.value;
+  });
+
+  if (cancleBtn) {
+    cancleBtn.addEventListener("click", () => {
+      setTimeout(() => {
+        detailedEditBtn.classList.remove("hidden");
+        questionDetailedControlls.classList.add("hidden");
+        questionDetailedControllsContainer.classList.add("hidden");
+        if (emojiEditContainer) emojiEditContainer.classList.add("hidden");
+        editQuestions[questionData.id] = {
+          ...window.structuredClone(questions[questionData.id]),
+          order: editQuestions[questionData.id].order,
+        };
+        questionLableInput.value = "";
+        if (type == "small-text")
+          questionContainer.getElementsByTagName("input")[0].placeholder =
+            editQuestions[questionData.id].lable;
+        else if (type == "large-text")
+          questionContainer.getElementsByTagName("textarea")[0].placeholder =
+            editQuestions[questionData.id].lable;
+        else
+          questionContainer.getElementsByClassName("lable")[0].innerHTML =
+            editQuestions[questionData.id].lable;
+        for (let i = 0; i < emojiContainer.children.length; i++) {
+          emojiInputs[i].value = questions[questionData.id].emotes[i];
+          emojiContainer.children[i].innerText =
+            questions[questionData.id].emotes[i];
+        }
+      }, 200);
+    });
+  }
   doneBtn.addEventListener("click", () => {
     setTimeout(() => {
       if (editQuestions[questionData.id].id == NEWQUESTIONID) {
@@ -385,50 +416,11 @@ function createQuestion(questionData, creating = false) {
       }
     }, 200);
   });
-  if (cancleBtn)
-    cancleBtn.addEventListener("click", () => {
-      setTimeout(() => {
-        detailedEditBtn.classList.remove("hidden");
-        questionDetailedControlls.classList.add("hidden");
-        questionDetailedControllsContainer.classList.add("hidden");
-        if (emojiEditContainer) emojiEditContainer.classList.add("hidden");
-        editQuestions[questionData.id] = {
-          ...window.structuredClone(questions[questionData.id]),
-          order: editQuestions[questionData.id].order,
-        };
-        questionLableInput.value = '';
-        if (type == "small-text")
-          questionContainer.getElementsByTagName("input")[0].placeholder =
-            editQuestions[questionData.id].lable;
-        else if (type == "large-text")
-          questionContainer.getElementsByTagName("textarea")[0].placeholder =
-            editQuestions[questionData.id].lable;
-        else
-          questionContainer.getElementsByClassName("lable")[0].innerHTML =
-            editQuestions[questionData.id].lable;
-        for (let i = 0; i < emojiContainer.children.length; i++) {
-          emojiInputs[i].value = questions[questionData.id].emotes[i];
-          emojiContainer.children[i].innerText = questions[questionData.id].emotes[i];
-        }
-      }, 200);
-    });
   deleteBtn.addEventListener("click", () => {
     question.remove();
     delete editQuestions[questionData.id];
     delete questionsDom[questionData.id];
     refreshQuestionStyling();
-  });
-  questionLableInput.addEventListener("input", (e) => {
-    editQuestions[questionData.id].lable = questionLableInput.value;
-    if (type == "small-text")
-      questionContainer.getElementsByTagName("input")[0].placeholder =
-        questionLableInput.value;
-    else if (type == "large-text")
-      questionContainer.getElementsByTagName("textarea")[0].placeholder =
-        questionLableInput.value;
-    else
-      questionContainer.getElementsByClassName("lable")[0].innerHTML =
-        questionLableInput.value;
   });
   upBtn.addEventListener("click", () => {
     questionOrderChangeUp(questionData.id);
@@ -445,6 +437,17 @@ function createQuestion(questionData, creating = false) {
     }, 200);
   });
 
+  if (questionData.order == 1) {
+    question.style.marginTop = "0px";
+    question.style.border = "";
+    question.style.paddingBottom = "";
+  }
+  if (questionData.order == Object.keys(questions).length) {
+    question.style.border = "none";
+    question.style.paddingBottom = "0px";
+    question.style.marginTop = "";
+  }
+  question.style.order = questionData.order;
   question.appendChild(questionEditControlls);
   question.appendChild(questionContainer);
   return question;
@@ -532,16 +535,6 @@ function questionsEdited() {
   updateTimeout = 2000;
   dataChanged = true;
 }
-//this will update the data to the server if certain time passed after an input
-setInterval(() => {
-  if (updateTimeout > 0) {
-    updateTimeout -= 100;
-  } else if (dataChanged) {
-    console.log("data changed and updating");
-    console.log(questions);
-    dataChanged = false;
-  }
-}, 100);
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
   //so that the transition does not occur when reloading the page or loading another page besies the report page directly form url
@@ -588,7 +581,6 @@ function handleUrlChangeEvent() {
     updateView(currentView);
   }
 }
-//Emoji Slider
 function handleEmojiSliderEvent(e, x) {
   let parent = e.srcElement.parentElement;
   let sliderRect = parent.children[1].getBoundingClientRect();
@@ -928,6 +920,139 @@ function cancleEdit() {
   hidePopup();
   setupReportSection();
 }
+function warningPupup(warning, callback, info = false) {
+  warningContainer.classList.remove("hidden");
+  if (info) {
+    warningDone.style.display = "none";
+  } else {
+    warningDone.style.display = "flex";
+  }
+  warningContainer.getElementsByClassName("warning")[0].innerText = warning;
+  warningCancle.addEventListener(
+    "click",
+    () => {
+      setTimeout(() => {
+        callback(false);
+        warningContainer.classList.add("hidden");
+      }, 200);
+    },
+    { once: true }
+  );
+  warningDone.addEventListener(
+    "click",
+    () => {
+      setTimeout(() => {
+        callback(true);
+        warningContainer.classList.add("hidden");
+      }, 200);
+    },
+    { once: true }
+  );
+}
+function addQuestion(type) {
+  let questionData = {
+    type: type,
+    id: NEWQUESTIONID,
+    lable: "enter a lable",
+    order: 1,
+  };
+  if (type == "slider") {
+    questionData.emotes = ["☹️", "🙁", "😐", "🙂", "😄"];
+  }
+  let question = createQuestion(questionData, true);
+  let questionsKeys = Object.keys(editQuestions);
+  for (let i = 0; i < questionsKeys.length; i++) {
+    editQuestions[questionsKeys[i]].order += 1;
+    questionsDom[questionsKeys[i]].style.order =
+      editQuestions[questionsKeys[i]].order;
+  }
+  delete editQuestions[questionData.id];
+  if (questionsDom[questionData.id]) questionsDom[questionData.id].remove();
+  editQuestions[questionData.id] = questionData;
+  questionsDom[questionData.id] = question;
+  questionsContainer.appendChild(question);
+  refreshQuestionStyling();
+  reOrderQuestions(editQuestions);
+  hidePopup();
+  updateButtons();
+}
+function refreshQuestionStyling() {
+  let questionsKeys = Object.keys(editQuestions);
+  for (let i = 0; i < questionsKeys.length; i++) {
+    let questionData = editQuestions[questionsKeys[i]];
+    let question = questionsDom[questionsKeys[i]];
+    if (questionData.order == 1 && question) {
+      question.style.marginTop = "0px";
+      question.style.border = "";
+      question.style.paddingBottom = "";
+    }
+    if (questionData.order == Object.keys(questions).length) {
+      question.style.border = "none";
+      question.style.paddingBottom = "0px";
+      question.style.marginTop = "";
+    } else {
+      question.style.border = "";
+      question.style.paddingBottom = "";
+    }
+  }
+}
+function idNotTaken(value) {
+  let notTaken = true;
+  let questionsKeys = Object.keys(questions);
+  for (let i = 0; i < questionsKeys.length; i++) {
+    if (value == questionsKeys[i]) {
+      notTaken = false;
+    }
+  }
+  return notTaken;
+}
+function reOrderQuestions(questions) {
+  let questionsKeys = Object.keys(questions);
+  let pointer = 1;
+  let tempObj = window.structuredClone(questions);
+  while (pointer <= questionsKeys.length) {
+    let tempKeys = Object.keys(tempObj);
+    let smallestObj = tempKeys.length - 1;
+    for (let i = tempKeys.length - 1; i >= 0; i--) {
+      if (tempObj[tempKeys[smallestObj]].order >= tempObj[tempKeys[i]].order) {
+        smallestObj = i;
+      }
+    }
+    questions[tempKeys[smallestObj]].order = pointer;
+    delete tempObj[tempKeys[smallestObj]];
+    pointer++;
+  }
+  editQuestions = window.structuredClone(questions);
+}
+function scrollTo(element) {
+  const targetElement = element;
+  const windowHeight = window.innerHeight; // Height of the viewport
+  const elementHeight = targetElement.clientHeight; // Height of the target element
+
+  // Calculate the scroll position to center the element
+  const scrollTo = targetElement.offsetTop - (windowHeight - elementHeight) / 2;
+
+  const duration = 50; // Duration of the scroll animation in milliseconds
+  const startTime = performance.now();
+  const startScrollPosition = window.scrollY;
+
+  function animateScroll() {
+    const currentTime = performance.now();
+    const elapsedTime = currentTime - startTime;
+
+    if (elapsedTime < duration) {
+      const scrollProgress = elapsedTime / duration;
+      const newScrollPosition =
+        startScrollPosition + (scrollTo - startScrollPosition) * scrollProgress;
+      window.scrollTo(0, newScrollPosition);
+      requestAnimationFrame(animateScroll);
+    } else {
+      window.scrollTo(0, scrollTo);
+    }
+  }
+
+  requestAnimationFrame(animateScroll);
+}
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
     currentMonth--;
@@ -950,6 +1075,13 @@ export function monthChange(direction, ripple = true) {
   }
   updateCalander();
 }
+loginBtn.addEventListener("click", () => {
+  if (currentUser) {
+    signOut();
+  } else {
+    signIn();
+  }
+});
 reportBtn.addEventListener("click", (e) => {
   windowNavigation(REPORT, "");
   transtition(e, reportBtn, REPORT);
@@ -1095,136 +1227,3 @@ addQuestionPopup
   .addEventListener("click", () => {
     addQuestion("large-text");
   });
-function warningPupup(warning, callback, info = false) {
-  warningContainer.classList.remove("hidden");
-  if (info) {
-    warningDone.style.display = "none";
-  } else {
-    warningDone.style.display = "flex";
-  }
-  warningContainer.getElementsByClassName("warning")[0].innerText = warning;
-  warningCancle.addEventListener(
-    "click",
-    () => {
-      setTimeout(() => {
-        callback(false);
-        warningContainer.classList.add("hidden");
-      }, 200);
-    },
-    { once: true }
-  );
-  warningDone.addEventListener(
-    "click",
-    () => {
-      setTimeout(() => {
-        callback(true);
-        warningContainer.classList.add("hidden");
-      }, 200);
-    },
-    { once: true }
-  );
-}
-function addQuestion(type) {
-  let questionData = {
-    type: type,
-    id: NEWQUESTIONID,
-    lable: "enter a lable",
-    order: 1,
-  };
-  if (type == "slider") {
-    questionData.emotes = ["☹️", "🙁", "😐", "🙂", "😄"];
-  }
-  let question = createQuestion(questionData, true);
-  let questionsKeys = Object.keys(editQuestions);
-  for (let i = 0; i < questionsKeys.length; i++) {
-    editQuestions[questionsKeys[i]].order += 1;
-    questionsDom[questionsKeys[i]].style.order =
-      editQuestions[questionsKeys[i]].order;
-  }
-  delete editQuestions[questionData.id];
-  if (questionsDom[questionData.id]) questionsDom[questionData.id].remove();
-  editQuestions[questionData.id] = questionData;
-  questionsDom[questionData.id] = question;
-  questionsContainer.appendChild(question);
-  refreshQuestionStyling();
-  reOrderQuestions(editQuestions);
-  hidePopup();
-  updateButtons();
-}
-function refreshQuestionStyling() {
-  let questionsKeys = Object.keys(editQuestions);
-  for (let i = 0; i < questionsKeys.length; i++) {
-    let questionData = editQuestions[questionsKeys[i]];
-    let question = questionsDom[questionsKeys[i]];
-    if (questionData.order == 1 && question) {
-      question.style.marginTop = "0px";
-      question.style.border = "";
-      question.style.paddingBottom = "";
-    }
-    if (questionData.order == Object.keys(questions).length) {
-      question.style.border = "none";
-      question.style.paddingBottom = "0px";
-      question.style.marginTop = "";
-    } else {
-      question.style.border = "";
-      question.style.paddingBottom = "";
-    }
-  }
-}
-function idNotTaken(value) {
-  let notTaken = true;
-  let questionsKeys = Object.keys(questions);
-  for (let i = 0; i < questionsKeys.length; i++) {
-    if (value == questionsKeys[i]) {
-      notTaken = false;
-    }
-  }
-  return notTaken;
-}
-function reOrderQuestions(questions) {
-  let questionsKeys = Object.keys(questions);
-  let pointer = 1;
-  let tempObj = window.structuredClone(questions);
-  while (pointer <= questionsKeys.length) {
-    let tempKeys = Object.keys(tempObj);
-    let smallestObj = tempKeys.length - 1;
-    for (let i = tempKeys.length - 1; i >= 0; i--) {
-      if (tempObj[tempKeys[smallestObj]].order >= tempObj[tempKeys[i]].order) {
-        smallestObj = i;
-      }
-    }
-    questions[tempKeys[smallestObj]].order = pointer;
-    delete tempObj[tempKeys[smallestObj]];
-    pointer++;
-  }
-  editQuestions = window.structuredClone(questions);
-}
-function scrollTo(element) {
-  const targetElement = element;
-  const windowHeight = window.innerHeight; // Height of the viewport
-  const elementHeight = targetElement.clientHeight; // Height of the target element
-
-  // Calculate the scroll position to center the element
-  const scrollTo = targetElement.offsetTop - (windowHeight - elementHeight) / 2;
-
-  const duration = 50; // Duration of the scroll animation in milliseconds
-  const startTime = performance.now();
-  const startScrollPosition = window.scrollY;
-
-  function animateScroll() {
-    const currentTime = performance.now();
-    const elapsedTime = currentTime - startTime;
-
-    if (elapsedTime < duration) {
-      const scrollProgress = elapsedTime / duration;
-      const newScrollPosition =
-        startScrollPosition + (scrollTo - startScrollPosition) * scrollProgress;
-      window.scrollTo(0, newScrollPosition);
-      requestAnimationFrame(animateScroll);
-    } else {
-      window.scrollTo(0, scrollTo);
-    }
-  }
-
-  requestAnimationFrame(animateScroll);
-}
