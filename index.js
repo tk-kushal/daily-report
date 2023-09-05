@@ -4,7 +4,49 @@ const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
 const NEWQUESTIONID = "newQuestionID";
-let questions = {
+
+const questionsContainer =
+  document.getElementsByClassName("questionsContainer")[0];
+const reportBtn = document.getElementsByClassName("reportBtn")[0];
+const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
+const userBtn = document.getElementsByClassName("userBtn")[0];
+const title = document.getElementsByClassName("text")[0];
+const navbarContainer = document.getElementsByClassName("navbar")[0];
+const reportSection = document.getElementsByClassName("report")[0];
+const calanderSection = document.getElementsByClassName("calander")[0];
+const profileSection = document.getElementsByClassName("profile")[0];
+const loginBtn = document.getElementsByClassName("loginBtn")[0];
+const profilePicture = document.getElementById("profilePicture");
+const profileIcon = document.getElementById("profileIcon");
+const yearControlls = document.getElementsByClassName("yearControlls")[0];
+const monthControlls = document.getElementsByClassName("monthControlls")[0];
+const prevMonthButton = document.getElementsByClassName("previousMonthBtn")[0];
+const nextMonthButton = document.getElementsByClassName("nextMonthBtn")[0];
+const resetCalanderButton = document.getElementsByClassName("resetBtn")[0];
+const reportDate = document.getElementsByClassName("date-day")[0];
+const reportMonth = document.getElementsByClassName("month")[0];
+const reportYear = document.getElementsByClassName("year")[0];
+const reportEditBtn = document.getElementsByClassName("edit")[0];
+const reportAddQuestionBtn = document.getElementsByClassName("add")[0];
+const addQuestionPopup = document.getElementsByClassName("popup")[0];
+const reportEditCancleBtn = document.getElementsByClassName("cancle")[0];
+const reportEditDoneBtn = document.getElementsByClassName("done")[0];
+const reportEditControlls = document.getElementsByClassName(
+  "report-edit-controlls"
+)[0];
+const backdrop = document.getElementsByClassName("backdrop")[0];
+const warningContainer =
+  document.getElementsByClassName("warning-container")[0];
+const warningCancle = document.getElementsByClassName("warning-cancle")[0];
+const warningDone = document.getElementsByClassName("warning-done")[0];
+
+
+let overallDate = new Date();
+let todaysDate = overallDate.getDate();
+let todaysMonth = overallDate.getMonth();
+let todaysYear = overallDate.getFullYear();
+let dateString = todaysDate+":"+todaysMonth+":"+todaysYear
+let defaultQuestions = {
   title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
   exercise: {
     type: "toggle",
@@ -57,64 +99,37 @@ let questions = {
     id: "aboutday",
     lable: "Write about your day",
     order: 9,
+    
   },
 };
+let questions = null;
+let data = JSON.parse(localStorage.getItem("questions"))
+if (data.questions) {
+  questions = data.questions
+}else{
+  questions = defaultQuestions;
+}
+if(data.date != dateString){
+  let questionKeys = Object.keys(questions)
+  for(let i=0;i<questionKeys.length;i++){
+    delete questions[questionKeys[i]].value
+  }
+  console.log(questions)
+}
+
 let editQuestions = window.structuredClone(questions);
 let questionsDom = [];
-const questionsContainer =
-  document.getElementsByClassName("questionsContainer")[0];
-const reportBtn = document.getElementsByClassName("reportBtn")[0];
-const calanderBtn = document.getElementsByClassName("calanderBtn")[0];
-const userBtn = document.getElementsByClassName("userBtn")[0];
-const title = document.getElementsByClassName("text")[0];
-const navbarContainer = document.getElementsByClassName("navbar")[0];
-const reportSection = document.getElementsByClassName("report")[0];
-const calanderSection = document.getElementsByClassName("calander")[0];
-const profileSection = document.getElementsByClassName("profile")[0];
-const loginBtn = document.getElementsByClassName("loginBtn")[0];
-const profilePicture = document.getElementById("profilePicture");
-const profileIcon = document.getElementById("profileIcon");
-const yearControlls = document.getElementsByClassName("yearControlls")[0];
-const monthControlls = document.getElementsByClassName("monthControlls")[0];
-const prevMonthButton = document.getElementsByClassName("previousMonthBtn")[0];
-const nextMonthButton = document.getElementsByClassName("nextMonthBtn")[0];
-const resetCalanderButton = document.getElementsByClassName("resetBtn")[0];
-const reportDate = document.getElementsByClassName("date-day")[0];
-const reportMonth = document.getElementsByClassName("month")[0];
-const reportYear = document.getElementsByClassName("year")[0];
-const reportEditBtn = document.getElementsByClassName("edit")[0];
-const reportAddQuestionBtn = document.getElementsByClassName("add")[0];
-const addQuestionPopup = document.getElementsByClassName("popup")[0];
-const reportEditCancleBtn = document.getElementsByClassName("cancle")[0];
-const reportEditDoneBtn = document.getElementsByClassName("done")[0];
-const reportEditControlls = document.getElementsByClassName(
-  "report-edit-controlls"
-)[0];
-const backdrop = document.getElementsByClassName("backdrop")[0];
-const warningContainer =
-  document.getElementsByClassName("warning-container")[0];
-const warningCancle = document.getElementsByClassName("warning-cancle")[0];
-const warningDone = document.getElementsByClassName("warning-done")[0];
-
 let sliders = document.getElementsByClassName("emojiSlider");
 let toggleButtons = document.getElementsByClassName("yes-no-button");
-let overallDate = new Date();
-let todaysDate = overallDate.getDate();
-let todaysMonth = overallDate.getMonth();
-let todaysYear = overallDate.getFullYear();
 let currentMonth = todaysMonth;
 let currentYear = todaysYear;
 let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
 let currentView = REPORT;
-let updateTimeout = 2000; // 3 seconds
+let updateTimeout = 500;
 let dataChanged = false;
 let initialize = true;
-let currentReport = {
-  feel: null,
-  energy: null,
-};
 let hold = false; //for Dragging in Slider
 let currentUser = null;
 
@@ -148,6 +163,7 @@ setInterval(() => {
     console.log("data changed and updating");
     console.log(questions);
     dataChanged = false;
+    localStorage.setItem("questions", JSON.stringify({date:dateString,questions:questions}));
   }
 }, 100);
 function windowNavigation(view, subpath) {
@@ -227,7 +243,9 @@ function createQuestion(questionData, creating = false) {
   switch (type) {
     case "small-text":
       questionContainer.innerHTML = `
-        <input type="text" placeholder="${questionData.lable}" id="${questionData.id}" />
+        <input type="text" placeholder="${questionData.lable}" id="${
+        questionData.id
+      }" value = "${questionData.value ? questionData.value : ""}"/>
       `;
       questionContainer
         .getElementsByTagName("input")[0]
@@ -240,8 +258,10 @@ function createQuestion(questionData, creating = false) {
         <div class="lable">${questionData.lable}</div>
         <div class="yes-no-button" id=${questionData.id}>
           <div class="yes">Yes</div>
-          <div class="No selectedYesNoBtn">No</div>
-          <div class="indicator indicator-off"></div>
+          <div class="No">No</div>
+          <div class="indicator ${
+            questionData.value == true ? "" : "indicator-off"
+          }"></div>
         </div>
         `;
       break;
@@ -259,7 +279,7 @@ function createQuestion(questionData, creating = false) {
             <input
               type="range"
               class="emojiSlider"
-              value="2"
+              value=${questionData.value ? questionData.value : "2"}
               max="4"
             />
           </div>
@@ -289,7 +309,7 @@ function createQuestion(questionData, creating = false) {
             rows="20"
             placeholder="${questionData.lable}"
             oninput="resizeTextbox(this)"
-          ></textarea>
+          >${questionData.value ? questionData.value : ""}</textarea>
         `;
       questionContainer
         .getElementsByTagName("textarea")[0]
@@ -324,7 +344,7 @@ function createQuestion(questionData, creating = false) {
   let idInfoBtn = questionEditControlls.getElementsByClassName("id-info")[0];
   let questionLableInput =
     questionEditControlls.getElementsByClassName("questionLable")[0];
-
+  questionLableInput.value = questionData.lable;
   if (emojiSlider) initiateEmojiPosition(emojiSlider);
   for (let i = 0; i < emojiInputs.length; i++) {
     const element = emojiInputs[i];
@@ -396,10 +416,12 @@ function createQuestion(questionData, creating = false) {
         else
           questionContainer.getElementsByClassName("lable")[0].innerHTML =
             editQuestions[questionData.id].lable;
-        for (let i = 0; i < emojiContainer.children.length; i++) {
-          emojiInputs[i].value = questions[questionData.id].emotes[i];
-          emojiContainer.children[i].innerText =
-            questions[questionData.id].emotes[i];
+        if (emojiContainer) {
+          for (let i = 0; i < emojiContainer.children.length; i++) {
+            emojiInputs[i].value = questions[questionData.id].emotes[i];
+            emojiContainer.children[i].innerText =
+              questions[questionData.id].emotes[i];
+          }
         }
       }, 200);
     });
@@ -532,7 +554,7 @@ function changeQuestionValue(id, value) {
   }
 }
 function questionsEdited() {
-  updateTimeout = 2000;
+  updateTimeout = 500;
   dataChanged = true;
 }
 function handleUrlChangeEvent() {
@@ -1053,6 +1075,18 @@ function scrollTo(element) {
 
   requestAnimationFrame(animateScroll);
 }
+function saveQuestions() {
+  reportEditControlls.classList.add("hidden");
+  reportEditBtn.parentElement.classList.remove("hidden");
+  hidePopup();
+  if (JSON.stringify(editQuestions) != JSON.stringify(questions)) {
+    questionsEdited();
+  }
+  questions = window.structuredClone(editQuestions);
+  reOrderQuestions(questions);
+  hideQuestionsEditControlls();
+  setupReportSection();
+}
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
     currentMonth--;
@@ -1170,27 +1204,9 @@ reportEditDoneBtn.addEventListener("click", () => {
       delete questionsDom[NEWQUESTIONID];
       delete editQuestions[NEWQUESTIONID];
       delete questions[NEWQUESTIONID];
-      reportEditControlls.classList.add("hidden");
-      reportEditBtn.parentElement.classList.remove("hidden");
-      hidePopup();
-      if (JSON.stringify(editQuestions) != JSON.stringify(questions)) {
-        questionsEdited();
-      }
-      console.log(questions);
-      reOrderQuestions(questions);
-      hideQuestionsEditControlls();
-      setupReportSection();
+      saveQuestions();
     } else {
-      reportEditControlls.classList.add("hidden");
-      reportEditBtn.parentElement.classList.remove("hidden");
-      hidePopup();
-      if (JSON.stringify(editQuestions) != JSON.stringify(questions)) {
-        questionsEdited();
-      }
-      questions = window.structuredClone(editQuestions);
-      reOrderQuestions(questions);
-      hideQuestionsEditControlls();
-      setupReportSection();
+      saveQuestions();
     }
   }, 100);
 });
