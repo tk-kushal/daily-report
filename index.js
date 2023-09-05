@@ -104,17 +104,17 @@ let defaultQuestions = {
 };
 let questions = null;
 let data = JSON.parse(localStorage.getItem("questions"))
-if (data.questions) {
+if (data && data.questions) {
   questions = data.questions
+  if(data.date != dateString){
+    let questionKeys = Object.keys(questions)
+    for(let i=0;i<questionKeys.length;i++){
+      delete questions[questionKeys[i]].value
+    }
+    console.log(questions)
+  }
 }else{
   questions = defaultQuestions;
-}
-if(data.date != dateString){
-  let questionKeys = Object.keys(questions)
-  for(let i=0;i<questionKeys.length;i++){
-    delete questions[questionKeys[i]].value
-  }
-  console.log(questions)
 }
 
 let editQuestions = window.structuredClone(questions);
@@ -676,9 +676,9 @@ function updateView(view) {
 function updateCalander() {
   yearControlls.innerText = currentYear;
   monthControlls.innerText = getMonth(currentMonth);
-  populateCalander(todaysDate, currentMonth, currentYear);
+  populateCalander(currentMonth, currentYear);
 }
-function populateCalander(date, month, year) {
+function populateCalander(month, year) {
   const daysContainer = document.getElementsByClassName("days")[0];
   let daysDom = "";
   let leapYear = isLeapYear(year);
