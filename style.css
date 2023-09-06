@@ -1,16 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
-  --background: hsl(0, 0%, 0%);
-  --secondaryBackground: hsl(0, 0%, 11%);
+  --background: #222222;
+  --secondaryBackground: #454545;
+  --lightBorder : #faf0e631;
   --primaryButton: #71c9ce;
   --uncheckedStar: #71c9ce;
-  --primary: hsl(0, 100%, 69%);
-  --secondary: hsla(0, 85%, 66%, 0.507);
+  --primary: #FF6000;
+  --secondary: #FFA559;
   --circleSize: 1000px;
-  --textColor: hsl(0, 0%, 100%);
-  --secondaryText: hsla(0, 20%, 98%, 0.463);
-  --textInvert: hsl(0, 0%, 51%);
+  --textColor: #FFE6C7;
+  --secondaryText: #ffe6c742;
+  --textInvert: #FFE6C7;
   --selectedColor: rgb(182, 182, 182);
+  --rippleColor: rgba(255, 255, 255, 0.345);
 }
 input,
 textarea {
@@ -66,6 +68,18 @@ body {
   position: absolute;
   min-width: 300px;
 }
+.loading{
+  position: relative;
+  z-index: 2;
+  margin: 15px;
+  transition: 300ms;
+  opacity: 0.5;
+}
+.loading-hidden{
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
 .title {
   font-size: 30px;
   font-weight: bold;
@@ -85,7 +99,7 @@ body {
   top: 0;
   background-color: var(--background);
 }
-.right > * {
+.right > *:not(.loading){
   font-size: 20px;
   width: 28px;
   height: 28px;
@@ -222,7 +236,6 @@ body {
   padding: 20px;
   padding-top: 30px;
   background-color: transparent;
-  border: 2px solid var(--secondaryBackground);
   width: 100%;
   border-radius: 10px;
   box-sizing: border-box;
@@ -326,7 +339,7 @@ textarea {
   display: flex;
   border-radius: 30px;
   padding: 5px;
-  transition: 500ms;
+  transition: 300ms ;
   background-color: var(--secondaryBackground);
   border-radius: 10px;
 }
@@ -348,12 +361,12 @@ textarea {
   font-size: 22px;
   margin: 10px 10px;
   margin-right: 0;
-  border: 1px solid rgb(66, 66, 66);
+  border: 1px solid var(--lightBorder);
   background: var(--secondaryBackground);
   border-radius: 50%;
   cursor: pointer;
   transition: 500ms;
-  transition-property: background-color, border-radius;
+  transition-property: background-color, border-radius, color;
 }
 .yearAndMonth > *,
 .report-date > * {
@@ -457,7 +470,7 @@ textarea {
   width: 40px;
   display: flex;
   justify-content: center;
-  color: var(--textColor);
+  color: var(--background);
   z-index: 2;
   cursor: pointer;
 }
@@ -479,16 +492,16 @@ textarea {
 }
 @media not all and (hover: none) {
   .yearAndMonth:hover {
-    background-color: rgb(93, 93, 93);
     cursor: pointer;
   }
   .loginBtn:hover {
     cursor: pointer;
+    color: var(--textInvert);
     background-color: var(--primary);
     border-radius: 10px;
   }
-  .right > *:hover {
-    color: white;
+  .right > *:not(.loading):hover {
+    color: var(--textInvert);
     background: var(--primary);
     cursor: pointer;
     border-radius: 20%;
@@ -505,19 +518,22 @@ textarea {
   .calanderButtons > *:hover,
   .report-controlls-right > *:hover {
     background-color: var(--primary);
+    color: var(--textInvert);
     border-radius: 20%;
   }
   .selectedDay:hover:before {
     border-radius: 22%;
   }
   .option:hover{
-    background: var(--primary);
+    background: var(--textInvert);
+    color: var(--background);
   }
 }
 @media (hover: none) {
 }
 
 @media screen and (max-width: 600px) {
+  
   .main > * {
     transition: 300ms;
   }
@@ -555,6 +571,7 @@ textarea {
     transition: 300ms;
   }
   .title {
+    user-select: none;
     margin: 0;
     display: flex;
     position: fixed;
@@ -562,7 +579,7 @@ textarea {
     top: 0;
     background: linear-gradient(var(--background) 70%, transparent 100%);
     width: 100%;
-    padding: 10px;
+    padding: 10px 0;
     padding-bottom: 25px;
   }
   .text {
@@ -599,6 +616,13 @@ textarea {
   }
   .report-controlls-right > :nth-child(1):not(.popup) {
     font-size: 16px;
+  }
+  .loading, .lds-ring{
+    z-index: 2;
+    margin: 15px;
+    position: fixed;
+    top: 0;
+    right: 0;
   }
 }
 @media screen and (max-width: 400px) {
@@ -726,6 +750,7 @@ textarea {
 .popup:hover{
   border-radius: 10px;
   background-color: var(--background);
+  color: var(--textColor);
   cursor: auto;
 }
 .backdrop{
@@ -747,7 +772,7 @@ textarea {
   border-radius: 3px;
   width: calc(100% - 15px);
   transition: 300ms;
-  border: 1px solid rgb(54, 54, 54);
+  border: 1px solid var(--lightBorder);
 }
 .option:first-child{
   border-top-left-radius: 6px;

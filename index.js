@@ -39,8 +39,10 @@ const warningContainer =
   document.getElementsByClassName("warning-container")[0];
 const warningCancle = document.getElementsByClassName("warning-cancle")[0];
 const warningDone = document.getElementsByClassName("warning-done")[0];
+const loadingElement = document.getElementsByClassName('loading')[0];
 
-
+let loading = false;
+let editing = false;
 let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
@@ -158,14 +160,15 @@ setupReportSection();
 setInterval(() => {
   //this will update the data to the server if certain time passed after an input
   if (updateTimeout > 0) {
-    updateTimeout -= 100;
+    updateTimeout -= 50;
   } else if (dataChanged) {
     console.log("data changed and updating");
     console.log(questions);
     dataChanged = false;
     localStorage.setItem("questions", JSON.stringify({date:dateString,questions:questions}));
+    loadingStop();
   }
-}, 100);
+}, 50);
 function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
 }
@@ -548,12 +551,14 @@ function setupReportSection() {
 }
 function changeQuestionValue(id, value) {
   if (questions[id].value != value) {
+    loadingStart()
     questions[id].value = value;
-    updateTimeout = 2000;
+    updateTimeout = 1000;
     dataChanged = true;
   }
 }
 function questionsEdited() {
+  loadingStart();
   updateTimeout = 500;
   dataChanged = true;
 }
@@ -608,8 +613,10 @@ function handleEmojiSliderEvent(e, x) {
   let sliderRect = parent.children[1].getBoundingClientRect();
   let number = e.srcElement.value;
   let offsetX = x - sliderRect.x;
-  if (offsetX <= sliderRect.width - 10 && offsetX > 10 && hold) {
+  let percentage = (offsetX/sliderRect.width)*100;
+  if (offsetX <= sliderRect.width && offsetX >= 0 && hold) {
     parent.children[0].style.left = offsetX + "px";
+    e.srcElement.style.background = `linear-gradient(to right, var(--primary) ${percentage}%,  var(--secondary) ${percentage}%)`
   }
   for (let i = 0; i < parent.children[0].children.length; i++) {
     if (number == i) {
@@ -626,6 +633,8 @@ function initiateEmojiPosition(slider) {
   if (width == 0) width = 250;
   let position = number * (width / (emoji.children.length - 1));
   emoji.style.left = position + "px";
+  let percentage = (position/width)*100;
+  slider.style.background = `linear-gradient(to right, var(--primary) ${percentage}%,  var(--secondary) ${percentage}%)`
   for (let i = 0; i < emoji.children.length; i++) {
     if (number == i) {
       emoji.children[i].style.display = "inline-block";
@@ -936,6 +945,7 @@ function hidePopup() {
   addQuestionPopup.classList.add("hidden");
 }
 function cancleEdit() {
+  editing = false;
   editQuestions = window.structuredClone(questions);
   reportEditControlls.classList.add("hidden");
   reportEditBtn.parentElement.classList.remove("hidden");
@@ -956,7 +966,7 @@ function warningPupup(warning, callback, info = false) {
       setTimeout(() => {
         callback(false);
         warningContainer.classList.add("hidden");
-      }, 200);
+      }, 100);
     },
     { once: true }
   );
@@ -966,7 +976,7 @@ function warningPupup(warning, callback, info = false) {
       setTimeout(() => {
         callback(true);
         warningContainer.classList.add("hidden");
-      }, 200);
+      }, 100);
     },
     { once: true }
   );
@@ -1087,6 +1097,15 @@ function saveQuestions() {
   hideQuestionsEditControlls();
   setupReportSection();
 }
+function loadingStart(){
+  console.log('start')
+  loading = true;
+  loadingElement.classList.remove('loading-hidden');
+}
+function loadingStop(){
+  loading = false;
+  loadingElement.classList.add('loading-hidden');
+}
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
     currentMonth--;
@@ -1121,7 +1140,7 @@ reportBtn.addEventListener("click", (e) => {
   transtition(e, reportBtn, REPORT);
 });
 calanderBtn.addEventListener("click", (e) => {
-  if (JSON.stringify(editQuestions) == JSON.stringify(questions)) {
+  if (!editing) {
     cancleEdit();
     windowNavigation(CALANDER, "");
     transtition(e, calanderBtn, CALANDER);
@@ -1138,7 +1157,7 @@ calanderBtn.addEventListener("click", (e) => {
   }
 });
 userBtn.addEventListener("click", (e) => {
-  if (JSON.stringify(editQuestions) == JSON.stringify(questions)) {
+  if (!editing) {
     cancleEdit();
     windowNavigation(PROFILE, "");
     transtition(e, userBtn, PROFILE);
@@ -1168,6 +1187,7 @@ resetCalanderButton.addEventListener("click", () => {
 });
 reportEditBtn.addEventListener("click", () => {
   setTimeout(() => {
+    editing = true;
     reportEditControlls.classList.remove("hidden");
     reportEditBtn.parentElement.classList.add("hidden");
     showQuestionsEditControlls();
@@ -1175,7 +1195,7 @@ reportEditBtn.addEventListener("click", () => {
 });
 reportEditCancleBtn.addEventListener("click", () => {
   setTimeout(() => {
-    if (JSON.stringify(editQuestions) == JSON.stringify(questions)) {
+    if (!editing) {
       cancleEdit();
     } else {
       warningPupup("Changes will not be saved Cancle?", (result) => {
@@ -1195,8 +1215,10 @@ reportEditDoneBtn.addEventListener("click", () => {
       editQuestions[NEWQUESTIONID] &&
       editQuestions[NEWQUESTIONID].id != NEWQUESTIONID
     ) {
-      questions = window.structuredClone(editQuestions);
       questions[editQuestions[NEWQUESTIONID].id] = window.structuredClone(
+        editQuestions[NEWQUESTIONID]
+      );
+      editQuestions[editQuestions[NEWQUESTIONID].id] = window.structuredClone(
         editQuestions[NEWQUESTIONID]
       );
       questionsDom[editQuestions[NEWQUESTIONID].id] =
@@ -1204,6 +1226,7 @@ reportEditDoneBtn.addEventListener("click", () => {
       delete questionsDom[NEWQUESTIONID];
       delete editQuestions[NEWQUESTIONID];
       delete questions[NEWQUESTIONID];
+      console.log(questions)
       saveQuestions();
     } else {
       saveQuestions();
