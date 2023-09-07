@@ -40,6 +40,7 @@ const warningContainer =
 const warningCancle = document.getElementsByClassName("warning-cancle")[0];
 const warningDone = document.getElementsByClassName("warning-done")[0];
 const loadingElement = document.getElementsByClassName('loading')[0];
+const navbar = document.getElementsByClassName('right')[0];
 
 let loading = false;
 let editing = false;
@@ -150,6 +151,7 @@ auth.onAuthStateChanged((user) => {
     profileIcon.style.display = "flex";
   }
 });
+
 
 //Setting initial view ot Report
 handleUrlChangeEvent();
@@ -657,8 +659,10 @@ function updateReportSection() {
   }
 }
 function updateView(view) {
+  
   currentView = view;
   if (currentView === REPORT) {
+    handleContentChange()
     reportDate.innerText = todaysDate;
     reportMonth.innerText = getMonth(todaysMonth);
     reportYear.innerText = todaysYear;
@@ -854,6 +858,7 @@ function getMonth(month) {
   }
 }
 function transtition(e, element, view, cordX, cordY) {
+  title.parentElement.style.zIndex = 0;
   element.style.zIndex = "10";
   let transition = document.createElement("div");
   let transitionContainer = document.createElement("div");
@@ -865,27 +870,28 @@ function transtition(e, element, view, cordX, cordY) {
     y = rect.top + e.target.clientHeight / 2;
   }
   window.innerHeight > window.innerWidth
-    ? document.documentElement.style.setProperty(
+  ? document.documentElement.style.setProperty(
         "--circleSize",
         window.innerHeight * 3 + "px"
       )
-    : document.documentElement.style.setProperty(
+      : document.documentElement.style.setProperty(
         "--circleSize",
         window.innerWidth * 3 + "px"
-      );
-  transitionContainer.classList.add("transitionContainer");
-  transitionContainer.appendChild(transition);
-  transition.classList.add("transition");
-  navbarContainer.appendChild(transitionContainer);
-  transition.style.top = y + "px";
-  transition.style.left = x + "px";
-  transition.classList.add("grow");
-  setTimeout(() => {
-    updateView(view);
-  }, 250);
+        );
+        transitionContainer.classList.add("transitionContainer");
+        transitionContainer.appendChild(transition);
+        transition.classList.add("transition");
+        navbarContainer.appendChild(transitionContainer);
+        transition.style.top = y + "px";
+        transition.style.left = x + "px";
+        transition.classList.add("grow");
+        setTimeout(() => {
+          updateView(view);
+    }, 250);
   setTimeout(() => {
     navbarContainer.removeChild(transitionContainer);
     element.style.zIndex = "1";
+    title.parentElement.style.zIndex = 8;
   }, 600);
 }
 function showQuestionsEditControlls() {
@@ -1114,6 +1120,21 @@ function loadingStop(){
   loading = false;
   loadingElement.classList.add('loading-hidden');
 }
+function toggleTransparentBackground() {
+  let isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
+  if (isAtBottom || document.body.offsetHeight <= window.innerHeight) {
+    navbar.classList.add('transparent-bg');
+  } else {
+    navbar.classList.remove('transparent-bg');
+  }
+}
+function handleContentChange() {
+  const observer = new MutationObserver(() => {
+    // Handle content changes, such as dynamically added or removed elements
+    toggleTransparentBackground();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+}
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
     currentMonth--;
@@ -1136,6 +1157,25 @@ export function monthChange(direction, ripple = true) {
   }
   updateCalander();
 }
+document.addEventListener('DOMContentLoaded', function () {
+  function toggleTranslucentBackground() {
+    if (window.scrollY === 0) {
+      navbar.classList.remove('translucent-bg');
+    } else {
+      navbar.classList.add('translucent-bg');
+    }
+  }
+  // Initial check
+  toggleTranslucentBackground();
+  window.addEventListener('scroll', toggleTranslucentBackground);
+});
+document.addEventListener('DOMContentLoaded', function () {
+  // Check on initial load
+  toggleTransparentBackground();
+  // Check on scroll and resize events
+  window.addEventListener('scroll', toggleTransparentBackground);
+  window.addEventListener('resize', toggleTransparentBackground);
+});
 loginBtn.addEventListener("click", () => {
   if (currentUser) {
     signOut();
