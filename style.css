@@ -70,8 +70,11 @@ body {
 }
 .loading{
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 2;
-  margin: 15px;
+  margin: 25px;
   transition: 300ms;
   opacity: 0.5;
 }
@@ -483,9 +486,10 @@ textarea {
   transition: 300ms;
   border-radius: 30px;
   z-index: 1;
+  transform: translate(50px);
 }
 .indicator-off {
-  transform: translate(50px);
+  transform: translate(0px);
 }
 .selectedYesNoBtn {
   cursor: default;
@@ -619,7 +623,7 @@ textarea {
   }
   .loading, .lds-ring{
     z-index: 2;
-    margin: 15px;
+    margin: 22px;
     position: fixed;
     top: 0;
     right: 0;

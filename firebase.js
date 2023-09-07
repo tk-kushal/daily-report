@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCCZFx8mYEq_uzvQbaSzIc-m75Vc6X9_a8",
@@ -14,6 +15,16 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const provider = new GoogleAuthProvider();
+export const db = getFirestore(app)
+let uid = null;
+let journalCollection = null;
+auth.onAuthStateChanged((user)=>{
+  if(user){
+    uid = auth.currentUser.uid;
+    journalCollection = collection(db,uid);
+
+  }
+})
 export function signIn(){
   signInWithPopup(auth, provider)
   .then((result) => {
@@ -34,6 +45,17 @@ export function signIn(){
     const credential = GoogleAuthProvider.credentialFromError(error);
     // ...
   });
+}
+export function getdocuments(){
+  if(journalCollection){
+    getDocs(journalCollection).then(snapshot=>snapshot.docs.map(doc=>console.log(doc.data())))
+  }
+}
+export function createDocument(key,data){
+  if(uid){
+    let docRef = doc(db,uid,key);
+    setDoc(docRef,data).then().catch(e=>console.log(e))
+  }
 }
 export function signOut(){
   auth.signOut();

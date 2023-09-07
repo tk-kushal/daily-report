@@ -1,5 +1,5 @@
 import { calanderSwipe, updateButtons } from "./buttonClick.js";
-import { auth, signIn, signOut } from "./firebase.js";
+import { auth, createDocument, getdocuments, signIn, signOut } from "./firebase.js";
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
@@ -47,7 +47,7 @@ let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
 let todaysYear = overallDate.getFullYear();
-let dateString = todaysDate+":"+todaysMonth+":"+todaysYear
+let dateString = todaysDate+":"+todaysMonth+":"+todaysYear;
 let defaultQuestions = {
   title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
   exercise: {
@@ -118,7 +118,6 @@ if (data && data.questions) {
 }else{
   questions = defaultQuestions;
 }
-
 let editQuestions = window.structuredClone(questions);
 let questionsDom = [];
 let sliders = document.getElementsByClassName("emojiSlider");
@@ -143,6 +142,7 @@ auth.onAuthStateChanged((user) => {
     profilePicture.src = currentUser.photoURL;
     profilePicture.style.display = "flex";
     profileIcon.style.display = "none";
+    getdocuments()
   } else {
     loginBtn.style.display = "flex";
     loginBtn.innerText = "Login";
@@ -163,10 +163,18 @@ setInterval(() => {
     updateTimeout -= 50;
   } else if (dataChanged) {
     console.log("data changed and updating");
-    console.log(questions);
     dataChanged = false;
     localStorage.setItem("questions", JSON.stringify({date:dateString,questions:questions}));
     loadingStop();
+    let Data = {
+      date:{
+        date:selectedDate,
+        month:selectedMonth,
+        year:selectedYear
+      },
+      questions:questions
+    }
+    createDocument(dateString,Data);
   }
 }, 50);
 function windowNavigation(view, subpath) {
@@ -260,8 +268,8 @@ function createQuestion(questionData, creating = false) {
       questionContainer.innerHTML = `
         <div class="lable">${questionData.lable}</div>
         <div class="yes-no-button" id=${questionData.id}>
+        <div class="No">No</div>
           <div class="yes">Yes</div>
-          <div class="No">No</div>
           <div class="indicator ${
             questionData.value == true ? "" : "indicator-off"
           }"></div>
