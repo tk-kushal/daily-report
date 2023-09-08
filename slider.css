@@ -1,7 +1,7 @@
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, var(--primary) 50%,  var(--secondary) 50%);
+  background: linear-gradient(to right, var(--primaryTransparent) 50%,  var(--secondaryTransparent) 50%);
   margin: 18px 0;
   width: 100%;
   border-radius: 20px;

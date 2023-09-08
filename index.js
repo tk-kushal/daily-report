@@ -1,5 +1,11 @@
 import { calanderSwipe, updateButtons } from "./buttonClick.js";
-import { auth, createDocument, getdocuments, signIn, signOut } from "./firebase.js";
+import {
+  auth,
+  createDocument,
+  getdocuments,
+  signIn,
+  signOut,
+} from "./firebase.js";
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
@@ -39,8 +45,8 @@ const warningContainer =
   document.getElementsByClassName("warning-container")[0];
 const warningCancle = document.getElementsByClassName("warning-cancle")[0];
 const warningDone = document.getElementsByClassName("warning-done")[0];
-const loadingElement = document.getElementsByClassName('loading')[0];
-const navbar = document.getElementsByClassName('right')[0];
+const loadingElement = document.getElementsByClassName("loading")[0];
+const navbar = document.getElementsByClassName("right")[0];
 
 let loading = false;
 let editing = false;
@@ -48,7 +54,7 @@ let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
 let todaysYear = overallDate.getFullYear();
-let dateString = todaysDate+":"+todaysMonth+":"+todaysYear;
+let dateString = todaysDate + ":" + todaysMonth + ":" + todaysYear;
 let defaultQuestions = {
   title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
   exercise: {
@@ -102,21 +108,20 @@ let defaultQuestions = {
     id: "aboutday",
     lable: "Write about your day",
     order: 9,
-    
   },
 };
 let questions = null;
-let data = JSON.parse(localStorage.getItem("questions"))
+let data = JSON.parse(localStorage.getItem("questions"));
 if (data && data.questions) {
-  questions = data.questions
-  if(data.date != dateString){
-    let questionKeys = Object.keys(questions)
-    for(let i=0;i<questionKeys.length;i++){
-      delete questions[questionKeys[i]].value
+  questions = data.questions;
+  if (data.date != dateString) {
+    let questionKeys = Object.keys(questions);
+    for (let i = 0; i < questionKeys.length; i++) {
+      delete questions[questionKeys[i]].value;
     }
-    console.log(questions)
+    console.log(questions);
   }
-}else{
+} else {
   questions = defaultQuestions;
 }
 let editQuestions = window.structuredClone(questions);
@@ -143,7 +148,7 @@ auth.onAuthStateChanged((user) => {
     profilePicture.src = currentUser.photoURL;
     profilePicture.style.display = "flex";
     profileIcon.style.display = "none";
-    getdocuments()
+    getdocuments();
   } else {
     loginBtn.style.display = "flex";
     loginBtn.innerText = "Login";
@@ -151,7 +156,6 @@ auth.onAuthStateChanged((user) => {
     profileIcon.style.display = "flex";
   }
 });
-
 
 //Setting initial view ot Report
 handleUrlChangeEvent();
@@ -166,17 +170,20 @@ setInterval(() => {
   } else if (dataChanged) {
     console.log("data changed and updating");
     dataChanged = false;
-    localStorage.setItem("questions", JSON.stringify({date:dateString,questions:questions}));
+    localStorage.setItem(
+      "questions",
+      JSON.stringify({ date: dateString, questions: questions })
+    );
     loadingStop();
     let Data = {
-      date:{
-        date:selectedDate,
-        month:selectedMonth,
-        year:selectedYear
+      date: {
+        date: selectedDate,
+        month: selectedMonth,
+        year: selectedYear,
       },
-      questions:questions
-    }
-    createDocument(dateString,Data);
+      questions: questions,
+    };
+    createDocument(dateString, Data);
   }
 }, 50);
 function windowNavigation(view, subpath) {
@@ -513,14 +520,14 @@ function setupReportSection() {
       changeQuestionValue(id, false);
     });
     //yes
-    toggleButtons[i].addEventListener("swiped-left", () => {
+    toggleButtons[i].addEventListener("swiped-right", () => {
       indicator.classList.remove("indicator-off");
       noButton.classList.remove("selectedYesNoBtn");
       yesButton.classList.add("selectedYesNoBtn");
       changeQuestionValue(id, true);
     });
     //no
-    toggleButtons[i].addEventListener("swiped-right", () => {
+    toggleButtons[i].addEventListener("swiped-left", () => {
       indicator.classList.add("indicator-off");
       yesButton.classList.remove("selectedYesNoBtn");
       noButton.classList.add("selectedYesNoBtn");
@@ -561,7 +568,7 @@ function setupReportSection() {
 }
 function changeQuestionValue(id, value) {
   if (questions[id].value != value) {
-    loadingStart()
+    loadingStart();
     questions[id].value = value;
     updateTimeout = 1000;
     dataChanged = true;
@@ -623,10 +630,10 @@ function handleEmojiSliderEvent(e, x) {
   let sliderRect = parent.children[1].getBoundingClientRect();
   let number = e.srcElement.value;
   let offsetX = x - sliderRect.x;
-  let percentage = (offsetX/sliderRect.width)*100;
+  let percentage = (offsetX / sliderRect.width) * 100;
   if (offsetX <= sliderRect.width && offsetX >= 0 && hold) {
     parent.children[0].style.left = offsetX + "px";
-    e.srcElement.style.background = `linear-gradient(to right, var(--primary) ${percentage}%,  var(--secondary) ${percentage}%)`
+    e.srcElement.style.background = `linear-gradient(to right, var(--primaryTransparent) ${percentage}%,  var(--secondaryTransparent) ${percentage}%)`;
   }
   for (let i = 0; i < parent.children[0].children.length; i++) {
     if (number == i) {
@@ -643,8 +650,8 @@ function initiateEmojiPosition(slider) {
   if (width == 0) width = 250;
   let position = number * (width / (emoji.children.length - 1));
   emoji.style.left = position + "px";
-  let percentage = (position/width)*100;
-  slider.style.background = `linear-gradient(to right, var(--primary) ${percentage}%,  var(--secondary) ${percentage}%)`
+  let percentage = (position / width) * 100;
+  slider.style.background = `linear-gradient(to right, var(--primaryTransparent) ${percentage}%,  var(--secondaryTransparent) ${percentage}%)`;
   for (let i = 0; i < emoji.children.length; i++) {
     if (number == i) {
       emoji.children[i].style.display = "inline-block";
@@ -659,10 +666,9 @@ function updateReportSection() {
   }
 }
 function updateView(view) {
-  
   currentView = view;
   if (currentView === REPORT) {
-    handleContentChange()
+    handleContentChange();
     reportDate.innerText = todaysDate;
     reportMonth.innerText = getMonth(todaysMonth);
     reportYear.innerText = todaysYear;
@@ -870,24 +876,24 @@ function transtition(e, element, view, cordX, cordY) {
     y = rect.top + e.target.clientHeight / 2;
   }
   window.innerHeight > window.innerWidth
-  ? document.documentElement.style.setProperty(
+    ? document.documentElement.style.setProperty(
         "--circleSize",
         window.innerHeight * 3 + "px"
       )
-      : document.documentElement.style.setProperty(
+    : document.documentElement.style.setProperty(
         "--circleSize",
         window.innerWidth * 3 + "px"
-        );
-        transitionContainer.classList.add("transitionContainer");
-        transitionContainer.appendChild(transition);
-        transition.classList.add("transition");
-        navbarContainer.appendChild(transitionContainer);
-        transition.style.top = y + "px";
-        transition.style.left = x + "px";
-        transition.classList.add("grow");
-        setTimeout(() => {
-          updateView(view);
-    }, 250);
+      );
+  transitionContainer.classList.add("transitionContainer");
+  transitionContainer.appendChild(transition);
+  transition.classList.add("transition");
+  navbarContainer.appendChild(transitionContainer);
+  transition.style.top = y + "px";
+  transition.style.left = x + "px";
+  transition.classList.add("grow");
+  setTimeout(() => {
+    updateView(view);
+  }, 250);
   setTimeout(() => {
     navbarContainer.removeChild(transitionContainer);
     element.style.zIndex = "1";
@@ -1111,21 +1117,22 @@ function saveQuestions() {
   hideQuestionsEditControlls();
   setupReportSection();
 }
-function loadingStart(){
-  console.log('start')
+function loadingStart() {
+  console.log("start");
   loading = true;
-  loadingElement.classList.remove('loading-hidden');
+  loadingElement.classList.remove("loading-hidden");
 }
-function loadingStop(){
+function loadingStop() {
   loading = false;
-  loadingElement.classList.add('loading-hidden');
+  loadingElement.classList.add("loading-hidden");
 }
 function toggleTransparentBackground() {
-  let isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight;
+  let isAtBottom =
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
   if (isAtBottom || document.body.offsetHeight <= window.innerHeight) {
-    navbar.classList.add('transparent-bg');
+    navbar.classList.add("transparent-bg");
   } else {
-    navbar.classList.remove('transparent-bg');
+    navbar.classList.remove("transparent-bg");
   }
 }
 function handleContentChange() {
@@ -1157,24 +1164,24 @@ export function monthChange(direction, ripple = true) {
   }
   updateCalander();
 }
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
   function toggleTranslucentBackground() {
     if (window.scrollY === 0) {
-      navbar.classList.remove('translucent-bg');
+      navbar.classList.remove("translucent-bg");
     } else {
-      navbar.classList.add('translucent-bg');
+      navbar.classList.add("translucent-bg");
     }
   }
   // Initial check
   toggleTranslucentBackground();
-  window.addEventListener('scroll', toggleTranslucentBackground);
+  window.addEventListener("scroll", toggleTranslucentBackground);
 });
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
   // Check on initial load
   toggleTransparentBackground();
   // Check on scroll and resize events
-  window.addEventListener('scroll', toggleTransparentBackground);
-  window.addEventListener('resize', toggleTransparentBackground);
+  window.addEventListener("scroll", toggleTransparentBackground);
+  window.addEventListener("resize", toggleTransparentBackground);
 });
 loginBtn.addEventListener("click", () => {
   if (currentUser) {
@@ -1274,7 +1281,7 @@ reportEditDoneBtn.addEventListener("click", () => {
       delete questionsDom[NEWQUESTIONID];
       delete editQuestions[NEWQUESTIONID];
       delete questions[NEWQUESTIONID];
-      console.log(questions)
+      console.log(questions);
       saveQuestions();
     } else {
       saveQuestions();
@@ -1297,20 +1304,28 @@ backdrop.addEventListener("click", () => {
 addQuestionPopup
   .getElementsByClassName("small-text")[0]
   .addEventListener("click", () => {
-    addQuestion("small-text");
+    setTimeout(() => {
+      addQuestion("small-text");
+    }, 100);
   });
 addQuestionPopup
   .getElementsByClassName("toggle")[0]
   .addEventListener("click", () => {
-    addQuestion("toggle");
+    setTimeout(() => {
+      addQuestion("toggle");
+    }, 100);
   });
 addQuestionPopup
   .getElementsByClassName("slider")[0]
   .addEventListener("click", () => {
-    addQuestion("slider");
+    setTimeout(() => {
+      addQuestion("slider");
+    }, 100);
   });
 addQuestionPopup
   .getElementsByClassName("large-text")[0]
   .addEventListener("click", () => {
-    addQuestion("large-text");
+    setTimeout(() => {
+      addQuestion("large-text");
+    }, 100);
   });

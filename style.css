@@ -1,16 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
   --background: #222222;
+  --backgroundTransparent:#22222280;
   --secondaryBackground: #454545c6;
-  --lightBorder : #faf0e61e;
-  --primaryButton: #71c9ce;
-  --uncheckedStar: #71c9ce;
-  --primary: #FF6000;
-  --secondary: #FFA559;
-  --circleSize: 1000px;
-  --textColor: #FFE6C7;
+  --secondaryBackgroundTransparent:#45454572;
+  --lightBorder: #faf0e61e;
+  --primary: #ff6000;
+  --primaryTransparent:#ff6200b8;
+  --secondary: #ffa559;
+  --secondaryTransparent:#ffa55972;
+  --textColor: #ffe6c7;
   --secondaryText: #ffe6c742;
-  --textInvert: #FFE6C7;
+  --textInvert: #ffe6c7;
   --selectedColor: rgb(182, 182, 182);
   --rippleColor: rgba(255, 255, 255, 0.345);
 }
@@ -18,13 +19,17 @@ input,
 textarea {
   font-family: "Montserrat", sans-serif;
 }
-textarea{
-  margin-bottom: -4px;
+textarea {
 }
-.questionContainer{
+.questionContainer {
   padding: 0;
-  height: 100%;
+  height: min-content;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.questionContainer textarea {
+  margin-bottom: 0px;
 }
 textarea::-webkit-scrollbar {
   width: 0;
@@ -38,11 +43,11 @@ textarea::-webkit-scrollbar {
   overflow: hidden;
   transition: 500ms height;
 }
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   background-color: var(--background);
   width: 10px;
 }
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: var(--secondaryBackground);
   border-radius: 10px;
 }
@@ -77,7 +82,7 @@ body {
   position: absolute;
   min-width: 300px;
 }
-.loading{
+.loading {
   position: relative;
   display: flex;
   justify-content: center;
@@ -87,7 +92,7 @@ body {
   transition: 300ms;
   opacity: 0.5;
 }
-.loading-hidden{
+.loading-hidden {
   opacity: 0;
   pointer-events: none;
   user-select: none;
@@ -113,7 +118,7 @@ body {
   border-bottom: transparent 1px solid;
   transition: 300ms;
 }
-.right > *{
+.right > * {
   font-size: 20px;
   width: 28px;
   height: 28px;
@@ -191,7 +196,7 @@ body {
 .profileContainer {
   width: 100%;
   font-weight: 500;
-  background-color: color-mix(in srgb, var(--secondaryBackground) 60%, transparent);
+  background-color: var(--secondaryBackgroundTransparent);
   max-width: 800px;
   width: 100%;
   border-radius: 10px;
@@ -201,7 +206,8 @@ body {
   transition: 300ms;
   flex-direction: column;
 }
-.slider,.emojiEdit {
+.slider,
+.emojiEdit {
   position: relative;
   width: 250px;
   max-width: 100%;
@@ -253,7 +259,7 @@ body {
   width: 100%;
   border-radius: 10px;
   box-sizing: border-box;
-  font-size: 20px;
+  font-size: 25px;
 }
 .daysQuote > i {
   font-size: 16px;
@@ -265,11 +271,11 @@ body {
   text-align: right;
   font-size: 14px;
 }
-.question{
+.question {
   border-bottom: 1px solid var(--background);
   padding-bottom: 10px;
 }
-.question{
+.question {
   margin-top: 20px;
 }
 #title {
@@ -353,8 +359,8 @@ textarea {
   display: flex;
   border-radius: 30px;
   padding: 5px;
-  transition: 300ms ;
-  background-color: var(--secondaryBackground);
+  transition: 300ms;
+  background-color: var(--secondaryBackgroundTransparent);
   border-radius: 10px;
 }
 .yearAndMonth > i {
@@ -376,7 +382,7 @@ textarea {
   margin: 10px 10px;
   margin-right: 0;
   border: 1px solid var(--lightBorder);
-  background: var(--secondaryBackground);
+  background: var(--secondaryBackgroundTransparent);
   border-radius: 50%;
   cursor: pointer;
   transition: 500ms;
@@ -472,7 +478,7 @@ textarea {
 .yes-no-button {
   display: flex;
   align-items: center;
-  background-color: var(--secondary);
+  background-color: var(--secondaryTransparent);
   width: fit-content;
   padding: 3px;
   border-radius: 30px;
@@ -491,7 +497,7 @@ textarea {
 .indicator {
   width: 50px;
   height: 34px;
-  background-color: var(--primary);
+  background-color: var(--primaryTransparent);
   position: absolute;
   padding: 0;
   transition: 300ms;
@@ -539,7 +545,7 @@ textarea {
   .selectedDay:hover:before {
     border-radius: 22%;
   }
-  .option:hover{
+  .option:hover {
     background: var(--textInvert);
     color: var(--background);
   }
@@ -548,7 +554,6 @@ textarea {
 }
 
 @media screen and (max-width: 600px) {
-  
   .main > * {
     transition: 300ms;
   }
@@ -565,7 +570,7 @@ textarea {
   .right > * {
     margin-right: 0px;
   }
-  .yes-no-button{
+  .yes-no-button {
     margin-left: 10px;
   }
   .right {
@@ -573,11 +578,10 @@ textarea {
     top: auto;
     bottom: 0;
     height: 55px;
-    background-color:color-mix(in srgb, var(--background) 100%, transparent);
+    background-color: var(--background);
     border-top: var(--lightBorder) 1px solid;
-
   }
-  .right>*{
+  .right > * {
     transform: scale(0.9);
   }
   .questionsContainer {
@@ -606,6 +610,9 @@ textarea {
   .text {
     border-radius: 30px;
     padding: 8px 80px;
+  }
+  .daysQuote{
+    font-size: 20px;
   }
   .weekDay,
   .day {
@@ -638,14 +645,15 @@ textarea {
   .report-controlls-right > :nth-child(1):not(.popup) {
     font-size: 16px;
   }
-  .loading, .lds-ring{
+  .loading,
+  .lds-ring {
     z-index: 2;
     margin: 13px;
     position: fixed;
     top: 0;
     right: 0;
   }
-  .daysQuote{
+  .daysQuote {
     padding-top: 0;
   }
 }
@@ -710,11 +718,12 @@ textarea {
 .positionControlls {
   margin-right: auto;
 }
-.editControlls,.report-controlls-right{
+.editControlls,
+.report-controlls-right {
   -webkit-transition: all 200ms linear;
-    -moz-transition: all 200ms linear;
-    -o-transition: all 200ms linear;
-    transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+  transition: all 200ms linear;
 }
 .editControlls input[type="text"] {
   font-size: 16px;
@@ -734,10 +743,10 @@ textarea {
 .detailedEditBtn {
   font-size: 16px;
 }
-.questionEditing> *:not(.emojiEdit) {
+.questionEditing > *:not(.emojiEdit) {
   pointer-events: none;
   user-select: none;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 .hidden {
   width: 1px;
@@ -750,11 +759,11 @@ textarea {
   position: relative;
 }
 
-.questionsContainer{
+.questionsContainer {
   display: flex;
   flex-direction: column;
 }
-.popup{
+.popup {
   position: absolute;
   width: 100%;
   height: max-content;
@@ -769,15 +778,16 @@ textarea {
   padding-right: 2px;
   box-sizing: border-box;
   transition: all 100ms linear;
-  background-color: var(--background);
+  background-color: var(--backgroundTransparent);
+  backdrop-filter: blur(10px);
 }
-.popup:hover{
+.popup:hover {
   border-radius: 10px;
-  background-color: var(--background);
+  background-color: var(--backgroundTransparent);
   color: var(--textColor);
   cursor: auto;
 }
-.backdrop{
+.backdrop {
   background-color: rgba(0, 0, 0, 0.283);
   position: absolute;
   top: 0;
@@ -787,7 +797,7 @@ textarea {
   z-index: 3;
   transition: 300ms;
 }
-.option{
+.option {
   cursor: pointer;
   user-select: none;
   padding: 5px;
@@ -798,18 +808,18 @@ textarea {
   transition: 300ms;
   border: 1px solid var(--lightBorder);
 }
-.option:first-child{
+.option:first-child {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
-.option:last-child{
+.option:last-child {
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
-.add>*{
+.add > * {
   pointer-events: none;
 }
-.warning-container{
+.warning-container {
   position: fixed;
   z-index: 7;
   top: 0;
@@ -820,14 +830,14 @@ textarea {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.492);
+  background-color: rgba(0, 0, 0, 0.262);
   transition: 200ms;
 }
-.warning-popup{
+.warning-popup {
   width: 100%;
   max-width: 230px;
   margin: 10px;
-  background-color: var(--background);
+  background-color: var(--backgroundTransparent);
   border: 2px solid var(--primary);
   display: flex;
   border-radius: 20px;
@@ -836,20 +846,21 @@ textarea {
   flex-direction: column;
   padding: 20px;
   text-align: center;
+  backdrop-filter: blur(18px);
 }
-.warning{
+.warning {
   font-size: 24px;
   margin: 20px 0;
 }
-.warning-buttons{
+.warning-buttons {
   display: flex;
   justify-content: space-evenly;
   width: 100%;
 }
-.warning-cancle{
+.warning-cancle {
   margin: 0;
 }
-input[type='text'].questionIdInvalid{
+input[type="text"].questionIdInvalid {
   outline: 1px solid rgba(255, 0, 0, 0.483);
 }
 .emojiEdit {
@@ -859,7 +870,7 @@ input[type='text'].questionIdInvalid{
   margin: 0 10px;
   margin-top: -5px;
 }
-input[type="text"].emojiInput{
+input[type="text"].emojiInput {
   margin: 3px;
   padding: 2px;
   font-size: 30px;
@@ -869,7 +880,7 @@ input[type="text"].emojiInput{
   align-items: center;
   background-color: rgba(0, 0, 0, 0.436);
 }
-.id-info{
+.id-info {
   min-width: 30px;
   height: 30px;
   display: flex;
@@ -880,12 +891,12 @@ input[type="text"].emojiInput{
   padding: 4px;
   background-color: var(--background);
 }
-.id-input-container{
+.id-input-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.background{
+.background {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -894,7 +905,37 @@ input[type="text"].emojiInput{
   opacity: 1;
   overflow: hidden;
 }
-.backgroundoverlay{
+.blobContainer {
+  z-index: 0;
+  filter: blur(7vh);
+}
+.blobContainer > * {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  min-width: 300px;
+  min-height: 300px;
+  border-radius: 50%;
+  background-color: white;
+  animation: blobs 2s ease;
+}
+.blob1 {
+  background-color: var(--primary);
+  top: 0vh;
+  left: 25%;
+}
+.blob2 {
+  background-color: var(--secondary);
+  top: 50vh;
+  left: 50vw;
+}
+.blob3 {
+  top: 30vh;
+  left: 0vw;
+  background-color: var(--primary);
+  filter: hue-rotate(170deg) saturate(1) brightness(1);
+}
+.backgroundoverlay {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -902,42 +943,15 @@ input[type="text"].emojiInput{
   height: 100%;
   width: 100%;
   right: 0;
-  background-color: color-mix(in srgb, var(--background) 80%, transparent);
+  opacity: 0.75;
+  background-color: var(--background)
 }
-.blobContainer{
-  filter: blur(70px);
-  z-index: 0;
-}
-.blobContainer>*{
-  position: absolute;
-  width: 60vw;
-  height: 60vw;
-  border-radius: 50%;
-  background-color: white;
-  animation: blobs 2s ease;
-}
-.blob1{
-  background-color: var(--primary);
-  top: 0vh;
-  left: 25%;
-}
-.blob2{
-  background-color: var(--secondary);
-  top: 50vh;
-  left: 50vw;
-}
-.blob3{
-  background-color: var(--primary);
-  top: 30vh;
-  left: 0vw;
-  filter: hue-rotate(180deg) saturate(1) brightness(1);
-}
-@keyframes blobs{
-  0%{
+@keyframes blobs {
+  0% {
     transform: scale(0);
     opacity: 0;
   }
-  100%{
+  100% {
     transform: scale(1);
     opacity: 1;
   }
