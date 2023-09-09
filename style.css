@@ -19,8 +19,6 @@ input,
 textarea {
   font-family: "Montserrat", sans-serif;
 }
-textarea {
-}
 .questionContainer {
   padding: 0;
   height: min-content;
@@ -511,177 +509,6 @@ textarea {
 .selectedYesNoBtn {
   cursor: default;
 }
-@media not all and (hover: none) {
-  .yearAndMonth:hover {
-    cursor: pointer;
-  }
-  .loginBtn:hover {
-    cursor: pointer;
-    color: var(--textInvert);
-    background-color: var(--primary);
-    border-radius: 10px;
-  }
-  .right > *:not(.loading):hover {
-    color: var(--textInvert);
-    background: var(--primary);
-    cursor: pointer;
-    border-radius: 20%;
-    border: 2px solid transparent;
-  }
-  .day:hover {
-    cursor: pointer;
-    border-radius: 20%;
-    background-color: var(--secondary);
-  }
-  .completedDay:hover {
-    background-color: var(--primary);
-  }
-  .calanderButtons > *:hover,
-  .report-controlls-right > *:hover {
-    background-color: var(--primary);
-    color: var(--textInvert);
-    border-radius: 20%;
-  }
-  .selectedDay:hover:before {
-    border-radius: 22%;
-  }
-  .option:hover {
-    background: var(--textInvert);
-    color: var(--background);
-  }
-}
-@media (hover: none) {
-}
-
-@media screen and (max-width: 600px) {
-  .main > * {
-    transition: 300ms;
-  }
-  .report {
-    padding: 30px 0 0;
-  }
-  .navbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition: 300ms;
-  }
-  .right > * {
-    margin-right: 0px;
-  }
-  .yes-no-button {
-    margin-left: 10px;
-  }
-  .right {
-    justify-content: space-around;
-    top: auto;
-    bottom: 0;
-    height: 55px;
-    background-color: var(--background);
-    border-top: var(--lightBorder) 1px solid;
-  }
-  .right > * {
-    transform: scale(0.9);
-  }
-  .questionsContainer {
-    padding: 10px;
-  }
-  .lable,
-  .slider {
-    margin: 10px;
-  }
-  .main {
-    margin: 60px 0 60px;
-    padding: 5px;
-    transition: 300ms;
-  }
-  .title {
-    user-select: none;
-    margin: 0;
-    display: flex;
-    position: absolute;
-    justify-content: center;
-    width: 100%;
-    padding: 10px 0;
-    top: 0;
-    padding-bottom: 25px;
-  }
-  .text {
-    border-radius: 30px;
-    padding: 8px 80px;
-  }
-  .daysQuote{
-    font-size: 20px;
-  }
-  .weekDay,
-  .day {
-    display: flex;
-    font-size: 20px;
-    width: 30px;
-    height: 30px;
-    margin: 10px auto;
-    border-radius: 50%;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
-    transition: 300ms;
-  }
-  .calanderButtons > *,
-  .report-controlls-right > *:not(.popup) {
-    transform: scale(0.9);
-  }
-  .yearAndMonth {
-    padding: 5px;
-  }
-  .yearAndMonth > *,
-  .report-date > * {
-    font-size: 23px;
-  }
-  .left {
-    padding: 5px 0;
-    padding-right: 10px;
-  }
-  .report-controlls-right > :nth-child(1):not(.popup) {
-    font-size: 16px;
-  }
-  .loading,
-  .lds-ring {
-    z-index: 2;
-    margin: 13px;
-    position: fixed;
-    top: 0;
-    right: 0;
-  }
-  .daysQuote {
-    padding-top: 0;
-  }
-}
-@media screen and (max-width: 400px) {
-  .weekDay,
-  .day {
-    display: flex;
-    font-size: 16px;
-    width: 20px;
-    height: 20px;
-    margin: 10px auto;
-    border-radius: 50%;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
-    transition: 300ms;
-  }
-  .calanderContainer {
-    padding: 10px;
-  }
-  .yearAndMonth > * {
-    font-size: 20px;
-  }
-  .calanderButtons > * {
-    transform: scale(0.8);
-    margin: 2px;
-  }
-}
 
 .selectedDay {
   position: relative;
@@ -781,12 +608,7 @@ textarea {
   background-color: var(--backgroundTransparent);
   backdrop-filter: blur(10px);
 }
-.popup:hover {
-  border-radius: 10px;
-  background-color: var(--backgroundTransparent);
-  color: var(--textColor);
-  cursor: auto;
-}
+
 .backdrop {
   background-color: rgba(0, 0, 0, 0.283);
   position: absolute;
@@ -907,7 +729,7 @@ input[type="text"].emojiInput {
 }
 .blobContainer {
   z-index: 0;
-  filter: blur(7vh);
+  filter: blur(8vw);
 }
 .blobContainer > * {
   position: absolute;
@@ -943,9 +765,190 @@ input[type="text"].emojiInput {
   height: 100%;
   width: 100%;
   right: 0;
-  opacity: 0.75;
+  opacity: .85;
   background-color: var(--background)
 }
+@media not all and (hover: none) {
+  .yearAndMonth:hover {
+    cursor: pointer;
+  }
+  .loginBtn:hover {
+    cursor: pointer;
+    color: var(--textInvert);
+    background-color: var(--primary);
+    border-radius: 10px;
+  }
+  .right > *:not(.loading):hover {
+    color: var(--textInvert);
+    background: var(--primary);
+    cursor: pointer;
+    border-radius: 20%;
+    border: 2px solid transparent;
+  }
+  .day:hover {
+    cursor: pointer;
+    border-radius: 20%;
+    background-color: var(--secondary);
+  }
+  .completedDay:hover {
+    background-color: var(--primary);
+  }
+  .calanderButtons > *:hover,
+  .report-controlls-right > *:hover {
+    background-color: var(--primary);
+    color: var(--textInvert);
+    border-radius: 20%;
+  }
+  .selectedDay:hover:before {
+    border-radius: 22%;
+  }
+  .option:hover {
+    background: var(--textInvert);
+    color: var(--background);
+  }
+  .popup:hover {
+    border-radius: 10px;
+    background-color: var(--backgroundTransparent);
+    color: var(--textColor);
+    cursor: auto;
+  }
+}
+@media (hover: none) {
+}
+
+@media screen and (max-width: 600px) {
+  .main > * {
+    transition: 300ms;
+  }
+  .report {
+    padding: 30px 0 0;
+  }
+  .navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: 300ms;
+  }
+  .right > * {
+    margin-right: 0px;
+  }
+  .yes-no-button {
+    margin-left: 10px;
+  }
+  .right {
+    justify-content: space-around;
+    top: auto;
+    bottom: 0;
+    height: 55px;
+    background-color: var(--background);
+    border-top: var(--lightBorder) 1px solid;
+  }
+  .right > * {
+    transform: scale(0.9);
+  }
+  .questionsContainer {
+    padding: 10px;
+  }
+  .lable,
+  .slider {
+    margin: 10px;
+  }
+  .main {
+    margin: 60px 0 60px;
+    padding: 5px;
+    transition: 300ms;
+  }
+  .title {
+    user-select: none;
+    margin: 0;
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    top: 0;
+    padding-bottom: 25px;
+  }
+  .text {
+    border-radius: 30px;
+    padding: 8px 80px;
+  }
+  .daysQuote{
+    font-size: 20px;
+  }
+  .weekDay,
+  .day {
+    display: flex;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    margin: 10px auto;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    transition: 300ms;
+  }
+  .calanderButtons > *,
+  .report-controlls-right > *:not(.popup) {
+    transform: scale(0.9);
+  }
+  .yearAndMonth {
+    padding: 5px;
+  }
+  .yearAndMonth > *,
+  .report-date > * {
+    font-size: 23px;
+  }
+  .left {
+    padding: 5px 0;
+    padding-right: 10px;
+  }
+  .report-controlls-right > :nth-child(1):not(.popup) {
+    font-size: 16px;
+  }
+  .loading,
+  .lds-ring {
+    z-index: 2;
+    margin: 13px;
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
+  .daysQuote {
+    padding-top: 0;
+  }
+  .blobContainer {
+  filter: blur(10vh);
+}
+}
+@media screen and (max-width: 400px) {
+  .weekDay,
+  .day {
+    display: flex;
+    font-size: 16px;
+    width: 20px;
+    height: 20px;
+    margin: 10px auto;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    transition: 300ms;
+  }
+  .calanderContainer {
+    padding: 10px;
+  }
+  .yearAndMonth > * {
+    font-size: 20px;
+  }
+  .calanderButtons > * {
+    transform: scale(0.8);
+    margin: 2px;
+  }
+}
+
 @keyframes blobs {
   0% {
     transform: scale(0);

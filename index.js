@@ -10,7 +10,6 @@ const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
 const NEWQUESTIONID = "newQuestionID";
-
 const questionsContainer =
   document.getElementsByClassName("questionsContainer")[0];
 const reportBtn = document.getElementsByClassName("reportBtn")[0];
@@ -124,6 +123,12 @@ if (data && data.questions) {
 } else {
   questions = defaultQuestions;
 }
+
+// add a function to check if user is logged in if there is user, check if there is a record for today, if not, get the previous day's record and strip the questions and then process the data, in the meantime roll the loading animation.
+
+//also think about the data handling when you are ofline and how shuld you manage the data between other devices writing offline data and them how would you merge the final data, research about this.
+
+
 let editQuestions = window.structuredClone(questions);
 let questionsDom = [];
 let sliders = document.getElementsByClassName("emojiSlider");
