@@ -1,17 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 :root {
   --background: #222222;
-  --backgroundTransparent:#22222280;
+  --backgroundTransparent: #22222280;
   --secondaryBackground: #454545c6;
-  --secondaryBackgroundTransparent:#45454572;
+  --secondaryBackgroundTransparent: #45454572;
   --lightBorder: #faf0e61e;
   --primary: #ff6000;
-  --primaryTransparent:#ff6200b8;
+  --primaryTransparent: #ff6200b8;
   --secondary: #ffa559;
-  --secondaryTransparent:#ffa55972;
-  --textColor: #ffe6c7;
+  --secondaryTransparent: #ffa55972;
+  --textColor: #fceedd;
   --secondaryText: #ffe6c742;
-  --textInvert: #ffe6c7;
+  --textInvert: var(--textColor);
   --selectedColor: rgb(182, 182, 182);
   --rippleColor: rgba(255, 255, 255, 0.345);
 }
@@ -142,25 +142,23 @@ body {
   background: var(--primary);
   z-index: 9;
   position: absolute;
-  transform: translate(-50%, -50%);
-  animation: transition 0.5s ease-in-out;
+  transform: translate(-50%, -50%) scale(0);
+  height: var(--circleSize);
+  width: var(--circleSize);
+  animation: transition .5s ease-out;
   border-radius: 50%;
 }
 @keyframes transition {
   0% {
-    height: 0px;
-    width: 0px;
   }
   50% {
-    height: var(--circleSize);
-    width: var(--circleSize);
+    transform: translate(-50%, -50%) scale(1);
   }
   70% {
     background: var(--primary);
   }
   100% {
-    height: var(--circleSize);
-    width: var(--circleSize);
+    transform: translate(-50%, -50%) scale(1);
     background: transparent;
   }
 }
@@ -689,7 +687,7 @@ input[type="text"].questionIdInvalid {
   display: flex;
   pointer-events: all;
   opacity: 1;
-  margin: 0 10px;
+  margin: 0 10px 0 0;
   margin-top: -5px;
 }
 input[type="text"].emojiInput {
@@ -765,8 +763,8 @@ input[type="text"].emojiInput {
   height: 100%;
   width: 100%;
   right: 0;
-  opacity: .85;
-  background-color: var(--background)
+  opacity: 0.85;
+  background-color: var(--background);
 }
 @media not all and (hover: none) {
   .yearAndMonth:hover {
@@ -874,7 +872,7 @@ input[type="text"].emojiInput {
     border-radius: 30px;
     padding: 8px 80px;
   }
-  .daysQuote{
+  .daysQuote {
     font-size: 20px;
   }
   .weekDay,
@@ -908,6 +906,9 @@ input[type="text"].emojiInput {
   .report-controlls-right > :nth-child(1):not(.popup) {
     font-size: 16px;
   }
+  .emojiEdit{
+    margin-left: 10px;
+  }
   .loading,
   .lds-ring {
     z-index: 2;
@@ -920,8 +921,8 @@ input[type="text"].emojiInput {
     padding-top: 0;
   }
   .blobContainer {
-  filter: blur(10vh);
-}
+    filter: blur(10vh);
+  }
 }
 @media screen and (max-width: 400px) {
   .weekDay,

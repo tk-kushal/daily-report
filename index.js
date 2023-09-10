@@ -883,11 +883,11 @@ function transtition(e, element, view, cordX, cordY) {
   window.innerHeight > window.innerWidth
     ? document.documentElement.style.setProperty(
         "--circleSize",
-        window.innerHeight * 3 + "px"
+        window.innerHeight * 2.1 + "px"
       )
     : document.documentElement.style.setProperty(
         "--circleSize",
-        window.innerWidth * 3 + "px"
+        window.innerWidth * 2.1 + "px"
       );
   transitionContainer.classList.add("transitionContainer");
   transitionContainer.appendChild(transition);
