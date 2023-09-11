@@ -157,6 +157,10 @@ auth.onAuthStateChanged((user) => {
       console.log(data)
       if(data){
         questions = data.questions
+        localStorage.setItem(
+          "questions",
+          JSON.stringify({ date: dateString, questions: questions })
+        );
         setupReportSection();
       }
     })
