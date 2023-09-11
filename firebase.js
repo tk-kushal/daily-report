@@ -16,15 +16,6 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app)
-let uid = null;
-let journalCollection = null;
-auth.onAuthStateChanged((user)=>{
-  if(user){
-    uid = auth.currentUser.uid;
-    journalCollection = collection(db,uid);
-
-  }
-})
 export function signIn(){
   signInWithPopup(auth, provider)
   .then((result) => {
@@ -46,17 +37,7 @@ export function signIn(){
     // ...
   });
 }
-export function getdocuments(){
-  if(journalCollection){
-    getDocs(journalCollection).then(snapshot=>snapshot.docs.map(doc=>console.log(doc.data())))
-  }
-}
-export function createDocument(key,data){
-  if(uid){
-    let docRef = doc(db,uid,key);
-    setDoc(docRef,data).then().catch(e=>console.log(e))
-  }
-}
+
 export function signOut(){
   auth.signOut();
 }

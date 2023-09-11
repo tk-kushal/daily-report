@@ -1,11 +1,12 @@
 import { calanderSwipe, updateButtons } from "./buttonClick.js";
+import { auth, signIn, signOut, db } from "./firebase.js";
 import {
-  auth,
-  createDocument,
-  getdocuments,
-  signIn,
-  signOut,
-} from "./firebase.js";
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  setDoc,
+} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 const REPORT = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
@@ -49,6 +50,9 @@ const navbar = document.getElementsByClassName("right")[0];
 
 let loading = false;
 let editing = false;
+let currentUser = null;
+let uid = null;
+let usersCollection = null;
 let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
@@ -118,16 +122,57 @@ if (data && data.questions) {
     for (let i = 0; i < questionKeys.length; i++) {
       delete questions[questionKeys[i]].value;
     }
-    console.log(questions);
   }
 } else {
   questions = defaultQuestions;
 }
+auth.onAuthStateChanged((user) => {
+  currentUser = user;
+  if (currentUser) {
+    loadingStart();
+    loginBtn.style.display = "flex";
+    loginBtn.innerText = "Logout";
+    profilePicture.src = currentUser.photoURL;
+    profilePicture.style.display = "flex";
+    profileIcon.style.display = "none";
+
+    uid = currentUser.uid;
+    usersCollection = collection(db, uid);
+
+    getDoc(doc(db, uid, "structure")).then((snapshot) => {
+      let questionsStructure = snapshot.data();
+      if (questionsStructure) {
+        questions = questionsStructure;
+      } else {
+        questionsStructure = window.structuredClone(questions);
+        let questionKeys = Object.keys(questionsStructure);
+        for (let i = 0; i < questionKeys.length; i++) {
+          delete questionsStructure[questionKeys[i]].value;
+        }
+        createDocument("structure", questionsStructure);
+      }
+    });
+    getDoc(doc(db, uid, dateString)).then(snapshot=>{
+      let data = snapshot.data();
+      console.log(data)
+      if(data){
+        questions = data.questions
+        setupReportSection();
+      }
+    })
+    getdocuments();
+    loadingStop()
+  } else {
+    loginBtn.style.display = "flex";
+    loginBtn.innerText = "Login";
+    profilePicture.style.display = "none";
+    profileIcon.style.display = "flex";
+  }
+});
 
 // add a function to check if user is logged in if there is user, check if there is a record for today, if not, get the previous day's record and strip the questions and then process the data, in the meantime roll the loading animation.
 
 //also think about the data handling when you are ofline and how shuld you manage the data between other devices writing offline data and them how would you merge the final data, research about this.
-
 
 let editQuestions = window.structuredClone(questions);
 let questionsDom = [];
@@ -143,24 +188,6 @@ let updateTimeout = 500;
 let dataChanged = false;
 let initialize = true;
 let hold = false; //for Dragging in Slider
-let currentUser = null;
-
-auth.onAuthStateChanged((user) => {
-  currentUser = user;
-  if (currentUser) {
-    loginBtn.style.display = "flex";
-    loginBtn.innerText = "Logout";
-    profilePicture.src = currentUser.photoURL;
-    profilePicture.style.display = "flex";
-    profileIcon.style.display = "none";
-    getdocuments();
-  } else {
-    loginBtn.style.display = "flex";
-    loginBtn.innerText = "Login";
-    profilePicture.style.display = "none";
-    profileIcon.style.display = "flex";
-  }
-});
 
 //Setting initial view ot Report
 handleUrlChangeEvent();
@@ -191,6 +218,14 @@ setInterval(() => {
     createDocument(dateString, Data);
   }
 }, 50);
+function saveQuestionsData() {
+  let questionsStructure = window.structuredClone(editQuestions);
+  let questionKeys = Object.keys(questionsStructure);
+  for (let i = 0; i < questionKeys.length; i++) {
+    delete questionsStructure[questionKeys[i]].value;
+  }
+  createDocument("structure", questionsStructure);
+}
 function windowNavigation(view, subpath) {
   window.history.pushState({}, view, window.location.origin + view + subpath);
 }
@@ -581,6 +616,7 @@ function changeQuestionValue(id, value) {
 }
 function questionsEdited() {
   loadingStart();
+  saveQuestionsData();
   updateTimeout = 500;
   dataChanged = true;
 }
@@ -1123,7 +1159,6 @@ function saveQuestions() {
   setupReportSection();
 }
 function loadingStart() {
-  console.log("start");
   loading = true;
   loadingElement.classList.remove("loading-hidden");
 }
@@ -1146,6 +1181,21 @@ function handleContentChange() {
     toggleTransparentBackground();
   });
   observer.observe(document.body, { childList: true, subtree: true });
+}
+function getdocuments() {
+  if (usersCollection) {
+    getDocs(usersCollection).then((snapshot) =>
+      snapshot.docs.map((doc) => {})
+    );
+  }
+}
+function createDocument(key, data) {
+  if (uid) {
+    let docRef = doc(db, uid, key);
+    setDoc(docRef, data)
+      .then()
+      .catch((e) => console.log(e));
+  }
 }
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
@@ -1286,7 +1336,6 @@ reportEditDoneBtn.addEventListener("click", () => {
       delete questionsDom[NEWQUESTIONID];
       delete editQuestions[NEWQUESTIONID];
       delete questions[NEWQUESTIONID];
-      console.log(questions);
       saveQuestions();
     } else {
       saveQuestions();

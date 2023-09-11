@@ -736,8 +736,9 @@ input[type="text"].emojiInput {
   min-width: 300px;
   min-height: 300px;
   border-radius: 50%;
+  transform: scale(0);
   background-color: white;
-  animation: blobs 2s ease;
+  animation: blobs 4s ease forwards;
 }
 .blob1 {
   background-color: var(--primary);
