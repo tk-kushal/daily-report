@@ -7,7 +7,7 @@ import {
   doc,
   setDoc,
 } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-const REPORT = "/",
+const JOURNAL = "/",
   CALANDER = "/calander",
   PROFILE = "/profile";
 const NEWQUESTIONID = "newQuestionID";
@@ -53,6 +53,7 @@ let editing = false;
 let currentUser = null;
 let uid = null;
 let usersCollection = null;
+let allJournals = {};
 let overallDate = new Date();
 let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
@@ -154,7 +155,6 @@ auth.onAuthStateChanged((user) => {
     });
     getDoc(doc(db, uid, dateString)).then(snapshot=>{
       let data = snapshot.data();
-      console.log(data)
       if(data){
         questions = data.questions
         localStorage.setItem(
@@ -187,7 +187,7 @@ let currentYear = todaysYear;
 let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
-let currentView = REPORT;
+let currentView = JOURNAL;
 let updateTimeout = 500;
 let dataChanged = false;
 let initialize = true;
@@ -627,17 +627,17 @@ function questionsEdited() {
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
   //so that the transition does not occur when reloading the page or loading another page besies the report page directly form url
-  if (initialize && (path == REPORT || path == CALANDER || path == PROFILE)) {
+  if (initialize && (path == JOURNAL || path == CALANDER || path == PROFILE)) {
     currentView = path;
     initialize = false;
   }
 
   if (currentView !== path) {
-    if (path === REPORT) {
+    if (path === JOURNAL) {
       transtition(
         null,
         reportBtn,
-        REPORT,
+        JOURNAL,
         reportBtn.getBoundingClientRect().left,
         reportBtn.getBoundingClientRect().top
       );
@@ -661,7 +661,7 @@ function handleUrlChangeEvent() {
       transtition(
         null,
         reportBtn,
-        REPORT,
+        JOURNAL,
         reportBtn.getBoundingClientRect().left,
         reportBtn.getBoundingClientRect().top
       );
@@ -712,7 +712,7 @@ function updateReportSection() {
 }
 function updateView(view) {
   currentView = view;
-  if (currentView === REPORT) {
+  if (currentView === JOURNAL) {
     handleContentChange();
     reportDate.innerText = todaysDate;
     reportMonth.innerText = getMonth(todaysMonth);
@@ -769,6 +769,8 @@ function populateCalander(month, year) {
       selectedDate == i && month == selectedMonth && year == selectedYear
         ? "selectedDay"
         : ""
+    } ${
+        allJournals[i+":"+month+":"+year]?"trackedDay":""
     }">${i}</div>
     `;
   }
@@ -923,11 +925,11 @@ function transtition(e, element, view, cordX, cordY) {
   window.innerHeight > window.innerWidth
     ? document.documentElement.style.setProperty(
         "--circleSize",
-        window.innerHeight * 2.1 + "px"
+        window.innerHeight * 2.8 + "px"
       )
     : document.documentElement.style.setProperty(
         "--circleSize",
-        window.innerWidth * 2.1 + "px"
+        window.innerWidth * 2.8 + "px"
       );
   transitionContainer.classList.add("transitionContainer");
   transitionContainer.appendChild(transition);
@@ -1188,8 +1190,16 @@ function handleContentChange() {
 }
 function getdocuments() {
   if (usersCollection) {
-    getDocs(usersCollection).then((snapshot) =>
-      snapshot.docs.map((doc) => {})
+    getDocs(usersCollection).then((snapshot) =>{
+      snapshot.docs.map((doc) => {
+        let data = doc.data()
+        if(data.date){
+          allJournals[doc.id] = data
+          
+        }
+      })
+      updateCalander();
+    }
     );
   }
 }
@@ -1250,8 +1260,8 @@ loginBtn.addEventListener("click", () => {
   }
 });
 reportBtn.addEventListener("click", (e) => {
-  windowNavigation(REPORT, "");
-  transtition(e, reportBtn, REPORT);
+  windowNavigation(JOURNAL, "");
+  transtition(e, reportBtn, JOURNAL);
 });
 calanderBtn.addEventListener("click", (e) => {
   if (!editing) {
@@ -1374,7 +1384,7 @@ addQuestionPopup
     }, 100);
   });
 addQuestionPopup
-  .getElementsByClassName("slider")[0]
+  .getElementsByClassName("sliderOption")[0]
   .addEventListener("click", () => {
     setTimeout(() => {
       addQuestion("slider");

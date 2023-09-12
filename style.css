@@ -131,6 +131,7 @@ body {
 
 .userBtn > img {
   width: 48px;
+  height: 48px;
 }
 .transitionContainer {
   width: 100%;
@@ -145,7 +146,7 @@ body {
   transform: translate(-50%, -50%) scale(0);
   height: var(--circleSize);
   width: var(--circleSize);
-  animation: transition .5s ease-out;
+  animation: transition 0.5s ease-out;
   border-radius: 50%;
 }
 @keyframes transition {
@@ -332,9 +333,11 @@ textarea {
   transition: 500ms;
   transition-property: background, border-radius, color, border;
 }
-
+.trackedDay{
+  background-color: var(--secondaryTransparent);
+}
 .weekDay {
-  background-color: var(--secondaryBackground);
+  background-color: transparent;
   margin-top: 10px;
 }
 .otherMonthDay {
@@ -472,27 +475,29 @@ textarea {
   z-index: 4;
 }
 .yes-no-button {
+  font-size: 18px;
   display: flex;
   align-items: center;
-  background-color: var(--secondaryTransparent);
+  background-color: var(--secondaryBackgroundTransparent);
   width: fit-content;
   padding: 3px;
   border-radius: 30px;
   user-select: none;
   margin: 10px 0;
+  border: 1px solid var(--lightBorder);
 }
 .yes-no-button > * {
   padding: 5px;
   width: 40px;
   display: flex;
   justify-content: center;
-  color: var(--background);
+  color: var(--textColor);
   z-index: 2;
   cursor: pointer;
 }
 .indicator {
   width: 50px;
-  height: 34px;
+  height: 32px;
   background-color: var(--primaryTransparent);
   position: absolute;
   padding: 0;
@@ -738,7 +743,7 @@ input[type="text"].emojiInput {
   border-radius: 50%;
   transform: scale(0);
   background-color: white;
-  animation: blobs 4s ease forwards;
+  animation: blobs 3s ease forwards;
 }
 .blob1 {
   background-color: var(--primary);
@@ -787,7 +792,7 @@ input[type="text"].emojiInput {
   .day:hover {
     cursor: pointer;
     border-radius: 20%;
-    background-color: var(--secondary);
+    background-color: var(--secondaryTransparent);
   }
   .completedDay:hover {
     background-color: var(--primary);
@@ -907,7 +912,7 @@ input[type="text"].emojiInput {
   .report-controlls-right > :nth-child(1):not(.popup) {
     font-size: 16px;
   }
-  .emojiEdit{
+  .emojiEdit {
     margin-left: 10px;
   }
   .loading,
