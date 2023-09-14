@@ -190,7 +190,8 @@ body {
 }
 .questionsContainer,
 .calanderContainer,
-.profileContainer {
+.profileContainer,
+.selectedDayReport {
   width: 100%;
   font-weight: 500;
   background-color: var(--secondaryBackgroundTransparent);
@@ -203,6 +204,19 @@ body {
   transition: 300ms;
   flex-direction: column;
 }
+.selectedDayReport{
+  margin-top: 20px;
+}
+.selectedDayDateContainer{
+  display: flex;
+  justify-content: center;
+}
+.selectedDayDate{
+  font-size: 25px;
+  font-weight: bold;
+  margin: 10px;
+}
+
 .slider,
 .emojiEdit {
   position: relative;
@@ -772,6 +786,16 @@ input[type="text"].emojiInput {
   opacity: 0.85;
   background-color: var(--background);
 }
+.selectedDayQuestionsContainer{
+  margin-top: 10px;
+}
+.selectedDayReport{
+  font-size: 20px;
+}
+.selectedQuestionLable{
+  opacity: 0.6;
+  font-size: 18px;
+}
 @media not all and (hover: none) {
   .yearAndMonth:hover {
     cursor: pointer;
@@ -902,7 +926,8 @@ input[type="text"].emojiInput {
     padding: 5px;
   }
   .yearAndMonth > *,
-  .report-date > * {
+  .report-date > * ,
+  .selectedDayDate{
     font-size: 23px;
   }
   .left {
@@ -929,6 +954,13 @@ input[type="text"].emojiInput {
   .blobContainer {
     filter: blur(10vh);
   }
+  .selectedDayReport{
+    font-size: 20px;
+  }
+  .selectedQuestionLable{
+    opacity: 0.8;
+    font-size: 18px;
+  }
 }
 @media screen and (max-width: 400px) {
   .weekDay,
@@ -947,12 +979,20 @@ input[type="text"].emojiInput {
   .calanderContainer {
     padding: 10px;
   }
-  .yearAndMonth > * {
+  .yearAndMonth > * ,
+  .selectedDayDate{
     font-size: 20px;
   }
   .calanderButtons > * {
     transform: scale(0.8);
     margin: 2px;
+  }
+  .selectedDayReport{
+    font-size: 16px;
+  }
+  .selectedQuestionLable{
+    opacity: 0.8;
+    font-size: 15px;
   }
 }
 

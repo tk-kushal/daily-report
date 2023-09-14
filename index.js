@@ -47,6 +47,7 @@ const warningCancle = document.getElementsByClassName("warning-cancle")[0];
 const warningDone = document.getElementsByClassName("warning-done")[0];
 const loadingElement = document.getElementsByClassName("loading")[0];
 const navbar = document.getElementsByClassName("right")[0];
+const daysContainer = document.getElementsByClassName("days")[0];
 
 let loading = false;
 let editing = false;
@@ -153,19 +154,19 @@ auth.onAuthStateChanged((user) => {
         createDocument("structure", questionsStructure);
       }
     });
-    getDoc(doc(db, uid, dateString)).then(snapshot=>{
+    getDoc(doc(db, uid, dateString)).then((snapshot) => {
       let data = snapshot.data();
-      if(data){
-        questions = data.questions
+      if (data) {
+        questions = data.questions;
         localStorage.setItem(
           "questions",
           JSON.stringify({ date: dateString, questions: questions })
         );
         setupReportSection();
       }
-    })
+    });
     getdocuments();
-    loadingStop()
+    loadingStop();
   } else {
     loginBtn.style.display = "flex";
     loginBtn.innerText = "Login";
@@ -187,6 +188,7 @@ let currentYear = todaysYear;
 let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
+let selectedDayString = todaysDate + ":" + todaysMonth + ":" + todaysYear;
 let currentView = JOURNAL;
 let updateTimeout = 500;
 let dataChanged = false;
@@ -751,7 +753,7 @@ function updateCalander() {
   populateCalander(currentMonth, currentYear);
 }
 function populateCalander(month, year) {
-  const daysContainer = document.getElementsByClassName("days")[0];
+  daysContainer.innerHTML = "";
   let daysDom = "";
   let leapYear = isLeapYear(year);
   let prevMonthDays = getDaysInMonth(leapYear, month - 1);
@@ -759,27 +761,89 @@ function populateCalander(month, year) {
   let firstDateDay = getDateDay(1, month, year);
   let lastDateDay = getDateDay(thisMonthDays, month, year);
   for (let i = prevMonthDays - firstDateDay + 1; i <= prevMonthDays; i++) {
-    daysDom += `
-    <div class="day otherMonthDay">${i}</div>
+    let dayContainer = document.createElement("div");
+    daysDom = `
+    <div class="day otherMonthDay ${
+      allJournals[i + ":" + month + ":" + year] ? "trackedDay" : ""
+    }" id="${i + ":" + month + ":" + year}">${i}</div>
     `;
+    dayContainer.innerHTML = daysDom;
+    daysContainer.appendChild(dayContainer);
   }
   for (let i = 1; i <= thisMonthDays; i++) {
-    daysDom += `
+    let dayContainer = document.createElement("div");
+    daysDom = `
     <div class="day ${
       selectedDate == i && month == selectedMonth && year == selectedYear
         ? "selectedDay"
         : ""
-    } ${
-        allJournals[i+":"+month+":"+year]?"trackedDay":""
-    }">${i}</div>
+    } ${allJournals[i + ":" + month + ":" + year] ? "trackedDay" : ""}"
+    id="${i + ":" + month + ":" + year}">${i}</div>
     `;
+    dayContainer.innerHTML = daysDom;
+    daysContainer.appendChild(dayContainer);
+    dayContainer.children[0].addEventListener("click", () => {
+      daySelected(dayContainer.children[0].id, i, month, year);
+    });
   }
   for (let i = 1; i <= 6 - lastDateDay; i++) {
-    daysDom += `
-    <div class="day otherMonthDay">${i}</div>
+    let dayContainer = document.createElement("div");
+    daysDom = `
+    <div class="day otherMonthDay ${
+      allJournals[i + ":" + month + ":" + year] ? "trackedDay" : ""
+    }"
+  id="${i + ":" + month + ":" + year}">${i}</div>
     `;
+    dayContainer.innerHTML = daysDom;
+    daysContainer.appendChild(dayContainer);
   }
-  daysContainer.innerHTML = daysDom;
+  refreshSelectedDayInfo();
+}
+function daySelected(id, date, month, year) {
+  selectedDayString = selectedDate + ":" + selectedMonth + ":" + selectedYear;
+  let prevSelectedDay = document.getElementById(selectedDayString);
+  let clickedDay = document.getElementById(id);
+  selectedDate = date;
+  selectedMonth = month;
+  selectedYear = year;
+  selectedDayString = selectedDate + ":" + selectedMonth + ":" + selectedYear;
+
+  if (prevSelectedDay) prevSelectedDay.classList.remove("selectedDay");
+  clickedDay.classList.add("selectedDay");
+
+  refreshSelectedDayInfo();
+}
+function refreshSelectedDayInfo() {
+  const date = document.getElementsByClassName("selectedDayDate")[0];
+  const questionsContainer = document.getElementsByClassName(
+    "selectedDayQuestionsContainer"
+  )[0];
+  let questionsDom = "";
+  date.innerHTML =
+    selectedDate + " " + getMonth(selectedMonth) + " " + selectedYear;
+  let selectedDayQuestionKeys = null;
+  console.log(questionsContainer);
+  try {
+    selectedDayQuestionKeys = Object.keys(
+      allJournals[selectedDayString].questions
+    );
+    for (let i = 0; i < selectedDayQuestionKeys.length; i++) {
+      let question =
+        allJournals[selectedDayString].questions[selectedDayQuestionKeys[i]];
+      console.log(question);
+      if (question.value != undefined)
+        questionsDom += `
+      <div class="selectedDayQuestion">
+      <div class="selectedQuestionLable">${question.lable}</div>
+        <div class="selectedQuestionAnswer">${
+          question.elmotes ? question.emotes[question.value] : question.value
+        }</div>
+      </div>
+        
+      `;
+    }
+    questionsContainer.innerHTML = questionsDom;
+  } catch (error) {}
 }
 function isLeapYear(year) {
   let leapYear = false;
@@ -1190,17 +1254,15 @@ function handleContentChange() {
 }
 function getdocuments() {
   if (usersCollection) {
-    getDocs(usersCollection).then((snapshot) =>{
+    getDocs(usersCollection).then((snapshot) => {
       snapshot.docs.map((doc) => {
-        let data = doc.data()
-        if(data.date){
-          allJournals[doc.id] = data
-          
+        let data = doc.data();
+        if (data.date) {
+          allJournals[doc.id] = data;
         }
-      })
+      });
       updateCalander();
-    }
-    );
+    });
   }
 }
 function createDocument(key, data) {
