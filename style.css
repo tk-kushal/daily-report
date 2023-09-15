@@ -287,7 +287,7 @@ body {
   padding-bottom: 10px;
 }
 .question {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 #title {
   margin-top: 0;
@@ -788,6 +788,8 @@ input[type="text"].emojiInput {
 }
 .selectedDayQuestionsContainer{
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
 .selectedDayReport{
   font-size: 20px;
@@ -795,6 +797,9 @@ input[type="text"].emojiInput {
 .selectedQuestionLable{
   opacity: 0.6;
   font-size: 18px;
+}
+.selectedQuestionAnswer{
+  white-space: pre-wrap;
 }
 @media not all and (hover: none) {
   .yearAndMonth:hover {

@@ -822,7 +822,6 @@ function refreshSelectedDayInfo() {
   date.innerHTML =
     selectedDate + " " + getMonth(selectedMonth) + " " + selectedYear;
   let selectedDayQuestionKeys = null;
-  console.log(questionsContainer);
   try {
     selectedDayQuestionKeys = Object.keys(
       allJournals[selectedDayString].questions
@@ -830,11 +829,11 @@ function refreshSelectedDayInfo() {
     for (let i = 0; i < selectedDayQuestionKeys.length; i++) {
       let question =
         allJournals[selectedDayString].questions[selectedDayQuestionKeys[i]];
-      console.log(question);
+        console.log(question)
       if (question.value != undefined)
         questionsDom += `
-      <div class="selectedDayQuestion">
-      <div class="selectedQuestionLable">${question.lable}</div>
+      <div class="selectedDayQuestion" style="order:${question.order}">
+        <div class="selectedQuestionLable">${question.lable}</div>
         <div class="selectedQuestionAnswer">${
           question.elmotes ? question.emotes[question.value] : question.value
         }</div>
@@ -1217,12 +1216,15 @@ function scrollTo(element) {
   requestAnimationFrame(animateScroll);
 }
 function saveQuestions() {
+  editing = false;
   reportEditControlls.classList.add("hidden");
   reportEditBtn.parentElement.classList.remove("hidden");
   hidePopup();
   if (JSON.stringify(editQuestions) != JSON.stringify(questions)) {
     questionsEdited();
   }
+  console.log(questions)
+  console.log(editQuestions)
   questions = window.structuredClone(editQuestions);
   reOrderQuestions(questions);
   hideQuestionsEditControlls();
@@ -1374,6 +1376,7 @@ resetCalanderButton.addEventListener("click", () => {
 reportEditBtn.addEventListener("click", () => {
   setTimeout(() => {
     editing = true;
+    editQuestions = window.structuredClone(questions)
     reportEditControlls.classList.remove("hidden");
     reportEditBtn.parentElement.classList.add("hidden");
     showQuestionsEditControlls();
