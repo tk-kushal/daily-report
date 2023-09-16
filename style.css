@@ -205,7 +205,7 @@ body {
   flex-direction: column;
 }
 .selectedDayReport{
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .selectedDayDateContainer{
   display: flex;
@@ -216,7 +216,6 @@ body {
   font-weight: bold;
   margin: 10px;
 }
-
 .slider,
 .emojiEdit {
   position: relative;
@@ -417,7 +416,6 @@ textarea {
   border-radius: 7px;
   transition: 500ms;
 }
-
 .line {
   width: 2px;
   padding: 0;
@@ -431,7 +429,6 @@ textarea {
   margin-top: 5px;
   padding: 0;
 }
-
 .profileContainer {
   display: flex;
   justify-content: center;
@@ -448,7 +445,6 @@ textarea {
   width: 100%;
   box-sizing: border-box;
 }
-
 .report-date {
   display: flex;
   font-size: 20px;
@@ -478,7 +474,6 @@ textarea {
   padding-right: 15px;
   transition: 500ms;
 }
-
 .report-controlls-right > *,
 .report-controlls-right {
   position: relative;
@@ -526,7 +521,6 @@ textarea {
 .selectedYesNoBtn {
   cursor: default;
 }
-
 .selectedDay {
   position: relative;
   transition: 500ms;
@@ -800,6 +794,13 @@ input[type="text"].emojiInput {
 }
 .selectedQuestionAnswer{
   white-space: pre-wrap;
+}
+.selectedDayQuestion{
+  margin-top: 15px;
+}
+.blank{
+  width: 100%;
+  text-align: center;
 }
 @media not all and (hover: none) {
   .yearAndMonth:hover {

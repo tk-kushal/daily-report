@@ -174,11 +174,6 @@ auth.onAuthStateChanged((user) => {
     profileIcon.style.display = "flex";
   }
 });
-
-// add a function to check if user is logged in if there is user, check if there is a record for today, if not, get the previous day's record and strip the questions and then process the data, in the meantime roll the loading animation.
-
-//also think about the data handling when you are ofline and how shuld you manage the data between other devices writing offline data and them how would you merge the final data, research about this.
-
 let editQuestions = window.structuredClone(questions);
 let questionsDom = [];
 let sliders = document.getElementsByClassName("emojiSlider");
@@ -764,8 +759,28 @@ function populateCalander(month, year) {
     let dayContainer = document.createElement("div");
     daysDom = `
     <div class="day otherMonthDay ${
-      allJournals[i + ":" + month + ":" + year] ? "trackedDay" : ""
-    }" id="${i + ":" + month + ":" + year}">${i}</div>
+      selectedDate == i &&
+      getMonthYearNumber(month - 1, currentYear).month == selectedMonth &&
+      getMonthYearNumber(month - 1, currentYear).year == selectedYear
+        ? "selectedDay"
+        : ""
+    } ${
+      allJournals[
+        i +
+          ":" +
+          getMonthYearNumber(month - 1, selectedYear).month +
+          ":" +
+          getMonthYearNumber(month - 1, currentYear).year
+      ]
+        ? "trackedDay"
+        : ""
+    }" id="${
+      i +
+      ":" +
+      getMonthYearNumber(month - 1, currentYear).month +
+      ":" +
+      getMonthYearNumber(month - 1, currentYear).year
+    }">${i}</div>
     `;
     dayContainer.innerHTML = daysDom;
     daysContainer.appendChild(dayContainer);
@@ -790,9 +805,29 @@ function populateCalander(month, year) {
     let dayContainer = document.createElement("div");
     daysDom = `
     <div class="day otherMonthDay ${
-      allJournals[i + ":" + month + ":" + year] ? "trackedDay" : ""
+      selectedDate == i &&
+      getMonthYearNumber(month + 1, currentYear).month == selectedMonth &&
+      getMonthYearNumber(month + 1, currentYear).year == selectedYear
+        ? "selectedDay"
+        : ""
+    } ${
+      allJournals[
+        i +
+          ":" +
+          getMonthYearNumber(month + 1, currentYear).month +
+          ":" +
+          getMonthYearNumber(month + 1, currentYear).year
+      ]
+        ? "trackedDay"
+        : ""
     }"
-  id="${i + ":" + month + ":" + year}">${i}</div>
+  id="${
+    i +
+    ":" +
+    getMonthYearNumber(month + 1, currentYear).month +
+    ":" +
+    getMonthYearNumber(month + 1, currentYear).year
+  }">${i}</div>
     `;
     dayContainer.innerHTML = daysDom;
     daysContainer.appendChild(dayContainer);
@@ -822,27 +857,40 @@ function refreshSelectedDayInfo() {
   date.innerHTML =
     selectedDate + " " + getMonth(selectedMonth) + " " + selectedYear;
   let selectedDayQuestionKeys = null;
-  try {
-    selectedDayQuestionKeys = Object.keys(
-      allJournals[selectedDayString].questions
-    );
-    for (let i = 0; i < selectedDayQuestionKeys.length; i++) {
-      let question =
-        allJournals[selectedDayString].questions[selectedDayQuestionKeys[i]];
-        console.log(question)
-      if (question.value != undefined)
-        questionsDom += `
+  if (allJournals[selectedDayString]) {
+    try {
+      selectedDayQuestionKeys = Object.keys(
+        allJournals[selectedDayString].questions
+      );
+      for (let i = 0; i < selectedDayQuestionKeys.length; i++) {
+        let question =
+          allJournals[selectedDayString].questions[selectedDayQuestionKeys[i]];
+        let value = "";
+        if (question.emotes) {
+          value = question.emotes[question.value];
+        } else if (question.value == true || question.value == false) {
+          if(question.value == true)
+          value = 'Yes'
+          else value = "No"
+        }else{
+          value = question.value;
+        }
+        if (question.value != undefined)
+          questionsDom += `
       <div class="selectedDayQuestion" style="order:${question.order}">
         <div class="selectedQuestionLable">${question.lable}</div>
         <div class="selectedQuestionAnswer">${
-          question.elmotes ? question.emotes[question.value] : question.value
+          value
         }</div>
       </div>
         
       `;
-    }
-    questionsContainer.innerHTML = questionsDom;
-  } catch (error) {}
+      }
+      questionsContainer.innerHTML = questionsDom;
+    } catch (error) {}
+  } else {
+    questionsContainer.innerHTML = "";
+  }
 }
 function isLeapYear(year) {
   let leapYear = false;
@@ -894,9 +942,19 @@ function getDateDay(date, month, year) {
   day = (daysOffset + YearsFirstDay) % 7;
   return day;
 }
+function getMonthYearNumber(month, year) {
+  if (month < 0) {
+    month = 12 + month;
+    year--;
+  } else if (month > 11) {
+    month = month - 10;
+    year++;
+  }
+  return { month, year };
+}
 function getDaysInMonth(leapYear, month) {
   if (month < 0) {
-    month == 11 + month;
+    month = 12 + month;
   } else if (month > 11) {
     month = month - 10;
   }
@@ -1223,8 +1281,8 @@ function saveQuestions() {
   if (JSON.stringify(editQuestions) != JSON.stringify(questions)) {
     questionsEdited();
   }
-  console.log(questions)
-  console.log(editQuestions)
+  console.log(questions);
+  console.log(editQuestions);
   questions = window.structuredClone(editQuestions);
   reOrderQuestions(questions);
   hideQuestionsEditControlls();
@@ -1376,7 +1434,7 @@ resetCalanderButton.addEventListener("click", () => {
 reportEditBtn.addEventListener("click", () => {
   setTimeout(() => {
     editing = true;
-    editQuestions = window.structuredClone(questions)
+    editQuestions = window.structuredClone(questions);
     reportEditControlls.classList.remove("hidden");
     reportEditBtn.parentElement.classList.add("hidden");
     showQuestionsEditControlls();
