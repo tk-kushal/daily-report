@@ -432,18 +432,28 @@ textarea {
 .profileContainer {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .loginBtn {
   color: var(--textColor);
-  padding: 10px 20px;
+  padding: 10px 40px;
   border: 2px solid var(--primary);
   font-size: 22px;
   border-radius: 30px;
   transition: 500ms;
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: min-content;
   box-sizing: border-box;
+}
+.themeContainer{
+  margin: 10px 0;
+  padding-bottom: 10px;
+  width: 100%;
+  border-bottom: 1px solid var(--background);
+}
+.theme-title{
+  font-size: 23px;
 }
 .report-date {
   display: flex;
