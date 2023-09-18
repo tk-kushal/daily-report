@@ -216,6 +216,7 @@ setInterval(() => {
       },
       questions: questions,
     };
+    allJournals[dateString] = Data;
     createDocument(dateString, Data);
   }
 }, 50);
