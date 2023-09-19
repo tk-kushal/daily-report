@@ -60,6 +60,7 @@ let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
 let todaysYear = overallDate.getFullYear();
 let dateString = todaysDate + ":" + todaysMonth + ":" + todaysYear;
+let monthString = todaysMonth+":"+todaysYear;
 let defaultQuestions = {
   title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
   exercise: {
@@ -128,10 +129,10 @@ if (data && data.questions) {
 } else {
   questions = defaultQuestions;
 }
+loadingStart()
 auth.onAuthStateChanged((user) => {
   currentUser = user;
   if (currentUser) {
-    loadingStart();
     loginBtn.style.display = "flex";
     loginBtn.innerText = "Logout";
     profilePicture.src = currentUser.photoURL;
@@ -154,8 +155,9 @@ auth.onAuthStateChanged((user) => {
         createDocument("structure", questionsStructure);
       }
     });
-    getDoc(doc(db, uid, dateString)).then((snapshot) => {
-      let data = snapshot.data();
+    getDoc(doc(db, uid, monthString)).then((snapshot) => {
+      let allJournals = snapshot.data();
+      let data = allJournals[dateString]
       if (data) {
         questions = data.questions;
         localStorage.setItem(
@@ -168,6 +170,7 @@ auth.onAuthStateChanged((user) => {
     getdocuments();
     loadingStop();
   } else {
+    loadingStop();
     loginBtn.style.display = "flex";
     loginBtn.innerText = "Login";
     profilePicture.style.display = "none";
@@ -194,7 +197,6 @@ let hold = false; //for Dragging in Slider
 handleUrlChangeEvent();
 window.onpopstate = () => handleUrlChangeEvent();
 //Updating the URL based on current View
-
 setupReportSection();
 setInterval(() => {
   //this will update the data to the server if certain time passed after an input
@@ -217,10 +219,11 @@ setInterval(() => {
       questions: questions,
     };
     allJournals[dateString] = Data;
-    createDocument(dateString, Data);
+    createDocument(monthString, allJournals);
   }
 }, 50);
 function saveQuestionsData() {
+  reOrderQuestions(editQuestions);
   let questionsStructure = window.structuredClone(editQuestions);
   let questionKeys = Object.keys(questionsStructure);
   for (let i = 0; i < questionKeys.length; i++) {
@@ -870,19 +873,16 @@ function refreshSelectedDayInfo() {
         if (question.emotes) {
           value = question.emotes[question.value];
         } else if (question.value == true || question.value == false) {
-          if(question.value == true)
-          value = 'Yes'
-          else value = "No"
-        }else{
+          if (question.value == true) value = "Yes";
+          else value = "No";
+        } else {
           value = question.value;
         }
         if (question.value != undefined)
           questionsDom += `
       <div class="selectedDayQuestion" style="order:${question.order}">
         <div class="selectedQuestionLable">${question.lable}</div>
-        <div class="selectedQuestionAnswer">${
-          value
-        }</div>
+        <div class="selectedQuestionAnswer">${value}</div>
       </div>
         
       `;
@@ -1198,7 +1198,8 @@ function addQuestion(type) {
   updateButtons();
 }
 function refreshQuestionStyling() {
-  let questionsKeys = Object.keys(editQuestions);
+  let questionsKeys = Object.keys(questions);
+  console.log(questions)
   for (let i = 0; i < questionsKeys.length; i++) {
     let questionData = editQuestions[questionsKeys[i]];
     let question = questionsDom[questionsKeys[i]];
@@ -1314,17 +1315,28 @@ function handleContentChange() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 function getdocuments() {
-  if (usersCollection) {
-    getDocs(usersCollection).then((snapshot) => {
-      snapshot.docs.map((doc) => {
-        let data = doc.data();
-        if (data.date) {
-          allJournals[doc.id] = data;
-        }
-      });
+  getDoc(doc(db,uid,monthString)).then((snapshot)=>{
+    data = snapshot.data()
+    if(data){
+      allJournals = data;
       updateCalander();
-    });
-  }
+      loadingStop()
+    }
+    else{
+      getDocs(usersCollection).then((snapshot) => {
+        snapshot.docs.map((doc) => {
+          let data = doc.data();
+          if (data.date) {
+            allJournals[doc.id] = data;
+          }
+        });
+        let docRef = doc(db,uid,monthString)
+        setDoc(docRef,allJournals).then().catch();
+        updateCalander();
+        loadingStop()
+      });
+    }
+  }).catch(e=>console.log(e))
 }
 function createDocument(key, data) {
   if (uid) {
