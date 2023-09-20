@@ -718,7 +718,7 @@ function updateView(view) {
     reportDate.innerText = todaysDate;
     reportMonth.innerText = getMonth(todaysMonth);
     reportYear.innerText = todaysYear;
-    title.innerText = "Report";
+    title.innerText = "Journal";
     reportBtn.classList.add("selected");
     calanderBtn.classList.remove("selected");
     userBtn.classList.remove("selected");
