@@ -451,9 +451,45 @@ textarea {
   padding-bottom: 10px;
   width: 100%;
   border-bottom: 1px solid var(--background);
+  display: flex;
+  align-items: center;
 }
 .theme-title{
   font-size: 23px;
+  padding-right: 10px;
+}
+.theme-circle{
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background: white;
+  margin: 10px;
+  border-radius: 50%;
+  transition: 100ms ease-in-out;
+}
+.theme-circle:hover{
+  cursor: pointer;
+  transform: scale(1.1);
+}
+.theme1{
+  background-color: orangered;
+}
+.theme2{
+  background-color: blue;
+}
+.theme3{
+  background-color: purple;
+}
+.themeSelected::before{
+  content: '';
+  position: absolute;
+  box-sizing: border-box;
+  width: 125%;
+  height: 125%;
+  border-radius: 50%;
+  top: -12%;
+  left: -12%;
+  border: 2px solid white;
 }
 .report-date {
   display: flex;
