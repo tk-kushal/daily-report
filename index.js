@@ -49,6 +49,10 @@ const loadingElement = document.getElementsByClassName("loading")[0];
 const navbar = document.getElementsByClassName("right")[0];
 const daysContainer = document.getElementsByClassName("days")[0];
 
+const theme1Btn = document.getElementsByClassName('theme1')[0]
+const theme2Btn = document.getElementsByClassName('theme2')[0]
+const theme3Btn = document.getElementsByClassName('theme3')[0]
+
 let loading = false;
 let editing = false;
 let currentUser = null;
@@ -1368,6 +1372,24 @@ export function monthChange(direction, ripple = true) {
   }
   updateCalander();
 }
+theme1Btn.addEventListener('click',()=>{
+  theme1Btn.classList.add('themeSelected')
+  theme2Btn.classList.remove('themeSelected')
+  theme3Btn.classList.remove('themeSelected')
+  console.log('clicked on theme')
+})
+theme2Btn.addEventListener('click',()=>{
+  theme1Btn.classList.remove('themeSelected')
+  theme2Btn.classList.add('themeSelected')
+  theme3Btn.classList.remove('themeSelected')
+  console.log('clicked on theme')
+})
+theme3Btn.addEventListener('click',()=>{
+  theme1Btn.classList.remove('themeSelected')
+  theme2Btn.classList.remove('themeSelected')
+  theme3Btn.classList.add('themeSelected')
+  console.log('clicked on theme')
+})
 document.addEventListener("DOMContentLoaded", function () {
   function toggleTranslucentBackground() {
     if (window.scrollY === 0) {
