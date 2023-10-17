@@ -1350,6 +1350,9 @@ function createDocument(key, data) {
       .catch((e) => console.log(e));
   }
 }
+function changeTheme(name){
+  console.log(name)
+}
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
     currentMonth--;
@@ -1376,19 +1379,19 @@ theme1Btn.addEventListener('click',()=>{
   theme1Btn.classList.add('themeSelected')
   theme2Btn.classList.remove('themeSelected')
   theme3Btn.classList.remove('themeSelected')
-  console.log('clicked on theme')
+  changeTheme('theme1')
 })
 theme2Btn.addEventListener('click',()=>{
   theme1Btn.classList.remove('themeSelected')
   theme2Btn.classList.add('themeSelected')
   theme3Btn.classList.remove('themeSelected')
-  console.log('clicked on theme')
+  changeTheme('theme2')
 })
 theme3Btn.addEventListener('click',()=>{
   theme1Btn.classList.remove('themeSelected')
   theme2Btn.classList.remove('themeSelected')
   theme3Btn.classList.add('themeSelected')
-  console.log('clicked on theme')
+  changeTheme('theme3')
 })
 document.addEventListener("DOMContentLoaded", function () {
   function toggleTranslucentBackground() {
