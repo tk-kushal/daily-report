@@ -48,11 +48,50 @@ const warningDone = document.getElementsByClassName("warning-done")[0];
 const loadingElement = document.getElementsByClassName("loading")[0];
 const navbar = document.getElementsByClassName("right")[0];
 const daysContainer = document.getElementsByClassName("days")[0];
-
 const theme1Btn = document.getElementsByClassName('theme1')[0]
 const theme2Btn = document.getElementsByClassName('theme2')[0]
 const theme3Btn = document.getElementsByClassName('theme3')[0]
+const themes = {
+  Orange: {
+    background: "#222222",
+    backgroundTransparent: "#22222280",
+    secondaryBackground: "#454545c6",
+    secondaryBackgroundTransparent: "#45454572",
+    lightBorder: "#faf0e61e",
+    primary: "#ff6000",
+    primaryTransparent: "#ff6200b8",
+    secondary: "#ffa559",
+    secondaryTransparent: "#ffa55972",
+    textColor: "#fceedd",
+    secondaryText: "#ffe6c742",
+    textInvert: "var(--textColor)",
+    selectedColor: "rgb(182, 182, 182)",
+    rippleColor: "rgba(255, 255, 255, 0.345)"
+  },
+  // Define other themes here
+  Teal: {
+    background: "#222222", // You can change this value to the background color you prefer
+    backgroundTransparent: "#22222280", // You can change this value
+    secondaryBackground: "#454545c6", // You can change this value
+    secondaryBackgroundTransparent: "#45454572", // You can change this value
+    lightBorder: "#faf0e61e", // You can change this value
+    primary: "rgb(0, 156, 140)", // The new primary color
+    primaryTransparent: "rgba(0, 156, 140, 0.72)", // You can change this value
+    secondary: "#ff6200b8", // You can change this value
+    secondaryTransparent: "rgba(255, 97, 115, 0.72)", // You can change this value
+    textColor: "#fceedd", // You can change this value
+    secondaryText: "#ffe6c742", // You can change this value
+    textInvert: "var(--textColor)",
+    selectedColor: "rgb(182, 182, 182)", // You can change this value
+    rippleColor: "rgba(255, 255, 255, 0.345)" // You can change this value
+  },
+  Green: {
+    background: "#789012",
+    // Define Green theme values
+  }
+};
 
+let currentTheme = themes.Orange;
 let loading = false;
 let editing = false;
 let currentUser = null;
@@ -1350,8 +1389,14 @@ function createDocument(key, data) {
       .catch((e) => console.log(e));
   }
 }
-function changeTheme(name){
-  console.log(name)
+function changeTheme(theme){
+  const root = document.documentElement; // Select the :root element
+
+  for (const key in theme) {
+    if (theme.hasOwnProperty(key)) {
+      root.style.setProperty(`--${key}`, theme[key]);
+    }
+  }
 }
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
@@ -1379,13 +1424,13 @@ theme1Btn.addEventListener('click',()=>{
   theme1Btn.classList.add('themeSelected')
   theme2Btn.classList.remove('themeSelected')
   theme3Btn.classList.remove('themeSelected')
-  changeTheme('theme1')
+  changeTheme(themes.Orange)
 })
 theme2Btn.addEventListener('click',()=>{
   theme1Btn.classList.remove('themeSelected')
   theme2Btn.classList.add('themeSelected')
   theme3Btn.classList.remove('themeSelected')
-  changeTheme('theme2')
+  changeTheme(themes.Teal)
 })
 theme3Btn.addEventListener('click',()=>{
   theme1Btn.classList.remove('themeSelected')
