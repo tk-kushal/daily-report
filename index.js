@@ -85,9 +85,11 @@ const themes = {
     selectedColor: "rgb(182, 182, 182)", // You can change this value
     rippleColor: "rgba(255, 255, 255, 0.345)" // You can change this value
   },
-  Green: {
-    background: "#789012",
-    // Define Green theme values
+  Purple: {
+    primary: "rgb(253, 0, 143)", // The new primary color
+    primaryTransparent: "rgba(0, 156, 140, 0.72)", // You can change this value
+    secondary: "#ff6200b8", // You can change this value
+    secondaryTransparent: "rgba(255, 97, 115, 0.72)",
   }
 };
 
@@ -1436,7 +1438,7 @@ theme3Btn.addEventListener('click',()=>{
   theme1Btn.classList.remove('themeSelected')
   theme2Btn.classList.remove('themeSelected')
   theme3Btn.classList.add('themeSelected')
-  changeTheme('theme3')
+  changeTheme(themes.Purple)
 })
 document.addEventListener("DOMContentLoaded", function () {
   function toggleTranslucentBackground() {
