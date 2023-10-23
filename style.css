@@ -146,7 +146,7 @@ body {
   transform: translate(-50%, -50%) scale(0);
   height: var(--circleSize);
   width: var(--circleSize);
-  animation: transition 500ms ease-out forwards;
+  animation: transition 500ms ease-out;
   border-radius: 50%;
 }
 @keyframes transition {
@@ -159,6 +159,7 @@ body {
   }
   100%{
     opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 .selected {

@@ -1112,7 +1112,7 @@ function transtition(e, element, view, cordX, cordY) {
     navbarContainer.removeChild(transitionContainer);
     element.style.zIndex = "1";
     title.parentElement.style.zIndex = 8;
-  }, 600);
+  }, 400);
 }
 function showQuestionsEditControlls() {
   let questionsKeys = Object.keys(questions);
