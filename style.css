@@ -128,7 +128,6 @@ body {
   transition-property: background, border-radius, color, border;
   overflow: hidden;
 }
-
 .userBtn > img {
   width: 48px;
   height: 48px;
@@ -795,6 +794,7 @@ input[type="text"].emojiInput {
   transform: scale(0);
   background-color: white;
   animation: blobs 3s ease forwards;
+  transition: 300ms ease-in-out;
 }
 .blob1 {
   background-color: var(--primary);
