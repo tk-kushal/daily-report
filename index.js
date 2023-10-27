@@ -48,9 +48,9 @@ const warningDone = document.getElementsByClassName("warning-done")[0];
 const loadingElement = document.getElementsByClassName("loading")[0];
 const navbar = document.getElementsByClassName("right")[0];
 const daysContainer = document.getElementsByClassName("days")[0];
-const theme1Btn = document.getElementsByClassName('theme1')[0]
-const theme2Btn = document.getElementsByClassName('theme2')[0]
-const theme3Btn = document.getElementsByClassName('theme3')[0]
+const theme1Btn = document.getElementsByClassName("theme1")[0];
+const theme2Btn = document.getElementsByClassName("theme2")[0];
+const theme3Btn = document.getElementsByClassName("theme3")[0];
 const themes = {
   Orange: {
     background: "#222222",
@@ -66,7 +66,7 @@ const themes = {
     secondaryText: "#ffe6c742",
     textInvert: "var(--textColor)",
     selectedColor: "rgb(182, 182, 182)",
-    rippleColor: "rgba(255, 255, 255, 0.345)"
+    rippleColor: "rgba(255, 255, 255, 0.345)",
   },
   // Define other themes here
   Teal: {
@@ -83,17 +83,16 @@ const themes = {
     secondaryText: "#ffe6c742", // You can change this value
     textInvert: "var(--textColor)",
     selectedColor: "rgb(182, 182, 182)", // You can change this value
-    rippleColor: "rgba(255, 255, 255, 0.345)" // You can change this value
+    rippleColor: "rgba(255, 255, 255, 0.345)", // You can change this value
   },
   Purple: {
     primary: "rgb(253, 0, 143)", // The new primary color
     primaryTransparent: "rgba(0, 156, 140, 0.72)", // You can change this value
     secondary: "#ff6200b8", // You can change this value
     secondaryTransparent: "rgba(255, 97, 115, 0.72)",
-  }
+  },
 };
 
-let currentTheme = themes.Orange;
 let loading = false;
 let editing = false;
 let currentUser = null;
@@ -105,7 +104,7 @@ let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
 let todaysYear = overallDate.getFullYear();
 let dateString = todaysDate + ":" + todaysMonth + ":" + todaysYear;
-let monthString = todaysMonth+":"+todaysYear;
+let monthString = todaysMonth + ":" + todaysYear;
 let defaultQuestions = {
   title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
   exercise: {
@@ -163,6 +162,10 @@ let defaultQuestions = {
 };
 let questions = null;
 let data = JSON.parse(localStorage.getItem("questions"));
+let currentTheme = JSON.parse(localStorage.getItem("preferences"))
+  ? JSON.parse(localStorage.getItem("preferences")).theme
+  : themes.Orange;
+changeTheme(currentTheme);
 if (data && data.questions) {
   questions = data.questions;
   if (data.date != dateString) {
@@ -174,7 +177,7 @@ if (data && data.questions) {
 } else {
   questions = defaultQuestions;
 }
-loadingStart()
+loadingStart();
 auth.onAuthStateChanged((user) => {
   currentUser = user;
   if (currentUser) {
@@ -202,7 +205,7 @@ auth.onAuthStateChanged((user) => {
     });
     getDoc(doc(db, uid, monthString)).then((snapshot) => {
       let allJournals = snapshot.data();
-      let data = allJournals[dateString]
+      let data = allJournals[dateString];
       if (data) {
         questions = data.questions;
         localStorage.setItem(
@@ -1244,7 +1247,7 @@ function addQuestion(type) {
 }
 function refreshQuestionStyling() {
   let questionsKeys = Object.keys(questions);
-  console.log(questions)
+  console.log(questions);
   for (let i = 0; i < questionsKeys.length; i++) {
     let questionData = editQuestions[questionsKeys[i]];
     let question = questionsDom[questionsKeys[i]];
@@ -1360,28 +1363,29 @@ function handleContentChange() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 function getdocuments() {
-  getDoc(doc(db,uid,monthString)).then((snapshot)=>{
-    data = snapshot.data()
-    if(data){
-      allJournals = data;
-      updateCalander();
-      loadingStop()
-    }
-    else{
-      getDocs(usersCollection).then((snapshot) => {
-        snapshot.docs.map((doc) => {
-          let data = doc.data();
-          if (data.date) {
-            allJournals[doc.id] = data;
-          }
-        });
-        let docRef = doc(db,uid,monthString)
-        setDoc(docRef,allJournals).then().catch();
+  getDoc(doc(db, uid, monthString))
+    .then((snapshot) => {
+      data = snapshot.data();
+      if (data) {
+        allJournals = data;
         updateCalander();
-        loadingStop()
-      });
-    }
-  }).catch(e=>console.log(e))
+        loadingStop();
+      } else {
+        getDocs(usersCollection).then((snapshot) => {
+          snapshot.docs.map((doc) => {
+            let data = doc.data();
+            if (data.date) {
+              allJournals[doc.id] = data;
+            }
+          });
+          let docRef = doc(db, uid, monthString);
+          setDoc(docRef, allJournals).then().catch();
+          updateCalander();
+          loadingStop();
+        });
+      }
+    })
+    .catch((e) => console.log(e));
 }
 function createDocument(key, data) {
   if (uid) {
@@ -1391,10 +1395,30 @@ function createDocument(key, data) {
       .catch((e) => console.log(e));
   }
 }
-function changeTheme(theme){
+function changeTheme(theme) {
+  currentTheme = theme;
   const root = document.documentElement; // Select the :root element
-
-  for (const key in theme) {
+  localStorage.setItem("preferences", JSON.stringify({ theme: currentTheme }));
+  switch (JSON.stringify(theme)) {
+    case JSON.stringify(themes.Orange):
+      theme1Btn.classList.add("themeSelected");
+      theme2Btn.classList.remove("themeSelected");
+      theme3Btn.classList.remove("themeSelected");
+      break;
+    case JSON.stringify(themes.Teal):
+      theme1Btn.classList.remove("themeSelected");
+      theme2Btn.classList.add("themeSelected");
+      theme3Btn.classList.remove("themeSelected");
+      break;
+    case JSON.stringify(themes.Purple):
+      theme1Btn.classList.remove("themeSelected");
+      theme2Btn.classList.remove("themeSelected");
+      theme3Btn.classList.add("themeSelected");
+      break;
+    default:
+      break;
+  }
+  for (const key in currentTheme) {
     if (theme.hasOwnProperty(key)) {
       root.style.setProperty(`--${key}`, theme[key]);
     }
@@ -1422,24 +1446,15 @@ export function monthChange(direction, ripple = true) {
   }
   updateCalander();
 }
-theme1Btn.addEventListener('click',()=>{
-  theme1Btn.classList.add('themeSelected')
-  theme2Btn.classList.remove('themeSelected')
-  theme3Btn.classList.remove('themeSelected')
-  changeTheme(themes.Orange)
-})
-theme2Btn.addEventListener('click',()=>{
-  theme1Btn.classList.remove('themeSelected')
-  theme2Btn.classList.add('themeSelected')
-  theme3Btn.classList.remove('themeSelected')
-  changeTheme(themes.Teal)
-})
-theme3Btn.addEventListener('click',()=>{
-  theme1Btn.classList.remove('themeSelected')
-  theme2Btn.classList.remove('themeSelected')
-  theme3Btn.classList.add('themeSelected')
-  changeTheme(themes.Purple)
-})
+theme1Btn.addEventListener("click", () => {
+  changeTheme(themes.Orange);
+});
+theme2Btn.addEventListener("click", () => {
+  changeTheme(themes.Teal);
+});
+theme3Btn.addEventListener("click", () => {
+  changeTheme(themes.Purple);
+});
 document.addEventListener("DOMContentLoaded", function () {
   function toggleTranslucentBackground() {
     if (window.scrollY === 0) {
