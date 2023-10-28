@@ -450,7 +450,12 @@ textarea {
   width: 100%;
   border-bottom: 1px solid var(--background);
   display: flex;
+  flex-direction: column;
   align-items: center;
+}
+.theme-options{
+  display: flex;
+  margin: 10px 0;
 }
 .theme-title {
   font-size: 23px;

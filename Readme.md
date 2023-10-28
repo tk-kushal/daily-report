@@ -10,3 +10,7 @@ to remind the user to write this journal everyday there can be an extension whic
 - add a graph or calander view to show how was each month or year accorind to what is beeen imporved
 - additional catagories can be added to make the data more usefull like what type of work did you do today etc
 - add daily quote on the top
+
+## Issues
+
+- all the records are stored in the current month, fix this issue and add the feature to fetch other months' data.

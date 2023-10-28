@@ -186,6 +186,7 @@ auth.onAuthStateChanged((user) => {
     profilePicture.src = currentUser.photoURL;
     profilePicture.style.display = "flex";
     profileIcon.style.display = "none";
+    console.log(profileIcon)
 
     uid = currentUser.uid;
     usersCollection = collection(db, uid);
@@ -1528,6 +1529,7 @@ nextMonthButton.addEventListener("click", () => {
 resetCalanderButton.addEventListener("click", () => {
   currentMonth = todaysMonth;
   currentYear = todaysYear;
+  selectedDate = todaysDate;
   calanderSwipe("reset");
   updateCalander();
 });

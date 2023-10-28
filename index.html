@@ -6,10 +6,7 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="slider.css" />
     <link rel="stylesheet" href="buttonClick.css" />
-    <script
-      src="https://kit.fontawesome.com/ad418b86d4.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="all.min.js"></script>
     <script src="pure-swipe.min.js"></script>
     <title>Daily Journal</title>
   </head>
@@ -21,14 +18,18 @@
         <div class="blob3"></div>
         <div class="blob2"></div>
       </div>
-      <div class="backgroundoverlay noisy">
-      </div>
+      <div class="backgroundoverlay noisy"></div>
     </div>
-    
+
     <div class="navbarContainer">
       <div class="navbar centre">
         <div class="right">
-          <div class="lds-ring loading loading-hidden"><div></div><div></div><div></div><div></div></div>
+          <div class="lds-ring loading loading-hidden">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
           <div class="reportBtn centre">
             <i class="fa-solid fa-book"></i>
           </div>
@@ -36,7 +37,9 @@
             <i class="fa-solid fa-calendar-days cetner"></i>
           </div>
           <div class="userBtn centre">
-            <i class="fa-solid fa-user" id="profileIcon"></i>
+            <div id="profileIcon">
+              <i class="fa-solid fa-user"></i>
+            </div>
             <img style="display: none" src="" alt="" id="profilePicture" />
           </div>
         </div>
@@ -50,7 +53,7 @@
       <div class="warning-popup">
         <div class="warning">Changes will not be saved Cancle?</div>
         <div class="warning-buttons report-controlls-right">
-          <div class="warning-cancle ripple-button" style="font-size: 18px;">
+          <div class="warning-cancle ripple-button" style="font-size: 18px">
             <i class="fa-solid fa-xmark"></i>
           </div>
           <div class="warning-done ripple-button">
@@ -103,8 +106,7 @@
             </div>
           </div>
         </div>
-        <div class="questionsContainer"> 
-        </div>
+        <div class="questionsContainer"></div>
       </div>
       <div class="calander" style="display: none">
         <div class="calanderControlls">
@@ -139,24 +141,22 @@
         </div>
         <div class="selectedDayReport calanderContainer">
           <div class="selectedDayDateContainer">
-            <div class="selectedDayDate">
-            </div>
+            <div class="selectedDayDate"></div>
           </div>
           <div class="blank">---------</div>
-          <div class="selectedDayQuestionsContainer">
-          </div>
+          <div class="selectedDayQuestionsContainer"></div>
         </div>
       </div>
 
       <div class="profile" style="display: none">
         <div class="profileContainer">
           <div class="themeContainer">
-            <div class="theme-title">
-              Colors
+            <div class="theme-title">Colors</div>
+            <div class="theme-options">
+              <div class="theme-circle theme1 themeSelected">ORANG-ish</div>
+              <div class="theme-circle theme2">TEAL</div>
+              <div class="theme-circle theme3">PURPLE</div>
             </div>
-            <div class="theme-circle theme1 themeSelected"> ORANG-ish </div>
-            <div class="theme-circle theme2"> TEAL </div>
-            <div class="theme-circle theme3"> PURPLE </div>
             <div>(Experimental)</div>
           </div>
           <div class="loginBtn ripple-button" style="display: none">Login</div>
