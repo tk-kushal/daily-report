@@ -186,7 +186,7 @@ auth.onAuthStateChanged((user) => {
     profilePicture.src = currentUser.photoURL;
     profilePicture.style.display = "flex";
     profileIcon.style.display = "none";
-    console.log(profileIcon)
+    console.log(profileIcon);
 
     uid = currentUser.uid;
     usersCollection = collection(db, uid);
@@ -1488,6 +1488,9 @@ reportBtn.addEventListener("click", (e) => {
 });
 calanderBtn.addEventListener("click", (e) => {
   if (!editing) {
+    currentMonth = todaysMonth;
+    currentYear = todaysYear;
+    selectedDate = todaysDate;
     cancleEdit();
     windowNavigation(CALANDER, "");
     transtition(e, calanderBtn, CALANDER);
@@ -1495,6 +1498,9 @@ calanderBtn.addEventListener("click", (e) => {
   } else {
     warningPupup("Changes will not be saved Cancle?", (result) => {
       if (result) {
+        currentMonth = todaysMonth;
+        currentYear = todaysYear;
+        selectedDate = todaysDate;
         cancleEdit();
         windowNavigation(CALANDER, "");
         transtition(e, calanderBtn, CALANDER);
