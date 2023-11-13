@@ -29,6 +29,9 @@ textarea {
 .questionContainer textarea {
   margin-bottom: 0px;
 }
+textarea::placeholder {
+  color: var(--secondaryText);
+}
 textarea::-webkit-scrollbar {
   width: 0;
 }
@@ -156,7 +159,7 @@ body {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-  100%{
+  100% {
     opacity: 0;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -453,7 +456,7 @@ textarea {
   flex-direction: column;
   align-items: center;
 }
-.theme-options{
+.theme-options {
   display: flex;
   margin: 10px 0;
 }
@@ -468,7 +471,7 @@ textarea {
   padding: 5px 10px;
   margin: 5px;
   border-radius: 20px;
-  font-size: .7em;
+  font-size: 0.7em;
   transition: 300ms;
   font-weight: bold;
   text-wrap: nowrap;
@@ -488,7 +491,7 @@ textarea {
 .theme3 {
   background-color: purple;
 }
-.themeSelected{
+.themeSelected {
   box-sizing: border-box;
   border: 2px solid white !important;
 }
