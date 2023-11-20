@@ -8,7 +8,7 @@ import {
   setDoc,
 } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 const JOURNAL = "/",
-  CALANDER = "/calander",
+  CALENDAR = "/calendar",
   PROFILE = "/profile";
 const NEWQUESTIONID = "newQuestionID";
 const questionsContainer =
@@ -677,7 +677,7 @@ function questionsEdited() {
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
   //so that the transition does not occur when reloading the page or loading another page besies the report page directly form url
-  if (initialize && (path == JOURNAL || path == CALANDER || path == PROFILE)) {
+  if (initialize && (path == JOURNAL || path == CALENDAR || path == PROFILE)) {
     currentView = path;
     initialize = false;
   }
@@ -691,11 +691,11 @@ function handleUrlChangeEvent() {
         reportBtn.getBoundingClientRect().left,
         reportBtn.getBoundingClientRect().top
       );
-    } else if (path === CALANDER) {
+    } else if (path === CALENDAR) {
       transtition(
         null,
         calanderBtn,
-        CALANDER,
+        CALENDAR,
         calanderBtn.getBoundingClientRect().left,
         calanderBtn.getBoundingClientRect().top
       );
@@ -762,37 +762,42 @@ function updateReportSection() {
 }
 function updateView(view) {
   currentView = view;
-  if (currentView === JOURNAL) {
-    handleContentChange();
-    reportDate.innerText = todaysDate;
-    reportMonth.innerText = getMonth(todaysMonth);
-    reportYear.innerText = todaysYear;
-    title.innerText = "Journal";
-    reportBtn.classList.add("selected");
-    calanderBtn.classList.remove("selected");
-    userBtn.classList.remove("selected");
-    reportSection.style.display = "block";
-    calanderSection.style.display = "none";
-    profileSection.style.display = "none";
-    updateReportSection();
-  } else if (currentView === CALANDER) {
-    title.innerText = "Calander";
-    calanderBtn.classList.add("selected");
-    reportBtn.classList.remove("selected");
-    userBtn.classList.remove("selected");
-    reportSection.style.display = "none";
-    calanderSection.style.display = "block";
-    profileSection.style.display = "none";
-    updateCalander();
-  } else if (currentView === PROFILE) {
-    title.innerText = "Profile";
-    userBtn.classList.add("selected");
-    reportBtn.classList.remove("selected");
-    calanderBtn.classList.remove("selected");
-    reportSection.style.display = "none";
-    calanderSection.style.display = "none";
-    profileSection.style.display = "block";
-  } else {
+  switch (currentView) {
+    case JOURNAL:
+      handleContentChange();
+      reportDate.innerText = todaysDate;
+      reportMonth.innerText = getMonth(todaysMonth);
+      reportYear.innerText = todaysYear;
+      title.innerText = "Journal";
+      reportBtn.classList.add("selected");
+      calanderBtn.classList.remove("selected");
+      userBtn.classList.remove("selected");
+      reportSection.style.display = "block";
+      calanderSection.style.display = "none";
+      profileSection.style.display = "none";
+      updateReportSection();
+      break;
+    case CALENDAR:
+      title.innerText = "Calendar";
+      calanderBtn.classList.add("selected");
+      reportBtn.classList.remove("selected");
+      userBtn.classList.remove("selected");
+      reportSection.style.display = "none";
+      calanderSection.style.display = "block";
+      profileSection.style.display = "none";
+      updateCalander();
+      break;
+    case PROFILE:
+      title.innerText = "Profile";
+      userBtn.classList.add("selected");
+      reportBtn.classList.remove("selected");
+      calanderBtn.classList.remove("selected");
+      reportSection.style.display = "none";
+      calanderSection.style.display = "none";
+      profileSection.style.display = "block";
+      break;
+    default:
+      break;
   }
 }
 function updateCalander() {
@@ -1082,41 +1087,40 @@ function getMonth(month) {
   }
 }
 function transtition(e, element, view, cordX, cordY) {
-  title.parentElement.style.zIndex = 0;
-  element.style.zIndex = "10";
-  let transition = document.createElement("div");
-  let transitionContainer = document.createElement("div");
-  let rect = element.getBoundingClientRect();
-  let x = cordX + element.clientWidth / 2;
-  let y = cordY + element.clientHeight / 2;
-  if (e) {
-    x = rect.left + e.target.clientWidth / 2;
-    y = rect.top + e.target.clientHeight / 2;
-  }
-  window.innerHeight > window.innerWidth
-    ? document.documentElement.style.setProperty(
-        "--circleSize",
-        window.innerHeight * 2.8 + "px"
-      )
-    : document.documentElement.style.setProperty(
-        "--circleSize",
-        window.innerWidth * 2.8 + "px"
-      );
-  transitionContainer.classList.add("transitionContainer");
-  transitionContainer.appendChild(transition);
-  transition.classList.add("transition");
-  navbarContainer.appendChild(transitionContainer);
-  transition.style.top = y + "px";
-  transition.style.left = x + "px";
-  transition.classList.add("grow");
+  // title.parentElement.style.zIndex = 0;
+  // element.style.zIndex = "10";
+  // let transition = document.createElement("div");
+  // let transitionContainer = document.createElement("div");
+  // let rect = element.getBoundingClientRect();
+  // let x = cordX + element.clientWidth / 2;
+  // let y = cordY + element.clientHeight / 2;
+  // if (e) {
+  //   x = rect.left + e.target.clientWidth / 2;
+  //   y = rect.top + e.target.clientHeight / 2;
+  // }
+  // window.innerHeight > window.innerWidth
+  //   ? document.documentElement.style.setProperty(
+  //       "--circleSize",
+  //       window.innerHeight * 2.8 + "px"
+  //     )
+  //   : document.documentElement.style.setProperty(
+  //       "--circleSize",
+  //       window.innerWidth * 2.8 + "px"
+  //     );
+  // transitionContainer.classList.add("transitionContainer");
+  // transitionContainer.appendChild(transition);
+  // transition.classList.add("transition");
+  // navbarContainer.appendChild(transitionContainer);
+  // transition.style.top = y + "px";
+  // transition.style.left = x + "px";
+  // transition.classList.add("grow");
   setTimeout(() => {
-    updateView(view);
-  }, 250);
-  setTimeout(() => {
-    navbarContainer.removeChild(transitionContainer);
-    element.style.zIndex = "1";
-    title.parentElement.style.zIndex = 8;
-  }, 400);
+  }, 0);
+  // setTimeout(() => {
+  //   navbarContainer.removeChild(transitionContainer);
+  //   element.style.zIndex = "1";
+  //   title.parentElement.style.zIndex = 8;
+  // }, 400);
 }
 function showQuestionsEditControlls() {
   let questionsKeys = Object.keys(questions);
@@ -1484,16 +1488,16 @@ loginBtn.addEventListener("click", () => {
 });
 reportBtn.addEventListener("click", (e) => {
   windowNavigation(JOURNAL, "");
-  transtition(e, reportBtn, JOURNAL);
+  updateView(JOURNAL);
 });
 calanderBtn.addEventListener("click", (e) => {
   if (!editing) {
+    updateView(CALENDAR);
     currentMonth = todaysMonth;
     currentYear = todaysYear;
     selectedDate = todaysDate;
     cancleEdit();
-    windowNavigation(CALANDER, "");
-    transtition(e, calanderBtn, CALANDER);
+    windowNavigation(CALENDAR, "");
     hidePopup();
   } else {
     warningPupup("Changes will not be saved Cancle?", (result) => {
@@ -1502,8 +1506,8 @@ calanderBtn.addEventListener("click", (e) => {
         currentYear = todaysYear;
         selectedDate = todaysDate;
         cancleEdit();
-        windowNavigation(CALANDER, "");
-        transtition(e, calanderBtn, CALANDER);
+        windowNavigation(CALENDAR, "");
+        updateView(CALENDAR);
         hidePopup();
       }
     });
@@ -1513,14 +1517,14 @@ userBtn.addEventListener("click", (e) => {
   if (!editing) {
     cancleEdit();
     windowNavigation(PROFILE, "");
-    transtition(e, userBtn, PROFILE);
     hidePopup();
+    updateView(PROFILE);
   } else {
     warningPupup("Changes will not be saved Cancle?", (result) => {
       if (result) {
         cancleEdit();
         windowNavigation(PROFILE, "");
-        transtition(e, userBtn, PROFILE);
+        updateView(PROFILE);
         hidePopup();
       }
     });
