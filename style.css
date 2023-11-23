@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
-:root {
+/*:root {
   --background: #222222;
   --backgroundTransparent: #22222280;
   --secondaryBackground: #454545c6;
@@ -14,6 +14,22 @@
   --textInvert: var(--textColor);
   --selectedColor: rgb(182, 182, 182);
   --rippleColor: rgba(255, 255, 255, 0.345);
+}*/
+:root {
+  --background: #ffffff;
+  --backgroundTransparent: #ffffff80;
+  --secondaryBackground: #d9d9d9c6;
+  --secondaryBackgroundTransparent: #dadada72;
+  --lightBorder: rgba(50, 50, 50, 0.285);
+  --primary: #ff6000;
+  --primaryTransparent: #ff6200b8;
+  --secondary: #ffa559;
+  --secondaryTransparent: #ff923998;
+  --textColor: #322f2b;
+  --secondaryText: #312c26ca;
+  --textInvert: var(--textColor);
+  --selectedColor: rgb(199, 190, 183);
+  --rippleColor: rgba(255, 181, 152, 0.345);
 }
 input,
 textarea {
@@ -204,6 +220,7 @@ body {
   font-size: 20px;
   transition: 300ms;
   flex-direction: column;
+  border: 1px solid var(--lightBorder);
 }
 .selectedDayReport {
   margin-top: 10px;
@@ -375,6 +392,7 @@ textarea {
   transition: 300ms;
   background-color: var(--secondaryBackgroundTransparent);
   border-radius: 10px;
+  border: 1px solid var(--lightBorder);
 }
 .yearAndMonth > i {
   font-size: 20px;
@@ -729,7 +747,7 @@ textarea {
   flex-direction: column;
   padding: 20px;
   text-align: center;
-  backdrop-filter: blur(18px); 
+  backdrop-filter: blur(18px);
 }
 .warning {
   font-size: 24px;
@@ -828,7 +846,7 @@ input[type="text"].emojiInput {
   height: 100%;
   width: 100%;
   right: 0;
-  opacity: 0.85;
+  opacity: 0.75;
   background-color: var(--background);
 }
 .selectedDayQuestionsContainer {
@@ -852,6 +870,9 @@ input[type="text"].emojiInput {
 .blank {
   width: 100%;
   text-align: center;
+}
+.day{
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.118);
 }
 @media not all and (hover: none) {
   .yearAndMonth:hover {

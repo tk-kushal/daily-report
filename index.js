@@ -1423,11 +1423,11 @@ function changeTheme(theme) {
     default:
       break;
   }
-  for (const key in currentTheme) {
-    if (theme.hasOwnProperty(key)) {
-      root.style.setProperty(`--${key}`, theme[key]);
-    }
-  }
+  // for (const key in currentTheme) {
+  //   if (theme.hasOwnProperty(key)) {
+  //     root.style.setProperty(`--${key}`, theme[key]);
+  //   }
+  // }
 }
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
