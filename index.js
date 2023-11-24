@@ -67,7 +67,7 @@ const themes = {
     textInvert: "var(--textColor)",
     selectedColor: "rgb(182, 182, 182)",
     rippleColor: "rgba(255, 255, 255, 0.345)",
-    bgOpacity:"0.85"
+    bgOpacity:"0.9"
   },
   // Define other themes here
   Light: {
@@ -85,7 +85,7 @@ const themes = {
     textInvert: "var(--textColor)",
     selectedColor: "rgb(199, 190, 183)", // You can change this value
     rippleColor: "rgba(255, 181, 152, 0.345)", // You can change this value
-    bgOpacity:"0.7"
+    bgOpacity:"0.8"
   },
 };
 

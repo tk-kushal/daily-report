@@ -872,6 +872,7 @@ input[type="text"].emojiInput {
   object-fit: cover ;
   object-position: center;
   filter: blur(10px);
+  transform: scale(1.1);
 }
 @media not all and (hover: none) {
   .yearAndMonth:hover {
