@@ -16,8 +16,10 @@
   --selectedColor: rgb(199, 190, 183);
   --rippleColor: rgba(255, 181, 152, 0.345);
   --bgOpacity: 0.80
+
+  transition:100ms var(--textColor);
 }
-:root {
+/* :root {
   --background: #222222;
   --backgroundTransparent: #22222280;
   --secondaryBackground: #454545c6;
@@ -33,7 +35,7 @@
   --selectedColor: rgb(182, 182, 182);
   --rippleColor: rgba(255, 255, 255, 0.345);
   --bgOpacity: 0.85
-}
+} */
 input,
 textarea {
   font-family: "Montserrat", sans-serif;
@@ -147,7 +149,7 @@ body {
   border-radius: 50%;
   border: 2px solid transparent;
   transition: 500ms;
-  transition-property: background, border-radius, color, border;
+  transition-property: background, border-radius,  border;
   overflow: hidden;
 }
 .userBtn > img {
@@ -221,7 +223,7 @@ body {
   padding: 20px;
   box-sizing: border-box;
   font-size: 20px;
-  transition: 300ms;
+  transition: 100ms;
   flex-direction: column;
   border: 1px solid var(--lightBorder);
 }
@@ -365,7 +367,7 @@ textarea {
   padding: 10px;
   user-select: none;
   transition: 500ms;
-  transition-property: background, border-radius, color, border;
+  transition-property: background, border-radius, border;
 }
 .trackedDay {
   background-color: var(--secondaryTransparent);
@@ -393,6 +395,7 @@ textarea {
   border-radius: 30px;
   padding: 5px;
   transition: 300ms;
+  transition-property: background;
   background-color: var(--secondaryBackgroundTransparent);
   border-radius: 10px;
   border: 1px solid var(--lightBorder);
@@ -740,7 +743,7 @@ textarea {
   width: 100%;
   max-width: 230px;
   margin: 10px;
-  background-color: var(--backgroundTransparent);
+  background-color: var(--background);
   border: 2px solid var(--primary);
   display: flex;
   border-radius: 20px;
@@ -749,7 +752,6 @@ textarea {
   flex-direction: column;
   padding: 20px;
   text-align: center;
-  backdrop-filter: blur(18px);
 }
 .warning {
   font-size: 24px;
