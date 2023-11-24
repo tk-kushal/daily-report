@@ -52,7 +52,7 @@ const theme1Btn = document.getElementsByClassName("theme1")[0];
 const theme2Btn = document.getElementsByClassName("theme2")[0];
 const theme3Btn = document.getElementsByClassName("theme3")[0];
 const themes = {
-  Orange: {
+  Dark: {
     background: "#222222",
     backgroundTransparent: "#22222280",
     secondaryBackground: "#454545c6",
@@ -67,29 +67,25 @@ const themes = {
     textInvert: "var(--textColor)",
     selectedColor: "rgb(182, 182, 182)",
     rippleColor: "rgba(255, 255, 255, 0.345)",
+    bgOpacity:"0.85"
   },
   // Define other themes here
-  Teal: {
-    background: "#222222", // You can change this value to the background color you prefer
-    backgroundTransparent: "#22222280", // You can change this value
-    secondaryBackground: "#454545c6", // You can change this value
-    secondaryBackgroundTransparent: "#45454572", // You can change this value
-    lightBorder: "#faf0e61e", // You can change this value
-    primary: "rgb(0, 156, 140)", // The new primary color
-    primaryTransparent: "rgba(0, 156, 140, 0.72)", // You can change this value
-    secondary: "#ff6200b8", // You can change this value
-    secondaryTransparent: "rgba(255, 97, 115, 0.72)", // You can change this value
-    textColor: "#fceedd", // You can change this value
-    secondaryText: "#ffe6c742", // You can change this value
+  Light: {
+    background: "#ffffff", // You can change this value to the background color you prefer
+    backgroundTransparent: "#ffffff80", // You can change this value
+    secondaryBackground: "#d9d9d9c6", // You can change this value
+    secondaryBackgroundTransparent: "#dadada72", // You can change this value
+    lightBorder: "#3232324a", // You can change this value
+    primary: "#ff6000", // The new primary color
+    primaryTransparent: "#ff6200b8", // You can change this value
+    secondary: "#ffa559", // You can change this value
+    secondaryTransparent: "#ff923998", // You can change this value
+    textColor: "#322f2b", // You can change this value
+    secondaryText: "#312c26ca", // You can change this value
     textInvert: "var(--textColor)",
-    selectedColor: "rgb(182, 182, 182)", // You can change this value
-    rippleColor: "rgba(255, 255, 255, 0.345)", // You can change this value
-  },
-  Purple: {
-    primary: "rgb(253, 0, 143)", // The new primary color
-    primaryTransparent: "rgba(0, 156, 140, 0.72)", // You can change this value
-    secondary: "#ff6200b8", // You can change this value
-    secondaryTransparent: "rgba(255, 97, 115, 0.72)",
+    selectedColor: "rgb(199, 190, 183)", // You can change this value
+    rippleColor: "rgba(255, 181, 152, 0.345)", // You can change this value
+    bgOpacity:"0.7"
   },
 };
 
@@ -1114,8 +1110,7 @@ function transtition(e, element, view, cordX, cordY) {
   // transition.style.top = y + "px";
   // transition.style.left = x + "px";
   // transition.classList.add("grow");
-  setTimeout(() => {
-  }, 0);
+  setTimeout(() => {}, 0);
   // setTimeout(() => {
   //   navbarContainer.removeChild(transitionContainer);
   //   element.style.zIndex = "1";
@@ -1405,29 +1400,22 @@ function changeTheme(theme) {
   const root = document.documentElement; // Select the :root element
   localStorage.setItem("preferences", JSON.stringify({ theme: currentTheme }));
   switch (JSON.stringify(theme)) {
-    case JSON.stringify(themes.Orange):
+    case JSON.stringify(themes.Light):
       theme1Btn.classList.add("themeSelected");
       theme2Btn.classList.remove("themeSelected");
-      theme3Btn.classList.remove("themeSelected");
       break;
-    case JSON.stringify(themes.Teal):
+    case JSON.stringify(themes.Dark):
       theme1Btn.classList.remove("themeSelected");
       theme2Btn.classList.add("themeSelected");
-      theme3Btn.classList.remove("themeSelected");
-      break;
-    case JSON.stringify(themes.Purple):
-      theme1Btn.classList.remove("themeSelected");
-      theme2Btn.classList.remove("themeSelected");
-      theme3Btn.classList.add("themeSelected");
       break;
     default:
       break;
   }
-  // for (const key in currentTheme) {
-  //   if (theme.hasOwnProperty(key)) {
-  //     root.style.setProperty(`--${key}`, theme[key]);
-  //   }
-  // }
+  for (const key in currentTheme) {
+    if (theme.hasOwnProperty(key)) {
+      root.style.setProperty(`--${key}`, theme[key]);
+    }
+  }
 }
 export function monthChange(direction, ripple = true) {
   if (direction === "previous") {
@@ -1452,13 +1440,10 @@ export function monthChange(direction, ripple = true) {
   updateCalander();
 }
 theme1Btn.addEventListener("click", () => {
-  changeTheme(themes.Orange);
+  changeTheme(themes.Light);
 });
 theme2Btn.addEventListener("click", () => {
-  changeTheme(themes.Teal);
-});
-theme3Btn.addEventListener("click", () => {
-  changeTheme(themes.Purple);
+  changeTheme(themes.Dark);
 });
 document.addEventListener("DOMContentLoaded", function () {
   function toggleTranslucentBackground() {
