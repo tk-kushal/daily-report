@@ -48,9 +48,10 @@ const warningDone = document.getElementsByClassName("warning-done")[0];
 const loadingElement = document.getElementsByClassName("loading")[0];
 const navbar = document.getElementsByClassName("right")[0];
 const daysContainer = document.getElementsByClassName("days")[0];
-const theme1Btn = document.getElementsByClassName("theme1")[0];
-const theme2Btn = document.getElementsByClassName("theme2")[0];
-const theme3Btn = document.getElementsByClassName("theme3")[0];
+const themeBtn = document.getElementsByClassName("sunMoonContainer")[0];
+const sunMoon = document.getElementsByClassName("sunMoon")[0];
+const sunRays = document.getElementsByClassName("sunRays")[0];
+const moonSparkles = document.getElementsByClassName("moonSparkles")[0];
 const themes = {
   Dark: {
     background: "#222222",
@@ -67,7 +68,7 @@ const themes = {
     textInvert: "var(--textColor)",
     selectedColor: "rgb(182, 182, 182)",
     rippleColor: "rgba(255, 255, 255, 0.345)",
-    bgOpacity:"0.9"
+    bgOpacity: "0.9",
   },
   // Define other themes here
   Light: {
@@ -85,7 +86,7 @@ const themes = {
     textInvert: "var(--textColor)",
     selectedColor: "rgb(199, 190, 183)", // You can change this value
     rippleColor: "rgba(255, 181, 152, 0.345)", // You can change this value
-    bgOpacity:"0.8"
+    bgOpacity: "0.9",
   },
 };
 
@@ -1401,12 +1402,14 @@ function changeTheme(theme) {
   localStorage.setItem("preferences", JSON.stringify({ theme: currentTheme }));
   switch (JSON.stringify(theme)) {
     case JSON.stringify(themes.Light):
-      theme1Btn.classList.add("themeSelected");
-      theme2Btn.classList.remove("themeSelected");
+      sunMoon.classList.add("moon");
+      moonSparkles.style.display = "block";
+      sunRays.style.display = "none";
       break;
     case JSON.stringify(themes.Dark):
-      theme1Btn.classList.remove("themeSelected");
-      theme2Btn.classList.add("themeSelected");
+      sunMoon.classList.remove("moon");
+      moonSparkles.style.display = "none";
+      sunRays.style.display = "block";
       break;
     default:
       break;
@@ -1439,11 +1442,11 @@ export function monthChange(direction, ripple = true) {
   }
   updateCalander();
 }
-theme1Btn.addEventListener("click", () => {
-  changeTheme(themes.Light);
-});
-theme2Btn.addEventListener("click", () => {
-  changeTheme(themes.Dark);
+themeBtn.addEventListener("click", () => {
+  
+  JSON.stringify(currentTheme) == JSON.stringify(themes.Light)
+    ? changeTheme(themes.Dark)
+    : changeTheme(themes.Light);
 });
 document.addEventListener("DOMContentLoaded", function () {
   function toggleTranslucentBackground() {
