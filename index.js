@@ -86,7 +86,7 @@ const themes = {
     textInvert: "var(--textColor)",
     selectedColor: "rgb(199, 190, 183)", // You can change this value
     rippleColor: "rgba(255, 181, 152, 0.345)", // You can change this value
-    bgOpacity: "0.9",
+    bgOpacity: "0.8",
   },
 };
 
@@ -1443,7 +1443,6 @@ export function monthChange(direction, ripple = true) {
   updateCalander();
 }
 themeBtn.addEventListener("click", () => {
-  
   JSON.stringify(currentTheme) == JSON.stringify(themes.Light)
     ? changeTheme(themes.Dark)
     : changeTheme(themes.Light);

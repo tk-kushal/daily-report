@@ -15,8 +15,7 @@
   --textInvert: var(--textColor);
   --selectedColor: rgb(199, 190, 183);
   --rippleColor: rgba(255, 181, 152, 0.345);
-  --bgOpacity: 0.80
-
+  --bgOpacity: .9;
   transition:100ms var(--textColor);
 }
 /* :root {
@@ -34,7 +33,7 @@
   --textInvert: var(--textColor);
   --selectedColor: rgb(182, 182, 182);
   --rippleColor: rgba(255, 255, 255, 0.345);
-  --bgOpacity: 0.85
+  --bgOpacity: 0.9
 } */
 input,
 textarea {
@@ -809,6 +808,8 @@ input[type="text"].emojiInput {
   right: 0;
   opacity: 1;
   overflow: hidden;
+  filter: hue-rotate(20deg);
+
 }
 .blobContainer {
   z-index: 0;
@@ -936,7 +937,7 @@ input[type="text"].emojiInput {
 }
 .moon{
   --position:7px;
-  box-shadow:  calc(0px - var(--position)) var(--position) 0 0px rgb(0, 0, 0) ;
+  box-shadow:  calc(0px - var(--position)) var(--position) 0 0px rgb(40, 40, 40) ;
 }
 .sunMoonContainer{
   position: relative;
