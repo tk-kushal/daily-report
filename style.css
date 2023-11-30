@@ -808,7 +808,6 @@ input[type="text"].emojiInput {
   right: 0;
   opacity: 1;
   overflow: hidden;
-  filter: hue-rotate(20deg);
 
 }
 .blobContainer {
