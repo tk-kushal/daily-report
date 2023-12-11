@@ -198,6 +198,7 @@ body {
   flex-direction: column;
   padding: 50px;
   position: relative;
+  padding-top: 20px;
 }
 .main > * {
   max-width: 800px;
