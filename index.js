@@ -183,7 +183,6 @@ auth.onAuthStateChanged((user) => {
     profilePicture.src = currentUser.photoURL;
     profilePicture.style.display = "flex";
     profileIcon.style.display = "none";
-    console.log(profileIcon);
 
     uid = currentUser.uid;
     usersCollection = collection(db, uid);

@@ -65,7 +65,7 @@ textarea::-webkit-scrollbar {
   transition: 500ms height;
 }
 ::-webkit-scrollbar {
-  background-color: var(--background);
+  background-color: transparent;
   width: 10px;
 }
 ::-webkit-scrollbar-thumb {
