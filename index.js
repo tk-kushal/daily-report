@@ -101,7 +101,7 @@ let todaysDate = overallDate.getDate();
 let todaysMonth = overallDate.getMonth();
 let todaysYear = overallDate.getFullYear();
 let dateString = todaysDate + ":" + todaysMonth + ":" + todaysYear;
-let monthString = todaysMonth + ":" + todaysYear;
+let todaysMonthString = todaysMonth + ":" + todaysYear;
 let defaultQuestions = {
   title: { type: "small-text", id: "title", lable: "Name Your Day", order: 1 },
   exercise: {
@@ -200,9 +200,10 @@ auth.onAuthStateChanged((user) => {
         createDocument("structure", questionsStructure);
       }
     });
-    getDoc(doc(db, uid, monthString)).then((snapshot) => {
-      let allJournals = snapshot.data();
-      let data = allJournals[dateString];
+    getDoc(doc(db, uid, todaysMonthString)).then((snapshot) => {
+      allJournals[todaysMonthString] = snapshot.data();
+      //fixJournals();
+      let data = allJournals[todaysMonthString][dateString];
       if (data) {
         questions = data.questions;
         localStorage.setItem(
@@ -212,7 +213,7 @@ auth.onAuthStateChanged((user) => {
         setupReportSection();
       }
     });
-    getdocuments();
+    getdocuments(todaysMonthString);
     loadingStop();
   } else {
     loadingStop();
@@ -232,6 +233,7 @@ let selectedMonth = todaysMonth;
 let selectedYear = todaysYear;
 let selectedDate = todaysDate;
 let selectedDayString = todaysDate + ":" + todaysMonth + ":" + todaysYear;
+let selectedMonthString = todaysMonth + ":" + todaysYear;
 let currentView = JOURNAL;
 let updateTimeout = 500;
 let dataChanged = false;
@@ -248,7 +250,7 @@ setInterval(() => {
   if (updateTimeout > 0) {
     updateTimeout -= 50;
   } else if (dataChanged) {
-    console.log("data changed and updating");
+    // console.log("data changed and updating");
     dataChanged = false;
     localStorage.setItem(
       "questions",
@@ -263,10 +265,40 @@ setInterval(() => {
       },
       questions: questions,
     };
-    allJournals[dateString] = Data;
-    createDocument(monthString, allJournals);
+    // console.log(allJournals);
+    allJournals[todaysMonthString][dateString] = Data;
+    createDocument(todaysMonthString, allJournals[todaysMonthString]);
   }
 }, 50);
+
+function fixJournals() {
+  let tempAllJournals = {};
+  tempAllJournals = structuredClone(allJournals);
+  Object.keys(tempAllJournals).forEach((monthString) => {
+    Object.keys(tempAllJournals[monthString]).forEach((dayString) => {
+      let thismonthString =
+        tempAllJournals[monthString][dayString].date.month +
+        ":" +
+        tempAllJournals[monthString][dayString].date.year;
+      if (tempAllJournals[thismonthString]) {
+        tempAllJournals[thismonthString][dayString] =
+          tempAllJournals[monthString][dayString];
+      } else {
+        tempAllJournals[thismonthString] = {};
+        tempAllJournals[thismonthString][dayString] =
+          tempAllJournals[monthString][dayString];
+      }
+      if (thismonthString != monthString) {
+        delete tempAllJournals[monthString][dateString];
+      }
+    });
+  });
+  // console.log(tempAllJournals);
+  allJournals = structuredClone({});
+  allJournals = structuredClone(tempAllJournals);
+  // console.log(allJournals);
+  //dataChanged = true;
+}
 function saveQuestionsData() {
   reOrderQuestions(editQuestions);
   let questionsStructure = window.structuredClone(editQuestions);
@@ -806,9 +838,26 @@ function populateCalander(month, year) {
   let daysDom = "";
   let leapYear = isLeapYear(year);
   let prevMonthDays = getDaysInMonth(leapYear, month - 1);
-  let thisMonthDays = getDaysInMonth(leapYear, month);
+  let daysInMonth = getDaysInMonth(leapYear, month);
   let firstDateDay = getDateDay(1, month, year);
-  let lastDateDay = getDateDay(thisMonthDays, month, year);
+  let lastDateDay = getDateDay(daysInMonth, month, year);
+  let currentMonthString = month + ":" + year;
+  let previousMonthString =
+    getMonthYearNumber(month - 1, selectedYear).month +
+    ":" +
+    getMonthYearNumber(month - 1, currentYear).year;
+  let nextMonthString =
+    getMonthYearNumber(month + 1, currentYear).month +
+    ":" +
+    getMonthYearNumber(month + 1, currentYear).year;
+
+  if (!allJournals.hasOwnProperty(previousMonthString)) {
+    getdocuments(previousMonthString);
+  }
+  if (!allJournals.hasOwnProperty(currentMonthString)) {
+    getdocuments(currentMonthString);
+  }
+
   for (let i = prevMonthDays - firstDateDay + 1; i <= prevMonthDays; i++) {
     let dayContainer = document.createElement("div");
     daysDom = `
@@ -819,14 +868,16 @@ function populateCalander(month, year) {
         ? "selectedDay"
         : ""
     } ${
-      allJournals[
-        i +
-          ":" +
-          getMonthYearNumber(month - 1, selectedYear).month +
-          ":" +
-          getMonthYearNumber(month - 1, currentYear).year
-      ]
-        ? "trackedDay"
+      allJournals.hasOwnProperty(previousMonthString)
+        ? allJournals[previousMonthString][
+            i +
+              ":" +
+              getMonthYearNumber(month - 1, selectedYear).month +
+              ":" +
+              getMonthYearNumber(month - 1, currentYear).year
+          ]
+          ? "trackedDay"
+          : ""
         : ""
     }" id="${
       i +
@@ -839,14 +890,20 @@ function populateCalander(month, year) {
     dayContainer.innerHTML = daysDom;
     daysContainer.appendChild(dayContainer);
   }
-  for (let i = 1; i <= thisMonthDays; i++) {
+  for (let i = 1; i <= daysInMonth; i++) {
     let dayContainer = document.createElement("div");
     daysDom = `
     <div class="day ${
       selectedDate == i && month == selectedMonth && year == selectedYear
         ? "selectedDay"
         : ""
-    } ${allJournals[i + ":" + month + ":" + year] ? "trackedDay" : ""}"
+    } ${
+      allJournals.hasOwnProperty(currentMonthString)
+        ? allJournals[currentMonthString][i + ":" + month + ":" + year]
+          ? "trackedDay"
+          : ""
+        : ""
+    }"
     id="${i + ":" + month + ":" + year}">${i}</div>
     `;
     dayContainer.innerHTML = daysDom;
@@ -865,14 +922,16 @@ function populateCalander(month, year) {
         ? "selectedDay"
         : ""
     } ${
-      allJournals[
-        i +
-          ":" +
-          getMonthYearNumber(month + 1, currentYear).month +
-          ":" +
-          getMonthYearNumber(month + 1, currentYear).year
-      ]
-        ? "trackedDay"
+      allJournals.hasOwnProperty(nextMonthString)
+        ? allJournals[nextMonthString][
+            i +
+              ":" +
+              getMonthYearNumber(month + 1, currentYear).month +
+              ":" +
+              getMonthYearNumber(month + 1, currentYear).year
+          ]
+          ? "trackedDay"
+          : ""
         : ""
     }"
   id="${
@@ -890,6 +949,7 @@ function populateCalander(month, year) {
 }
 function daySelected(id, date, month, year) {
   selectedDayString = selectedDate + ":" + selectedMonth + ":" + selectedYear;
+  selectedMonthString = currentMonth + ":" + currentYear;
   let prevSelectedDay = document.getElementById(selectedDayString);
   let clickedDay = document.getElementById(id);
   selectedDate = date;
@@ -903,6 +963,10 @@ function daySelected(id, date, month, year) {
   refreshSelectedDayInfo();
 }
 function refreshSelectedDayInfo() {
+  // console.log("******************");
+  // console.log(selectedDayString);
+  // console.log(selectedMonthString);
+  // console.log(allJournals[selectedMonthString]);
   const date = document.getElementsByClassName("selectedDayDate")[0];
   const questionsContainer = document.getElementsByClassName(
     "selectedDayQuestionsContainer"
@@ -911,14 +975,16 @@ function refreshSelectedDayInfo() {
   date.innerHTML =
     selectedDate + " " + getMonth(selectedMonth) + " " + selectedYear;
   let selectedDayQuestionKeys = null;
-  if (allJournals[selectedDayString]) {
-    try {
+  try {
+    if (allJournals[selectedMonthString][selectedDayString]) {
       selectedDayQuestionKeys = Object.keys(
-        allJournals[selectedDayString].questions
+        allJournals[selectedMonthString][selectedDayString].questions
       );
       for (let i = 0; i < selectedDayQuestionKeys.length; i++) {
         let question =
-          allJournals[selectedDayString].questions[selectedDayQuestionKeys[i]];
+          allJournals[selectedMonthString][selectedDayString].questions[
+            selectedDayQuestionKeys[i]
+          ];
         let value = "";
         if (question.emotes) {
           value = question.emotes[question.value];
@@ -938,8 +1004,11 @@ function refreshSelectedDayInfo() {
       `;
       }
       questionsContainer.innerHTML = questionsDom;
-    } catch (error) {}
-  } else {
+    } else {
+      questionsContainer.innerHTML = "";
+    }
+  } catch (error) {
+    console.error(error);
     questionsContainer.innerHTML = "";
   }
 }
@@ -1247,7 +1316,7 @@ function addQuestion(type) {
 }
 function refreshQuestionStyling() {
   let questionsKeys = Object.keys(questions);
-  console.log(questions);
+  // console.log(questions);
   for (let i = 0; i < questionsKeys.length; i++) {
     let questionData = editQuestions[questionsKeys[i]];
     let question = questionsDom[questionsKeys[i]];
@@ -1362,30 +1431,38 @@ function handleContentChange() {
   });
   observer.observe(document.body, { childList: true, subtree: true });
 }
-function getdocuments() {
-  getDoc(doc(db, uid, monthString))
-    .then((snapshot) => {
-      data = snapshot.data();
-      if (data) {
-        allJournals = data;
-        updateCalander();
-        loadingStop();
-      } else {
-        getDocs(usersCollection).then((snapshot) => {
-          snapshot.docs.map((doc) => {
-            let data = doc.data();
-            if (data.date) {
-              allJournals[doc.id] = data;
-            }
-          });
-          let docRef = doc(db, uid, monthString);
-          setDoc(docRef, allJournals).then().catch();
+function getdocuments(monthString) {
+  // console.log(monthString);
+  if (uid) {
+    getDoc(doc(db, uid, monthString))
+      .then((snapshot) => {
+        data = snapshot.data();
+        if (data) {
+          // console.log(data);
+          allJournals[monthString] = data;
+          // console.log(allJournals);
+          fixJournals();
           updateCalander();
           loadingStop();
-        });
-      }
-    })
-    .catch((e) => console.log(e));
+        } else {
+          allJournals[monthString] = {};
+          // getDocs(usersCollection).then((snapshot) => {
+          //   snapshot.docs.map((doc) => {
+          //     let data = doc.data();
+          //     if (data.date) {
+          //       allJournals[monthString][doc.id] = data;
+          //       fixJournals();
+          //     }
+          //   });
+          //   let docRef = doc(db, uid, monthString);
+          //   setDoc(docRef, allJournals[monthString]).then().catch();
+          //   updateCalander();
+          //   loadingStop();
+          // });
+        }
+      })
+      .catch((e) => console.log(e));
+  }
 }
 function createDocument(key, data) {
   if (uid) {
@@ -1526,6 +1603,10 @@ resetCalanderButton.addEventListener("click", () => {
   currentMonth = todaysMonth;
   currentYear = todaysYear;
   selectedDate = todaysDate;
+  selectedMonth = todaysMonth;
+  selectedYear = todaysYear;
+  selectedMonthString = todaysMonth + ":" + todaysYear;
+  selectedDayString = todaysDate + ":" + todaysMonth + ":" + todaysYear;
   calanderSwipe("reset");
   updateCalander();
 });
