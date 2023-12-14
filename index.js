@@ -89,7 +89,7 @@ const themes = {
     bgOpacity: "0.8",
   },
 };
-
+const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)");
 let loading = false;
 let editing = false;
 let currentUser = null;
@@ -161,7 +161,9 @@ let questions = null;
 let data = JSON.parse(localStorage.getItem("questions"));
 let currentTheme = JSON.parse(localStorage.getItem("preferences"))
   ? JSON.parse(localStorage.getItem("preferences")).theme
-  : themes.Orange;
+  : prefersDarkMode
+  ? themes.Dark
+  : themes.Light;
 changeTheme(currentTheme);
 if (data && data.questions) {
   questions = data.questions;
@@ -1545,6 +1547,8 @@ document.addEventListener("DOMContentLoaded", function () {
 loginBtn.addEventListener("click", () => {
   if (currentUser) {
     signOut();
+    localStorage.clear();
+    allJournals = {};
   } else {
     signIn();
   }
