@@ -4,7 +4,7 @@ make the theme more standard and appealing
 
 ~add a custom light and dark theme button~
 
-fix the month date loading issue
+~fix the month date loading issue~
 
 add more font options for the text box
 
