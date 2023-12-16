@@ -13,3 +13,5 @@ add a full screen type of thing for the report, and maybe rethink the UI.
 and yes, please make it a PWA as soon as possible.
 
 Fixing the data fetching issue
+
+make and add a logo for the application and find a way to convert it into a PWA
