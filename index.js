@@ -1010,7 +1010,7 @@ function refreshSelectedDayInfo() {
       questionsContainer.innerHTML = "";
     }
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     questionsContainer.innerHTML = "";
   }
 }
