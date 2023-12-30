@@ -253,12 +253,12 @@ setInterval(() => {
     updateTimeout -= 50;
   } else if (dataChanged) {
     // console.log("data changed and updating");
+    loadingStart();
     dataChanged = false;
     localStorage.setItem(
       "questions",
       JSON.stringify({ date: dateString, questions: questions })
     );
-    loadingStop();
     let Data = {
       date: {
         date: selectedDate,
@@ -692,9 +692,9 @@ function setupReportSection() {
 }
 function changeQuestionValue(id, value) {
   if (questions[id].value != value) {
-    loadingStart();
+    // loadingStart();
     questions[id].value = value;
-    updateTimeout = 1000;
+    updateTimeout = 2000;
     dataChanged = true;
   }
 }
@@ -706,49 +706,7 @@ function questionsEdited() {
 }
 function handleUrlChangeEvent() {
   let path = window.location.pathname;
-  //so that the transition does not occur when reloading the page or loading another page besies the report page directly form url
-  if (initialize && (path == JOURNAL || path == CALENDAR || path == PROFILE)) {
-    currentView = path;
-    initialize = false;
-  }
-
-  if (currentView !== path) {
-    if (path === JOURNAL) {
-      transtition(
-        null,
-        reportBtn,
-        JOURNAL,
-        reportBtn.getBoundingClientRect().left,
-        reportBtn.getBoundingClientRect().top
-      );
-    } else if (path === CALENDAR) {
-      transtition(
-        null,
-        calanderBtn,
-        CALENDAR,
-        calanderBtn.getBoundingClientRect().left,
-        calanderBtn.getBoundingClientRect().top
-      );
-    } else if (path === PROFILE) {
-      transtition(
-        null,
-        userBtn,
-        PROFILE,
-        userBtn.getBoundingClientRect().left,
-        userBtn.getBoundingClientRect().top
-      );
-    } else {
-      transtition(
-        null,
-        reportBtn,
-        JOURNAL,
-        reportBtn.getBoundingClientRect().left,
-        reportBtn.getBoundingClientRect().top
-      );
-    }
-  } else {
-    updateView(currentView);
-  }
+  updateView(path);
 }
 function handleEmojiSliderEvent(e, x) {
   let parent = e.srcElement.parentElement;
@@ -1153,41 +1111,6 @@ function getMonth(month) {
       break;
   }
 }
-function transtition(e, element, view, cordX, cordY) {
-  // title.parentElement.style.zIndex = 0;
-  // element.style.zIndex = "10";
-  // let transition = document.createElement("div");
-  // let transitionContainer = document.createElement("div");
-  // let rect = element.getBoundingClientRect();
-  // let x = cordX + element.clientWidth / 2;
-  // let y = cordY + element.clientHeight / 2;
-  // if (e) {
-  //   x = rect.left + e.target.clientWidth / 2;
-  //   y = rect.top + e.target.clientHeight / 2;
-  // }
-  // window.innerHeight > window.innerWidth
-  //   ? document.documentElement.style.setProperty(
-  //       "--circleSize",
-  //       window.innerHeight * 2.8 + "px"
-  //     )
-  //   : document.documentElement.style.setProperty(
-  //       "--circleSize",
-  //       window.innerWidth * 2.8 + "px"
-  //     );
-  // transitionContainer.classList.add("transitionContainer");
-  // transitionContainer.appendChild(transition);
-  // transition.classList.add("transition");
-  // navbarContainer.appendChild(transitionContainer);
-  // transition.style.top = y + "px";
-  // transition.style.left = x + "px";
-  // transition.classList.add("grow");
-  setTimeout(() => {}, 0);
-  // setTimeout(() => {
-  //   navbarContainer.removeChild(transitionContainer);
-  //   element.style.zIndex = "1";
-  //   title.parentElement.style.zIndex = 8;
-  // }, 400);
-}
 function showQuestionsEditControlls() {
   let questionsKeys = Object.keys(questions);
   for (let i = 0; i < questionsKeys.length; i++) {
@@ -1470,8 +1393,9 @@ function createDocument(key, data) {
   if (uid) {
     let docRef = doc(db, uid, key);
     setDoc(docRef, data)
-      .then()
-      .catch((e) => console.log(e));
+      .then(()=>{loadingStop()})
+      .catch((e) => {console.log(e)
+      loadingStop()});
   }
 }
 function changeTheme(theme) {
