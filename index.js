@@ -160,8 +160,11 @@ let defaultQuestions = {
 let questions = null;
 allJournals = JSON.parse(localStorage.getItem("questions"));
 let data = {}
-if(allJournals.hasOwnProperty(todaysMonthString)){
+if(allJournals){
+  if(allJournals.hasOwnProperty(todaysMonthString))
   data = allJournals[todaysMonthString][dateString]
+}else{
+  allJournals = {};
 }
 let currentTheme = JSON.parse(localStorage.getItem("preferences"))
   ? JSON.parse(localStorage.getItem("preferences")).theme
