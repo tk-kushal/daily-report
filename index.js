@@ -158,7 +158,11 @@ let defaultQuestions = {
   },
 };
 let questions = null;
-let data = JSON.parse(localStorage.getItem("questions"));
+allJournals = JSON.parse(localStorage.getItem("questions"));
+let data = {}
+if(allJournals.hasOwnProperty(todaysMonthString)){
+  data = allJournals[todaysMonthString][dateString]
+}
 let currentTheme = JSON.parse(localStorage.getItem("preferences"))
   ? JSON.parse(localStorage.getItem("preferences")).theme
   : prefersDarkMode
@@ -167,7 +171,9 @@ let currentTheme = JSON.parse(localStorage.getItem("preferences"))
 changeTheme(currentTheme);
 if (data && data.questions) {
   questions = data.questions;
-  if (data.date != dateString) {
+  let dataDateString = data.date.date+':'+data.date.month+':'+data.date.year;
+  if (dataDateString != dateString) {
+    console.log(dateString, dataDateString)
     let questionKeys = Object.keys(questions);
     for (let i = 0; i < questionKeys.length; i++) {
       delete questions[questionKeys[i]].value;
@@ -255,10 +261,7 @@ setInterval(() => {
     // console.log("data changed and updating");
     loadingStart();
     dataChanged = false;
-    localStorage.setItem(
-      "questions",
-      JSON.stringify({ date: dateString, questions: questions })
-    );
+    
     let Data = {
       date: {
         date: selectedDate,
@@ -268,7 +271,14 @@ setInterval(() => {
       questions: questions,
     };
     // console.log(allJournals);
+    if(!allJournals[todaysMonthString]){
+      allJournals[todaysMonthString] = {};
+    }
     allJournals[todaysMonthString][dateString] = Data;
+    localStorage.setItem(
+      "questions",
+      JSON.stringify(allJournals)
+    );
     createDocument(todaysMonthString, allJournals[todaysMonthString]);
   }
 }, 50);
@@ -620,6 +630,7 @@ function createQuestion(questionData, creating = false) {
 }
 function setupReportSection() {
   let questionsKeys = Object.keys(questions);
+
   questionsContainer.innerHTML = "";
   for (let i = 0; i < questionsKeys.length; i++) {
     let question = createQuestion(questions[questionsKeys[i]]);
@@ -802,6 +813,7 @@ function populateCalander(month, year) {
   let firstDateDay = getDateDay(1, month, year);
   let lastDateDay = getDateDay(daysInMonth, month, year);
   let currentMonthString = month + ":" + year;
+  console.log(allJournals[currentMonthString])
   let previousMonthString =
     getMonthYearNumber(month - 1, selectedYear).month +
     ":" +
@@ -1371,19 +1383,6 @@ function getdocuments(monthString) {
           loadingStop();
         } else {
           allJournals[monthString] = {};
-          // getDocs(usersCollection).then((snapshot) => {
-          //   snapshot.docs.map((doc) => {
-          //     let data = doc.data();
-          //     if (data.date) {
-          //       allJournals[monthString][doc.id] = data;
-          //       fixJournals();
-          //     }
-          //   });
-          //   let docRef = doc(db, uid, monthString);
-          //   setDoc(docRef, allJournals[monthString]).then().catch();
-          //   updateCalander();
-          //   loadingStop();
-          // });
         }
       })
       .catch((e) => console.log(e));
@@ -1396,6 +1395,10 @@ function createDocument(key, data) {
       .then(()=>{loadingStop()})
       .catch((e) => {console.log(e)
       loadingStop()});
+  }else{
+    setTimeout(() => {
+      loadingStop();
+    }, 500);
   }
 }
 function changeTheme(theme) {
