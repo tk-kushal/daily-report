@@ -1,228 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="slider.css" />
-    <link rel="stylesheet" href="buttonClick.css" />
-    <title>Daily Journal</title>
-    <link rel="icon" type="image/x-icon" href="/images/daily tracker logo.png">
-  </head>
 
-  <body>
-    <div class="background">
-      <div class="backgroundimg">
-        <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-      </div>
-      <div class="backgroundoverlay"></div>
-    </div>
-    <div class="navbarContainer">
-      <div class="navbar centre">
-        <div class="right">
-          <div class="lds-ring loading loading-hidden">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-          <div class="reportBtn centre">
-            <i class="fa-solid fa-book"></i>
-          </div>
-          <div class="calanderBtn centre">
-            <i class="fa-solid fa-calendar-days cetner"></i>
-          </div>
-          <div class="userBtn centre">
-            <div id="profileIcon">
-              <i class="fa-solid fa-user"></i>
-            </div>
-            <img style="display: none" src="" alt="" id="profilePicture" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="title">
-      <div class="text"></div>
-    </div>
-    <div class="backdrop hidden"></div>
-    <div class="warning-container hidden">
-      <div class="warning-popup">
-        <div class="warning">Changes will not be saved Cancle?</div>
-        <div class="warning-buttons report-controlls-right">
-          <div class="warning-cancle ripple-button" style="font-size: 18px">
-            <i class="fa-solid fa-xmark"></i>
-          </div>
-          <div class="warning-done ripple-button">
-            <i class="fa-solid fa-check"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="main">
-      <div class="report" style="display: none">
-        <div class="daysQuote">
-          <i class="fa-solid fa-quote-left"></i>
-          <span class="quote">
-            NOTHING IS IMPOSSIBLE. THE WORD ITSELF SAYS 'I'M POSSIBLE!'
-          </span>
-          <i class="fa-solid fa-quote-right"></i>
-          <div class="author">-Audrey Hepburn</div>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="slider.css" />
+  <link rel="stylesheet" href="buttonClick.css" />
+  <title>Daily Journal</title>
+  <link rel="icon" type="image/x-icon" href="/images/daily tracker logo.png">
+  <link rel="manifest" href="/manifest.json">
+</head>
 
-        <div class="report-controlls">
-          <div class="left">
-            <div class="report-date">
-              <div class="date-day"></div>
-              <div class="month"></div>
-              <div class="year"></div>
-            </div>
-          </div>
-          <div class="flex">
-            <div class="report-controlls-right">
-              <div class="edit ripple-button">
-                <i class="fa-solid fa-pen"></i>
-              </div>
-            </div>
-            <div class="report-controlls-right report-edit-controlls hidden">
-              <div class="popup hidden">
-                <div class="option ripple-button small-text">TextBox Small</div>
-                <div class="option ripple-button toggle">Toggle Button</div>
-                <div class="option ripple-button sliderOption">Slider</div>
-                <div class="option ripple-button large-text">TextBox Large</div>
-              </div>
-              <div class="add ripple-button">
-                <i class="fa-solid fa-plus"></i>
-              </div>
-              <div class="cancle ripple-button">
-                <i class="fa-solid fa-xmark"></i>
-              </div>
-              <div class="done ripple-button">
-                <i class="fa-solid fa-check"></i>
-              </div>
-            </div>
-          </div>
+<body>
+  <div class="background">
+    <div class="backgroundimg">
+      <img
+        src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="">
+    </div>
+    <div class="backgroundoverlay"></div>
+  </div>
+  <div class="navbarContainer">
+    <div class="navbar centre">
+      <div class="right">
+        <div class="lds-ring loading loading-hidden">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
-        <div class="questionsContainer"></div>
+        <div class="reportBtn centre">
+          <i class="fa-solid fa-book"></i>
+        </div>
+        <div class="calanderBtn centre">
+          <i class="fa-solid fa-calendar-days cetner"></i>
+        </div>
+        <div class="userBtn centre">
+          <div id="profileIcon">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <img style="display: none" src="" alt="" id="profilePicture" />
+        </div>
       </div>
-      <div class="calander" style="display: none">
-        <div class="calanderControlls">
-          <div class="yearAndMonth ripple-button">
-            <div class="yearControlls"></div>
-            <div class="line"></div>
-            <div class="monthControlls"></div>
-          </div>
-          <div class="calanderButtons">
-            <div class="resetBtn ripple-button">
-              <i class="fa-solid fa-arrow-rotate-left"></i>
-            </div>
-            <div class="previousMonthBtn ripple-button">
-              <i class="fa-solid fa-angle-left"></i>
-            </div>
-            <div class="nextMonthBtn ripple-button">
-              <i class="fa-solid fa-angle-right"></i>
-            </div>
-          </div>
+    </div>
+  </div>
+  <div class="title">
+    <div class="text"></div>
+  </div>
+  <div class="backdrop hidden"></div>
+  <div class="warning-container hidden">
+    <div class="warning-popup">
+      <div class="warning">Changes will not be saved Cancle?</div>
+      <div class="warning-buttons report-controlls-right">
+        <div class="warning-cancle ripple-button" style="font-size: 18px">
+          <i class="fa-solid fa-xmark"></i>
         </div>
-        <div class="calanderContainer ripple-calander">
-          <div class="weekDays">
-            <div class="weekDay">S</div>
-            <div class="weekDay">M</div>
-            <div class="weekDay">T</div>
-            <div class="weekDay">W</div>
-            <div class="weekDay">T</div>
-            <div class="weekDay">F</div>
-            <div class="weekDay">S</div>
-          </div>
-          <div class="days"></div>
+        <div class="warning-done ripple-button">
+          <i class="fa-solid fa-check"></i>
         </div>
-        <div class="selectedDayReport calanderContainer">
-          <div class="selectedDayDateContainer">
-            <div class="selectedDayDate"></div>
-          </div>
-          <div class="blank">---------</div>
-          <div class="selectedDayQuestionsContainer"></div>
-        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="report" style="display: none">
+      <div class="daysQuote">
+        <span class="quote">
+          " NOTHING IS IMPOSSIBLE. THE WORD ITSELF SAYS 'I'M POSSIBLE! "
+        </span>
+        <div class="author">-Audrey Hepburn</div>
       </div>
 
-      <div class="profile" style="display: none">
-        <div class="profileContainer">
-          <div class="themeContainer">
-            <div class="theme-options">
-              <div class="theme-title">Theme</div>
-              <!-- <div class="theme-circle theme1 themeSelected">Light</div>
+      <div class="report-controlls">
+        <div class="left">
+          <div class="report-date">
+            <div class="date-day"></div>
+            <div class="month"></div>
+            <div class="year"></div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="report-controlls-right">
+            <div class="edit ripple-button">
+              <i class="fa-solid fa-pen"></i>
+            </div>
+          </div>
+          <div class="report-controlls-right report-edit-controlls hidden">
+            <div class="popup hidden">
+              <div class="option ripple-button small-text">TextBox Small</div>
+              <div class="option ripple-button toggle">Toggle Button</div>
+              <div class="option ripple-button sliderOption">Slider</div>
+              <div class="option ripple-button large-text">TextBox Large</div>
+            </div>
+            <div class="add ripple-button">
+              <i class="fa-solid fa-plus"></i>
+            </div>
+            <div class="cancle ripple-button">
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+            <div class="done ripple-button">
+              <i class="fa-solid fa-check"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="questionsContainer"></div>
+    </div>
+    <div class="calander" style="display: none">
+      <div class="calanderControlls">
+        <div class="yearAndMonth ripple-button">
+          <div class="yearControlls"></div>
+          <div class="line"></div>
+          <div class="monthControlls"></div>
+        </div>
+        <div class="calanderButtons">
+          <div class="resetBtn ripple-button">
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+          </div>
+          <div class="previousMonthBtn ripple-button">
+            <i class="fa-solid fa-angle-left"></i>
+          </div>
+          <div class="nextMonthBtn ripple-button">
+            <i class="fa-solid fa-angle-right"></i>
+          </div>
+        </div>
+      </div>
+      <div class="calanderContainer ripple-calander">
+        <div class="weekDays">
+          <div class="weekDay">S</div>
+          <div class="weekDay">M</div>
+          <div class="weekDay">T</div>
+          <div class="weekDay">W</div>
+          <div class="weekDay">T</div>
+          <div class="weekDay">F</div>
+          <div class="weekDay">S</div>
+        </div>
+        <div class="days"></div>
+      </div>
+      <div class="selectedDayReport calanderContainer">
+        <div class="selectedDayDateContainer">
+          <div class="selectedDayDate"></div>
+        </div>
+        <div class="blank">---------</div>
+        <div class="selectedDayQuestionsContainer"></div>
+      </div>
+    </div>
+
+    <div class="profile" style="display: none">
+      <div class="profileContainer">
+        <div class="themeContainer">
+          <div class="theme-options">
+            <div class="theme-title">Theme</div>
+            <!-- <div class="theme-circle theme1 themeSelected">Light</div>
               <div class="theme-circle theme2">Dark</div> -->
-              <div class="sunMoonContainer">
-                <div class="sunMoon moon"></div>
-                <div class="moonSparkles">
-                  <div class="sparkle">
-                    <i class="fa-solid fa-star"></i>
-                  </div>
-                  <div class="sparkle">
-                    <i class="fa-solid fa-star"></i>
-                  </div>
-                  <div class="sparkle">
-                    <i class="fa-solid fa-star"></i>
-                  </div>
+            <div class="sunMoonContainer">
+              <div class="sunMoon moon"></div>
+              <div class="moonSparkles">
+                <div class="sparkle">
+                  <i class="fa-solid fa-star"></i>
                 </div>
-                <div class="sunRays">
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
-                  <div class="rayContainer">
-                    <div class="ray"></div>
-                  </div>
+                <div class="sparkle">
+                  <i class="fa-solid fa-star"></i>
+                </div>
+                <div class="sparkle">
+                  <i class="fa-solid fa-star"></i>
+                </div>
+              </div>
+              <div class="sunRays">
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
+                </div>
+                <div class="rayContainer">
+                  <div class="ray"></div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="loginBtn ripple-button" style="display: none">Login</div>
         </div>
+        <div class="loginBtn ripple-button" style="display: none">Login</div>
       </div>
     </div>
+  </div>
 
-    <div
-      data-swipe-threshold="20"
-      data-swipe-timeout="300"
-      data-swipe-ignore="false"
-    ></div>
-  </body>
-  <script>
-    function resizeTextbox(e) {
-      const textarea = e;
-      textarea.style.height = "auto"; // Reset the height to calculate the new height
-      textarea.style.height =
-        textarea.scrollHeight > textarea.offsetHeight
-          ? textarea.scrollHeight + "px"
-          : textarea.offsetHeight + "px";
-    }
-  </script>
-  <script src="index.js" type="module"></script>
-  <script src="buttonClick.js" type="module"></script>
-  <script type="module" src="firebase.js"></script>
-  <script src="all.min.js"></script>
-  <script src="pure-swipe.min.js"></script>
+  <div data-swipe-threshold="20" data-swipe-timeout="300" data-swipe-ignore="false"></div>
+</body>
+<script>
+  function resizeTextbox(e) {
+    const textarea = e;
+    textarea.style.height = "auto"; // Reset the height to calculate the new height
+    textarea.style.height =
+      textarea.scrollHeight > textarea.offsetHeight
+        ? textarea.scrollHeight + "px"
+        : textarea.offsetHeight + "px";
+  }
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register('/serviceworker.js')
+      .then(registration => {
+        console.log('Service worker registered:', registration);
+      })
+      .catch(error => {
+        console.error('Error registering service worker:', error);
+      });
+  }
+</script>
+<script src="index.js" type="module"></script>
+<script src="buttonClick.js" type="module"></script>
+<script type="module" src="firebase.js"></script>
+<script src="all.min.js"></script>
+<script src="pure-swipe.min.js"></script>
+
 </html>
