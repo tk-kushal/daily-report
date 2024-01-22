@@ -17,3 +17,5 @@ and yes, please make it a PWA as soon as possible.
 make and add a logo for the application and find a way to convert it into a PWA
 
 can add color theme options by adjusting the hue of the background using filter
+
+Need to find a pwa generator website or use the pwa generator NPM package to generate the assets for the manifest file.
