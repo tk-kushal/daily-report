@@ -159,11 +159,11 @@ let defaultQuestions = {
 };
 let questions = null;
 allJournals = JSON.parse(localStorage.getItem("questions"));
-let data = {}
-if(allJournals){
-  if(allJournals.hasOwnProperty(todaysMonthString))
-  data = allJournals[todaysMonthString][dateString]
-}else{
+let data = {};
+if (allJournals) {
+  if (allJournals.hasOwnProperty(todaysMonthString))
+    data = allJournals[todaysMonthString][dateString];
+} else {
   allJournals = {};
 }
 let currentTheme = JSON.parse(localStorage.getItem("preferences"))
@@ -174,9 +174,10 @@ let currentTheme = JSON.parse(localStorage.getItem("preferences"))
 changeTheme(currentTheme);
 if (data && data.questions) {
   questions = data.questions;
-  let dataDateString = data.date.date+':'+data.date.month+':'+data.date.year;
+  let dataDateString =
+    data.date.date + ":" + data.date.month + ":" + data.date.year;
   if (dataDateString != dateString) {
-    console.log(dateString, dataDateString)
+    console.log(dateString, dataDateString);
     let questionKeys = Object.keys(questions);
     for (let i = 0; i < questionKeys.length; i++) {
       delete questions[questionKeys[i]].value;
@@ -264,7 +265,7 @@ setInterval(() => {
     // console.log("data changed and updating");
     loadingStart();
     dataChanged = false;
-    
+
     let Data = {
       date: {
         date: selectedDate,
@@ -274,14 +275,11 @@ setInterval(() => {
       questions: questions,
     };
     // console.log(allJournals);
-    if(!allJournals[todaysMonthString]){
+    if (!allJournals[todaysMonthString]) {
       allJournals[todaysMonthString] = {};
     }
     allJournals[todaysMonthString][dateString] = Data;
-    localStorage.setItem(
-      "questions",
-      JSON.stringify(allJournals)
-    );
+    localStorage.setItem("questions", JSON.stringify(allJournals));
     createDocument(todaysMonthString, allJournals[todaysMonthString]);
   }
 }, 50);
@@ -291,20 +289,22 @@ function fixJournals() {
   tempAllJournals = structuredClone(allJournals);
   Object.keys(tempAllJournals).forEach((monthString) => {
     Object.keys(tempAllJournals[monthString]).forEach((dayString) => {
-      let thismonthString =
-        tempAllJournals[monthString][dayString].date.month +
-        ":" +
-        tempAllJournals[monthString][dayString].date.year;
-      if (tempAllJournals[thismonthString]) {
-        tempAllJournals[thismonthString][dayString] =
-          tempAllJournals[monthString][dayString];
-      } else {
-        tempAllJournals[thismonthString] = {};
-        tempAllJournals[thismonthString][dayString] =
-          tempAllJournals[monthString][dayString];
-      }
-      if (thismonthString != monthString) {
-        delete tempAllJournals[monthString][dateString];
+      if (tempAllJournals[monthString][dateString]) {
+        let thismonthString =
+          tempAllJournals[monthString][dayString].date.month +
+          ":" +
+          tempAllJournals[monthString][dayString].date.year;
+        if (tempAllJournals[thismonthString]) {
+          tempAllJournals[thismonthString][dayString] =
+            tempAllJournals[monthString][dayString];
+        } else {
+          tempAllJournals[thismonthString] = {};
+          tempAllJournals[thismonthString][dayString] =
+            tempAllJournals[monthString][dayString];
+        }
+        if (thismonthString != monthString) {
+          delete tempAllJournals[monthString][dateString];
+        }
       }
     });
   });
@@ -704,10 +704,18 @@ function setupReportSection() {
   }
   updateButtons();
 }
+function getCurrentTime() {
+  let dateObj = new Date();
+  let hours = dateObj.getHours();
+  let minutes = dateObj.getMinutes();
+  let seconds = dateObj.getSeconds();
+  return [hours, minutes, seconds];
+}
 function changeQuestionValue(id, value) {
-  if (questions[id].value != value) {
+  if (id in questions && questions[id].value != value) {
     // loadingStart();
     questions[id].value = value;
+    questions[id].time = getCurrentTime();
     updateTimeout = 2000;
     dataChanged = true;
   }
@@ -816,7 +824,7 @@ function populateCalander(month, year) {
   let firstDateDay = getDateDay(1, month, year);
   let lastDateDay = getDateDay(daysInMonth, month, year);
   let currentMonthString = month + ":" + year;
-  console.log(allJournals[currentMonthString])
+  console.log(allJournals[currentMonthString]);
   let previousMonthString =
     getMonthYearNumber(month - 1, selectedYear).month +
     ":" +
@@ -937,6 +945,15 @@ function daySelected(id, date, month, year) {
 
   refreshSelectedDayInfo();
 }
+function getFormattedTime(time) {
+  if (time[0] >= 12) {
+    return (
+      time[0] - 12 + " : " + (time[1] < 10 ? "0" + time[1] : time[1]) + " PM"
+    );
+  } else {
+    return time[0] + " : " + (time[1] < 10 ? "0" + time[1] : time[1]) + " AM";
+  }
+}
 function refreshSelectedDayInfo() {
   // console.log("******************");
   // console.log(selectedDayString);
@@ -972,7 +989,19 @@ function refreshSelectedDayInfo() {
         if (question.value != undefined)
           questionsDom += `
       <div class="selectedDayQuestion" style="order:${question.order}">
-        <div class="selectedQuestionLable">${question.lable}</div>
+        <div class="selectedQuestionLable">
+          <div>
+            ${question.lable}
+          </div>
+          ${
+            question.time &&
+            `
+            <div class="selectedQuestionTime">
+              ${getFormattedTime(question.time)}
+            </div>
+          `
+          }
+        </div>
         <div class="selectedQuestionAnswer">${value}</div>
       </div>
         
@@ -1395,10 +1424,14 @@ function createDocument(key, data) {
   if (uid) {
     let docRef = doc(db, uid, key);
     setDoc(docRef, data)
-      .then(()=>{loadingStop()})
-      .catch((e) => {console.log(e)
-      loadingStop()});
-  }else{
+      .then(() => {
+        loadingStop();
+      })
+      .catch((e) => {
+        console.log(e);
+        loadingStop();
+      });
+  } else {
     setTimeout(() => {
       loadingStop();
     }, 500);

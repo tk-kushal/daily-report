@@ -15,8 +15,8 @@
   --textInvert: var(--textColor);
   --selectedColor: rgb(199, 190, 183);
   --rippleColor: rgba(255, 181, 152, 0.345);
-  --bgOpacity: .9;
-  transition:100ms var(--textColor);
+  --bgOpacity: 0.9;
+  transition: 100ms var(--textColor);
 }
 /* :root {
   --background: #222222;
@@ -148,7 +148,7 @@ body {
   border-radius: 50%;
   border: 2px solid transparent;
   transition: 500ms;
-  transition-property: background, border-radius,  border;
+  transition-property: background, border-radius, border;
   overflow: hidden;
 }
 .userBtn > img {
@@ -846,8 +846,17 @@ input[type="text"].emojiInput {
   font-size: 20px;
 }
 .selectedQuestionLable {
+  display: flex;
+  justify-content: space-between;
   opacity: 0.6;
   font-size: 18px;
+}
+.selectedQuestionTime {
+  text-wrap: nowrap;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  font-size: 0.6em;
 }
 .selectedQuestionAnswer {
   white-space: pre-wrap;
@@ -862,7 +871,7 @@ input[type="text"].emojiInput {
 .day {
   box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.118);
 }
-.backgroundimg{
+.backgroundimg {
   object-fit: cover;
   width: 100%;
   height: 100%;
@@ -871,7 +880,7 @@ input[type="text"].emojiInput {
 .backgroundimg img {
   width: 100%;
   height: 100%;
-  object-fit: cover ;
+  object-fit: cover;
   object-position: center;
   filter: blur(10px);
   transform: scale(1.1);
@@ -922,71 +931,74 @@ input[type="text"].emojiInput {
   }
 }
 
-.sunMoon{ 
-  --position:24px;
-  position: absolute; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(calc(-50% + var(--position)), calc(-50% - var(--position))); 
+.sunMoon {
+  --position: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(
+    calc(-50% + var(--position)),
+    calc(-50% - var(--position))
+  );
   width: 24px;
   aspect-ratio: 1;
-  box-shadow:  calc(0px - var(--position)) var(--position) 0 0px rgb(255, 189, 7) ;
-  border-radius: 50%; 
-  transition: .3s ease-in-out;
+  box-shadow: calc(0px - var(--position)) var(--position) 0 0px rgb(255, 189, 7);
+  border-radius: 50%;
+  transition: 0.3s ease-in-out;
 }
-.moon{
-  --position:7px;
-  box-shadow:  calc(0px - var(--position)) var(--position) 0 0px rgb(40, 40, 40) ;
+.moon {
+  --position: 7px;
+  box-shadow: calc(0px - var(--position)) var(--position) 0 0px rgb(40, 40, 40);
 }
-.sunMoonContainer{
+.sunMoonContainer {
   position: relative;
   width: 32px;
-  aspect-ratio:1;
+  aspect-ratio: 1;
   margin: 5px;
-  transform: scale(.9);
+  transform: scale(0.9);
 }
-.sunMoonContainer:hover{
+.sunMoonContainer:hover {
   cursor: pointer;
 }
 
-.sparkle{
+.sparkle {
   color: black;
   opacity: 0;
   font-size: 5px;
   position: absolute;
   right: 15%;
   top: 6%;
-  animation: .5s sparkle cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: 0.5s sparkle cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   animation-delay: 100ms;
 }
-.sparkle:nth-child(2){
+.sparkle:nth-child(2) {
   font-size: 7px;
   right: 25%;
   top: 21%;
 }
-.sparkle:nth-child(3){
+.sparkle:nth-child(3) {
   font-size: 4px;
   right: 8%;
   top: 23%;
 }
-.sunRays{
+.sunRays {
   opacity: 0;
   display: none;
   position: absolute;
   width: 32px;
   aspect-ratio: 1;
-  animation: rotate .5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55) ;
+  animation: rotate 0.5s forwards cubic-bezier(0.68, -0.55, 0.265, 1.55);
   animation-delay: 0ms;
   transition: 300ms ease-in-out;
   pointer-events: none;
 }
-.ray{
+.ray {
   width: 3px;
   height: 5px;
   border-radius: 2px;
-  background-color: rgb(233, 171, 0) ;
+  background-color: rgb(233, 171, 0);
 }
-.rayContainer{
+.rayContainer {
   --divisor: 36deg;
   display: flex;
   align-items: end;
@@ -999,31 +1011,31 @@ input[type="text"].emojiInput {
   transform-origin: 1.5px -0px;
   pointer-events: none;
 }
-.rayContainer:nth-child(2){
+.rayContainer:nth-child(2) {
   transform: translate(-50%) rotate(calc(1 * var(--divisor)));
 }
-.rayContainer:nth-child(3){
+.rayContainer:nth-child(3) {
   transform: translate(-50%) rotate(calc(2 * var(--divisor)));
 }
-.rayContainer:nth-child(4){
+.rayContainer:nth-child(4) {
   transform: translate(-50%) rotate(calc(3 * var(--divisor)));
 }
-.rayContainer:nth-child(5){
+.rayContainer:nth-child(5) {
   transform: translate(-50%) rotate(calc(4 * var(--divisor)));
 }
-.rayContainer:nth-child(6){
+.rayContainer:nth-child(6) {
   transform: translate(-50%) rotate(calc(5 * var(--divisor)));
 }
-.rayContainer:nth-child(7){
+.rayContainer:nth-child(7) {
   transform: translate(-50%) rotate(calc(6 * var(--divisor)));
 }
-.rayContainer:nth-child(8){
+.rayContainer:nth-child(8) {
   transform: translate(-50%) rotate(calc(7 * var(--divisor)));
 }
-.rayContainer:nth-child(9){
+.rayContainer:nth-child(9) {
   transform: translate(-50%) rotate(calc(8 * var(--divisor)));
 }
-.rayContainer:nth-child(10){
+.rayContainer:nth-child(10) {
   transform: translate(-50%) rotate(calc(9 * var(--divisor)));
 }
 @keyframes rotate {
@@ -1031,22 +1043,21 @@ input[type="text"].emojiInput {
     opacity: 0;
     transform: rotate(0deg);
   }
-  100%{
+  100% {
     opacity: 100%;
     transform: rotate(60deg);
   }
 }
-@keyframes sparkle{
-  0%{
+@keyframes sparkle {
+  0% {
     opacity: 0;
     transform: scale(0) rotate(10deg);
   }
-  100%{
+  100% {
     opacity: 100%;
     transform: scale(1);
   }
 }
-
 
 @media (hover: none) {
 }
