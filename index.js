@@ -994,12 +994,13 @@ function refreshSelectedDayInfo() {
             ${question.lable}
           </div>
           ${
-            question.time &&
-            `
+            question.time
+              ? `
             <div class="selectedQuestionTime">
               ${getFormattedTime(question.time)}
             </div>
           `
+              : ""
           }
         </div>
         <div class="selectedQuestionAnswer">${value}</div>
