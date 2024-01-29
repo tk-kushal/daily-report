@@ -21,3 +21,5 @@ can add color theme options by adjusting the hue of the background using filter
 Need to find a pwa generator website or use the pwa generator NPM package to generate the assets for the manifest file.
 
 add a dedicated notes section and a analysis page
+
+change the architecture to use a different document for current editable copy and only append the day's data to the month bundle on the next day, this is to avoid any accidental overwrite like today.
