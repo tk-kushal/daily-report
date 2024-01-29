@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="background">
+    <div class="backgroundimg">
+      <img
+        src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="">
+    </div>
+    <div class="backgroundoverlay"></div>
+  </div>
+  <div class="content">
+    <img src="./Images/daily tracker logo.png" alt="">
+  </div>
+  <style>
+    :root {
+      --background: #222222;
+      --backgroundTransparent: #22222280;
+      --secondaryBackground: #d9d9d9c6;
+      --secondaryBackgroundTransparent: #dadada72;
+      --lightBorder: rgba(50, 50, 50, 0.285);
+      --primary: #ff6000;
+      --primaryTransparent: #ff6200b8;
+      --secondary: #ffa559;
+      --secondaryTransparent: #ff923998;
+      --textColor: #322f2b;
+      --secondaryText: #312c26ca;
+      --textInvert: var(--textColor);
+      --selectedColor: rgb(199, 190, 183);
+      --rippleColor: rgba(255, 181, 152, 0.345);
+      --bgOpacity: 0.9;
+      transition: 100ms var(--textColor);
+    }
+
+    body {
+      background-color: #181818;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+    }
+
+    .content img {
+      width: 90px;
+      border-radius: 50%;
+    }
+
+    .content {
+      z-index: 5;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 1;
+      overflow: hidden;
+    }
+
+    .backgroundimg {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-position: center;
+    }
+
+    .backgroundimg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: blur(10px);
+      transform: scale(1.1);
+    }
+
+    .backgroundoverlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      right: 0;
+      opacity: var(--bgOpacity);
+      background-color: var(--background);
+    }
+  </style>
+</body>
+
+</html>
